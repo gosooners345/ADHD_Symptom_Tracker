@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ADHD Symptom Tracker</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="intro_header">What would you like to do today?</string>
+    <string name="home_header2">What would you like to record today?</string>
+    <string name="subject">Subject</string>
+    <string name="lines">lines</string>
+    <string name="timestamp">timestamp</string>
+    <string name="new_record">New record</string>
+    <string name="save_note">Save Note</string>
+    <string name="edit_record">Edit record</string>
+</resources>
