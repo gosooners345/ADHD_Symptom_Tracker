@@ -10,4 +10,5 @@
     <dimen name="dimen_padding_5">5dp</dimen>
     <dimen name="widget_spacing">16dp</dimen>
     <dimen name="wall_spacing">8dp</dimen>
+    <dimen name="dimen_64">64dp</dimen>
 </resources>

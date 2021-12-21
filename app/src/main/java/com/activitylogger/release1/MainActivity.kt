@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.activitylogger.release1.databinding.ActivityMainBinding
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,5 +32,9 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        mainActionButton = findViewById(R.id.record_button)
+    }
+    companion object{
+        lateinit var mainActionButton : ExtendedFloatingActionButton
     }
 }

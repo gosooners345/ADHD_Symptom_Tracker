@@ -31,5 +31,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation"
         tools:ignore="FragmentTagUsage" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_button"
+        android:text="@string/record"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="@dimen/dimen_16"
+
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

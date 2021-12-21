@@ -11,4 +11,5 @@
     <string name="new_record">New record</string>
     <string name="save_note">Save Note</string>
     <string name="edit_record">Edit record</string>
+    <string name="record">Record</string>
 </resources>

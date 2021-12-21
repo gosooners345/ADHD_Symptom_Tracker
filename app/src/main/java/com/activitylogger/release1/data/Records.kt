@@ -20,7 +20,7 @@ data class Records(var timeCreatedValue:Long): Parcelable,Cloneable,Comparable<R
     @ColumnInfo(name="rating")
     var rating : Double=0.0
     @ColumnInfo(name="time_created")
-    var timeCreated =timeCreatedValue
+    open var timeCreated =timeCreatedValue
     @ColumnInfo(name="time_updated")
     var timeUpdated =timeCreated
     @ColumnInfo(name="timestamp")
