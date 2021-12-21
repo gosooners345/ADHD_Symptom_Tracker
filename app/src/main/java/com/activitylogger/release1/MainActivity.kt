@@ -1,6 +1,7 @@
 package com.activitylogger.release1
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.activitylogger.release1.databinding.ActivityMainBinding
+import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +35,13 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         mainActionButton = findViewById(R.id.record_button)
+        mainActionButton.setOnClickListener(mainButtonClick)
+
+
+    }
+
+    var mainButtonClick =   View.OnClickListener { HomeFragment.newRecord(this,75)
+
     }
     companion object{
         lateinit var mainActionButton : ExtendedFloatingActionButton

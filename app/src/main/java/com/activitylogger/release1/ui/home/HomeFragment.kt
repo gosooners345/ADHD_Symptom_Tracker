@@ -1,5 +1,7 @@
 package com.activitylogger.release1.ui.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
+import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.databinding.FragmentHomeBinding
+import com.activitylogger.release1.interfaces.OnRecordListener
+import com.activitylogger.release1.records.ComposeRecords
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , OnRecordListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
@@ -41,5 +46,19 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onRecordClick(position: Int) {
+
+    }
+
+    companion object{
+        var recordsList = ArrayList<Records>()
+        const val ACTIVITY_ID = 75
+        fun newRecord(context : Context?,activityID:Int)
+        {
+            val intent = Intent(context, ComposeRecords::class.java)
+        intent.putExtra("activityID",activityID)
+            context!!.startActivity(intent)
+        }
     }
 }
