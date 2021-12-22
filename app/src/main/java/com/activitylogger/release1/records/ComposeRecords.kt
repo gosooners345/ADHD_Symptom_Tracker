@@ -70,7 +70,8 @@ lateinit var saveButton : Button
 Log.i(TAG,"Accessing Record for Editing")
 
         } else {
-            record= Records(System.currentTimeMillis())
+            record= Records()
+            record.timeCreated=System.currentTimeMillis()
             recordTitle.editText!!.setText(emptyString)
             recordContent.editText!!.setText(emptyString)
             recordEmotion.editText!!.setText(emptyString)
@@ -168,8 +169,7 @@ recordContentString=recordContent.editText!!.text.toString()
         record.content=recordContentString
         record.emotions=recordEmotionString
         record.rating=ratingsInfo
-        record.timeCreated = record.timeCreated
-        record.timeStamp=DateFormat.getInstance().format(record.timeUpdated)
+
         record.successState = success
         run {
             if (isnewRecord) {

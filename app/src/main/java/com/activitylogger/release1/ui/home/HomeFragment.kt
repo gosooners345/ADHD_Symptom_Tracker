@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() , OnRecordListener {
 
 
     private var _binding: FragmentHomeBinding? = null
+    lateinit var recordsRCV : RecyclerView
 //lateinit var adapter : RecordsAdapter
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -45,12 +47,14 @@ class HomeFragment : Fragment() , OnRecordListener {
         homeViewModel.recordsRepo= RecordsRepository(requireContext())
         getRecords()
         adapter = RecordsAdapter(recordsList, this, requireContext())
-        binding.trackerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.trackerView.itemAnimator = DefaultItemAnimator()
-        binding.trackerView.adapter = adapter
+        recordsRCV=root.findViewById(R.id.tracker_view)
+        recordsRCV.layoutManager=LinearLayoutManager(context)
+        //binding.trackerView.layoutManager = LinearLayoutManager(requireContext())
+        recordsRCV.itemAnimator = DefaultItemAnimator()
+        recordsRCV.adapter = adapter
         val divider = RecyclerViewSpaceExtender(8)
-        binding.trackerView.addItemDecoration(divider)
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.trackerView)
+        recordsRCV.addItemDecoration(divider)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
         setHasOptionsMenu(true)
 
         return root
@@ -67,7 +71,11 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     override fun onRecordClick(position: Int) {
         val intent = Intent(context, ComposeRecords::class.java)
-        intent.putExtra("record_selected", recordsList[position])
+        var recordSend = Records()
+
+        recordSend=recordsList[position]
+        intent.putExtra("record_selected",recordSend )
+        Log.i("Tag","${recordSend.emotions}")
         intent.putExtra("activityID", ACTIVITY_ID)
         startActivity(intent)
     }
@@ -106,19 +114,14 @@ class HomeFragment : Fragment() , OnRecordListener {
     }
     private fun getRecords() {
         try {
-            homeViewModel.recordsRepo!!.getRecords().observeForever {
+            /*homeViewModel.recordsRepo!!.getRecords().observeForever {
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
                     recordsList.addAll(it)
                     recordsList.sortedWith(Records.compareUpdatedTimes)
                 }
                 refreshAdapter()
-            }
-        }
-        catch (ex: Exception) {
-            Toast.makeText(requireContext(), "This failed", Toast.LENGTH_LONG).show()
-            ex.printStackTrace()
-            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+            }*/
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, { it ->
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
@@ -127,6 +130,12 @@ class HomeFragment : Fragment() , OnRecordListener {
                 }
                 refreshAdapter()
             })
+        }
+        catch (ex: Exception) {
+            Toast.makeText(requireContext(), "This failed", Toast.LENGTH_LONG).show()
+            ex.printStackTrace()
+            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+
         }
     }
 

@@ -6,14 +6,14 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.text.DateFormat
 import java.util.*
 
 @Entity(tableName = "records")
-data class Records(var timeCreatedValue:Long): Parcelable,Cloneable,Comparable<Records>
+class Records(): Parcelable,Cloneable,Comparable<Records>
 {
-
 
 
     @JvmField
@@ -26,37 +26,31 @@ data class Records(var timeCreatedValue:Long): Parcelable,Cloneable,Comparable<R
     @ColumnInfo(name="rating")
     var rating : Double=0.0
     @ColumnInfo(name="time_created")
-    var timeCreated = if(timeCreatedValue==null) 0 else timeCreatedValue
+    var timeCreated :Long =0
     @ColumnInfo(name="time_updated")
-    var timeUpdated =System.currentTimeMillis()
-    @ColumnInfo(name="timestamp")
-    var timeStamp: String =DateFormat.getInstance().format(timeUpdated)
+    var timeUpdated :Long = 0
 @ColumnInfo(name="success")
-var successState :Boolean? = null
+var successState :Boolean?=null
     @ColumnInfo(name="emotions")
     var emotions : String = ""
 
 
-    constructor(parcel: Parcel) : this(parcel.readLong()) {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    constructor(parcel: Parcel) : this() {
        id=parcel.readInt()
         title = parcel.readString()!!
         content = parcel.readString()!!
+        emotions=parcel.readString().toString()
         rating = parcel.readDouble()
         timeCreated = parcel.readLong()
         timeUpdated = parcel.readLong()
-        timeStamp = parcel.readString().toString()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            successState = parcel.readBoolean()
-        }
-        else
-            successState=null
-emotions=parcel.readString()!!
+        successState=parcel.readBoolean()
+
 
     }
 
     fun update(titleContent : String, contentValue : String, ratingValue : Double,emotionState:String,success:Boolean) {
     this.timeUpdated=System.currentTimeMillis()
-    timeStamp=DateFormat.getInstance().format(this.timeUpdated)
 this.title=titleContent
     this.content=contentValue
     this.rating=ratingValue
@@ -67,17 +61,17 @@ this.title=titleContent
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
        parcel.writeInt(id)
-        parcel.writeLong(timeCreatedValue)
+
         parcel.writeString(title)
         parcel.writeString(content)
+        parcel.writeString(emotions)
         parcel.writeDouble(rating)
-        parcel.writeLong(timeCreated)
-        parcel.writeLong(timeUpdated)
-        parcel.writeString(timeStamp)
+        parcel.writeLong(timeCreated!!)
+        parcel.writeLong(timeUpdated!!)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             parcel.writeBoolean(successState!!)
         }
-        parcel.writeString(emotions)
+
     }
 
     override fun describeContents(): Int {
@@ -85,6 +79,7 @@ this.title=titleContent
     }
 
     companion object CREATOR : Parcelable.Creator<Records> {
+        @RequiresApi(Build.VERSION_CODES.Q)
         override fun createFromParcel(parcel: Parcel): Records {
             return Records(parcel)
         }

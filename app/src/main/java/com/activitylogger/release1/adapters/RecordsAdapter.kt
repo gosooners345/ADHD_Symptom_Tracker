@@ -39,7 +39,7 @@ val record = recordList[position]
     emotionHolder.text = record.emotions
         successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
         timeCreatedHolder.text= DateFormat.getInstance().format(record.timeCreated)
-        timeStamp.text = record.timeStamp
+        timeStamp.text = DateFormat.getInstance().format(record.timeUpdated)
 
 
     }
