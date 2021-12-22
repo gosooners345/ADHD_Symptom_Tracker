@@ -43,7 +43,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="@string/subject"
+                android:hint="What do you want to call this?"
                 android:layoutDirection="locale"
                 app:endIconMode="clear_text"
                 android:padding="5dp"
@@ -66,7 +66,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="Enter Event info here"
+                android:hint="What happened"
                 android:layoutDirection="locale"
 
                 android:padding="5dp"
@@ -83,21 +83,40 @@
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emotionsContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="5dp"
+                android:hint="What are you feeling?"
+                android:layoutDirection="locale"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contentContainer"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emotionsTextBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="normal"
+                    android:inputType="textMultiLine|text|textImeMultiLine"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
-
-
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/edit_record"
                 app:icon="@drawable/ic_baseline_edit_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/contentContainer"
-                app:layout_constraintTop_toBottomOf="@+id/ratingSeekbar" />
+                app:layout_constraintTop_toBottomOf="@+id/successchip" />
 
             <Button
                 android:id="@+id/saveNote"
@@ -123,7 +142,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contentContainer" />
+                app:layout_constraintTop_toBottomOf="@+id/emotionsContainer" />
 
             <SeekBar
                 android:id="@+id/ratingSeekbar"
@@ -139,6 +158,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/ratingTitleBar" />
 
             <TextView
+                android:id="@+id/successTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layoutDirection="locale"
+                android:padding="@dimen/dimen_padding_5"
+                android:text="Success/Fail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratingSeekbar" />
+            <TextView
                 android:id="@+id/ratingTitleBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,6 +179,19 @@
                 android:text="Rating:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/successchip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_8"
+                android:layout_marginTop="@dimen/dimen_16"
+                android:checkable="true"
+                app:checkedIconEnabled="true"
+                app:checkedIconVisible="true"
+                android:text="Fail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/successTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

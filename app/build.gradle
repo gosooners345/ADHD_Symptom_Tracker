@@ -45,7 +45,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
-    implementation 'com.github.CodeBoy722:ViewPager2_Transformers:1.0.0'
     testImplementation 'junit:junit:4.+'
     kapt 'androidx.room:room-compiler:2.4.0-rc01'
     implementation 'androidx.room:room-runtime:2.4.0-rc01'

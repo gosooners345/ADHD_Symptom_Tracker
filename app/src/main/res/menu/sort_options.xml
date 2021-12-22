@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/sortAction"
+        android:title="Sort By"
+        app:showAsAction="always">
+        <menu>
+
+            <item
+                android:id="@+id/created_date"
+                android:title="Date Created" />
+            <item
+                android:id="@+id/recent_updated"
+                android:title="Recently Updated" />
+            <item
+                android:id="@+id/success_fail"
+                android:title="Success/Fail Rate" />
+            <item
+                android:id="@+id/created_date_rev"
+                android:title="Oldest to Newest" />
+        </menu>
+
+    </item>
+</menu>

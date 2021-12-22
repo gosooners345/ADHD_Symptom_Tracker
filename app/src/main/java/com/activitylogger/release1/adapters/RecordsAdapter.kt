@@ -1,5 +1,6 @@
 package com.activitylogger.release1.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.interfaces.OnRecordListener
+import org.w3c.dom.Text
+import java.text.DateFormat
 
 class RecordsAdapter constructor(private val recordList : ArrayList<Records>,private val onRecordListener: OnRecordListener,private  val context: Context) :RecyclerView.Adapter<RecordsAdapter.ViewHolder>(){
 
@@ -19,18 +22,24 @@ class RecordsAdapter constructor(private val recordList : ArrayList<Records>,pri
 return ViewHolder(recordView,onRecordListener)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 val record = recordList[position]
         val recordTitle = holder.subjectView
-        recordTitle.text=record.title
         val contentHolder = holder.contentView
         var timeStamp = holder.timeStamp
         var ratingHolder = holder.rating
+        var successHolder = holder.successTV
+        var emotionHolder = holder.emotionTV
+        var timeCreatedHolder = holder.timeCreated
+        //Assign values to variable references
+        recordTitle.text=record.title
         ratingHolder.text=record.rating.toString()
         contentHolder.text=record.content
+    emotionHolder.text = record.emotions
+        successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
+        timeCreatedHolder.text= DateFormat.getInstance().format(record.timeCreated)
         timeStamp.text = record.timeStamp
-
-
 
 
     }
@@ -46,7 +55,9 @@ val record = recordList[position]
 var contentView : TextView=itemView.findViewById(R.id.content_text)
 var rating : TextView = itemView.findViewById(R.id.ratingDisplay)
 var timeStamp : TextView=itemView.findViewById(R.id.timeStamp)
-
+var timeCreated : TextView = itemView.findViewById(R.id.time_created)
+        var emotionTV : TextView = itemView.findViewById(R.id.emotions_text)
+        var successTV : TextView = itemView.findViewById(R.id.success_state_label)
         override fun onClick(v: View?) {
 onRecordListener.onRecordClick(bindingAdapterPosition)
         }
