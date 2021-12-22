@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
             android:paddingEnd="5dp"
@@ -31,6 +33,7 @@
             android:text="@string/subject"
             android:textDirection="locale"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ratingTV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,14 +131,12 @@
             android:id="@+id/ratingTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="216dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:paddingStart="@dimen/dimen_padding_5"
             android:paddingEnd="@dimen/dimen_padding_5"
             android:text="Rating:"
             app:layout_constraintEnd_toStartOf="@+id/ratingDisplay"
-            app:layout_constraintStart_toEndOf="@+id/content_Title"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

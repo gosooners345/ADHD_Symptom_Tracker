@@ -177,18 +177,9 @@ recordContentString=recordContent.editText!!.text.toString()
                 HomeFragment.refreshData()
                 HomeFragment.recordsList.add(record)
             } else {
-
                 homeViewModel.recordsRepo!!.updateRecord(record)
-
-
-
-                //recordsRepo!!.updateRecord(record)
                 HomeFragment.refreshData()
-                 /* recordsRepo!!.deleteRecord(record)
-recordsList.remove(record)
-                recordsRepo!!.insertRecord(record)
-recordsList.add(record)
-                HomeFragment.refreshData()*/
+
             }
             Log.i(TAG,"Saving Record to storage")
             Log.i(TAG,record.toString())
