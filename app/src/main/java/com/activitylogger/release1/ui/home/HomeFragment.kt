@@ -131,7 +131,10 @@ class HomeFragment : Fragment() , OnRecordListener {
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
                     recordsList.addAll(it)
-                    recordsList.sortedWith(Records.compareUpdatedTimes)
+                    //recordsList.sortedWith(Records.compareUpdatedTimes)
+                    Collections.sort(recordsList,Records.compareUpdatedTimes)
+                    recordsList.reverse()
+                    refreshAdapter()
                 }
                 refreshAdapter()
             })
