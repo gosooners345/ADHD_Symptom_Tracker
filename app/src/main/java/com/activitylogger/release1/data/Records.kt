@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 import java.text.DateFormat
 import java.util.*
 
@@ -31,6 +32,8 @@ class Records(): Parcelable,Cloneable,Comparable<Records>
 var successState :Boolean?=null
     @ColumnInfo(name="emotions")
     var emotions : String = ""
+    @ColumnInfo(name="sources",defaultValue = "")
+    var sources : String = ""
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -39,30 +42,21 @@ var successState :Boolean?=null
         title = parcel.readString()!!
         content = parcel.readString()!!
         emotions=parcel.readString().toString()
+        sources=parcel.readString().toString()
+        successState=parcel.readBoolean()
         rating = parcel.readDouble()
         timeCreated = parcel.readLong()
         timeUpdated = parcel.readLong()
-        successState=parcel.readBoolean()
 
 
     }
 
-    fun update(titleContent : String, contentValue : String, ratingValue : Double,emotionState:String,success:Boolean) {
-    this.timeUpdated=System.currentTimeMillis()
-this.title=titleContent
-    this.content=contentValue
-    this.rating=ratingValue
-        this.emotions=emotionState
-        this.successState=success
-}
-
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
        parcel.writeInt(id)
-
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(emotions)
+        parcel.writeString(sources)
         parcel.writeDouble(rating)
         parcel.writeLong(timeCreated!!)
         parcel.writeLong(timeUpdated!!)
@@ -135,9 +129,10 @@ this.title=titleContent
     override fun toString(): String {
         return String.format("Event title: $title,\r\n" +
                 "Event: $content\r\n" +
-                "Rating: $rating\r\n" +
+                "Rating: ${rating.toString()}\r\n" +
                 "Time Occurred: ${DateFormat.getInstance().format(timeCreated)}\r\n" +
-                "Emotions: $emotions" +
+                "Emotions: $emotions \r\n " +
+                "Sources: $sources \r\n"+
                 "Success or Fail: ${ if(successState!!)"success" else "fail"}"                 )
     }
 

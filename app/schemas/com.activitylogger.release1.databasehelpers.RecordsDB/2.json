@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a6eee8e1fa19fb5801af8fb0c1a27b1c",
+    "identityHash": "7faa05d34538f007f4f42bc697dff156",
     "entities": [
       {
         "tableName": "records",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `rating` REAL NOT NULL, `time_created` INTEGER, `time_updated` INTEGER, `timestamp` TEXT NOT NULL, `success` INTEGER, `emotions` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `rating` REAL NOT NULL, `time_created` INTEGER NOT NULL, `time_updated` INTEGER NOT NULL, `success` INTEGER, `emotions` TEXT NOT NULL, `sources` TEXT NOT NULL DEFAULT '')",
         "fields": [
           {
             "fieldPath": "id",
@@ -36,18 +36,12 @@
             "fieldPath": "timeCreated",
             "columnName": "time_created",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "timeUpdated",
             "columnName": "time_updated",
             "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timeStamp",
-            "columnName": "timestamp",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -61,6 +55,13 @@
             "columnName": "emotions",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "sources",
+            "columnName": "sources",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -76,7 +77,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a6eee8e1fa19fb5801af8fb0c1a27b1c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7faa05d34538f007f4f42bc697dff156')"
     ]
   }
 }

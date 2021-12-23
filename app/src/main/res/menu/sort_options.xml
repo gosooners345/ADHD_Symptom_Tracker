@@ -18,6 +18,7 @@
                 android:icon="@drawable/sort_date"/>
             <item
                 android:id="@+id/success_fail"
+                android:icon="@drawable/sort_success"
                 android:title="Success/Fail Rate" />
             <item
                 android:id="@+id/sort_by_rating"

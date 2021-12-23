@@ -56,6 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content_Title" />
+
         <TextView
             android:id="@+id/emotions_text"
             android:layout_width="0dp"
@@ -77,22 +78,43 @@
             app:layout_constraintTop_toBottomOf="@+id/content_text" />
 
         <TextView
+            android:id="@+id/sources_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:minLines="1"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:text="@string/lines"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emotions_text" />
+
+        <TextView
             android:id="@+id/timeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="@dimen/dimen_16"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
             android:paddingEnd="5dp"
             android:paddingBottom="2dp"
             android:text="@string/timestamp"
-            android:textSize="15sp"
+            android:textSize="10sp"
             android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_created"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/success_state_label"
@@ -105,24 +127,23 @@
             android:paddingEnd="5dp"
             android:paddingBottom="2dp"
             android:text="@string/timestamp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emotions_text" />
+            app:layout_constraintTop_toBottomOf="@+id/sources_text" />
 
         <TextView
             android:id="@+id/time_created"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
             android:paddingEnd="5dp"
             android:paddingBottom="2dp"
             android:text="TimeCreated"
-            android:textSize="15sp"
+            android:textSize="10sp"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/success_state_label" />

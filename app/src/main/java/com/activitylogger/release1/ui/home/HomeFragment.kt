@@ -119,19 +119,11 @@ class HomeFragment : Fragment() , OnRecordListener {
     }
     private fun getRecords() {
         try {
-            /*homeViewModel.recordsRepo!!.getRecords().observeForever {
-                if (recordsList.size > 0) recordsList.clear()
-                if (it != null) {
-                    recordsList.addAll(it)
-                    recordsList.sortedWith(Records.compareUpdatedTimes)
-                }
-                refreshAdapter()
-            }*/
+
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, { it ->
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
                     recordsList.addAll(it)
-                    //recordsList.sortedWith(Records.compareUpdatedTimes)
                     Collections.sort(recordsList,Records.compareUpdatedTimes)
                     recordsList.reverse()
                     refreshAdapter()

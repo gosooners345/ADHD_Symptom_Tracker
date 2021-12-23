@@ -32,14 +32,16 @@ val record = recordList[position]
         var successHolder = holder.successTV
         var emotionHolder = holder.emotionTV
         var timeCreatedHolder = holder.timeCreated
+        var sourcesHolder = holder.sourcesTV
         //Assign values to variable references
         recordTitle.text=record.title
         ratingHolder.text=record.rating.toString()
         contentHolder.text=record.content
     emotionHolder.text = record.emotions
+        sourcesHolder.text = record.sources
         successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
-        timeCreatedHolder.text= DateFormat.getInstance().format(record.timeCreated)
-        timeStamp.text = DateFormat.getInstance().format(record.timeUpdated)
+        timeCreatedHolder.text="Time Created: "+ DateFormat.getInstance().format(record.timeCreated)
+        timeStamp.text ="Last Updated: "+ DateFormat.getInstance().format(record.timeUpdated)
 
 
     }
@@ -58,6 +60,7 @@ var timeStamp : TextView=itemView.findViewById(R.id.timeStamp)
 var timeCreated : TextView = itemView.findViewById(R.id.time_created)
         var emotionTV : TextView = itemView.findViewById(R.id.emotions_text)
         var successTV : TextView = itemView.findViewById(R.id.success_state_label)
+        var sourcesTV : TextView=itemView.findViewById(R.id.sources_text)
         override fun onClick(v: View?) {
 onRecordListener.onRecordClick(bindingAdapterPosition)
         }

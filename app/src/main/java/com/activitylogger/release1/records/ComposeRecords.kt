@@ -38,6 +38,7 @@ lateinit var saveButton : Button
     var recordTitleString=""
     var recordContentString=""
     var recordEmotionString=""
+    var recordSourcesString=""
     val emptyString = ""
     var ratingsInfo =0.0
 
@@ -45,6 +46,7 @@ lateinit var saveButton : Button
     lateinit var recordTitle : TextInputLayout
     lateinit var recordContent : TextInputLayout
     lateinit var recordEmotion : TextInputLayout
+    lateinit var recordSources : TextInputLayout
     lateinit var ratingSeekbar : SeekBar
     lateinit var successChip : Chip
      var success =false
@@ -55,6 +57,7 @@ lateinit var saveButton : Button
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
         recordEmotion = findViewById(R.id.emotionsContainer)
+        recordSources = findViewById(R.id.sourcesContainer)
         ratingSeekbar = findViewById(R.id.ratingSeekbar)
         successChip = findViewById(R.id.successchip)
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
@@ -67,6 +70,11 @@ lateinit var saveButton : Button
             recordEmotion.editText!!.setText(record!!.emotions)
             successChip.isChecked = record!!.successState!!
             ratingSeekbar.progress = record!!.rating.toInt()
+            if(record.sources!="" || record.sources ==null)
+                recordSources.editText!!.setText(record.sources)
+            else
+                recordSources.editText!!.setText(emptyString)
+
 Log.i(TAG,"Accessing Record for Editing")
 
         } else {
@@ -75,6 +83,7 @@ Log.i(TAG,"Accessing Record for Editing")
             recordTitle.editText!!.setText(emptyString)
             recordContent.editText!!.setText(emptyString)
             recordEmotion.editText!!.setText(emptyString)
+            recordSources.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
 Log.i(TAG,"Logging New Event")
@@ -106,6 +115,14 @@ Log.i(TAG,"Logging New Event")
 
             override fun afterTextChanged(editable: Editable) {}
         })
+        recordSources.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
+                 recordSourcesString= s.toString()
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
 
         saveButton = findViewById(R.id.saveNote)
         saveButton.setOnClickListener(saveRecord)
@@ -132,13 +149,15 @@ get(){
 
 
     override fun onBackPressed() {
+        val messageString = if (!isnewRecord) "Save your edits?" else "Save new record?"
+
         MaterialAlertDialogBuilder(this)
             .setTitle("Save Record?")
-            .setMessage(String.format("Save your Record?"))
+            .setMessage(String.format(messageString))
             .setNegativeButton("No") { _, _ ->
                 finish()
             }
-            .setPositiveButton("Yes") { _, _ -> saveButton!!.performClick() }
+            .setPositiveButton("Yes") { _, _ -> saveButton.performClick() }
             .setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
     }
@@ -163,13 +182,14 @@ get(){
 recordContentString=recordContent.editText!!.text.toString()
         recordTitleString=recordTitle.editText!!.text.toString()
         recordEmotionString=recordEmotion.editText!!.text.toString()
+        recordSourcesString=recordSources.editText!!.text.toString()
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
         record.title= recordTitleString
         record.content=recordContentString
         record.emotions=recordEmotionString
+        record.sources = recordSourcesString
         record.rating=ratingsInfo
-
         record.successState = success
         run {
             if (isnewRecord) {
