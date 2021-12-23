@@ -37,7 +37,7 @@
         android:id="@+id/record_button"
         android:text="@string/record"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="64dp"
         android:layout_marginEnd="@dimen/dimen_16"
 
         />

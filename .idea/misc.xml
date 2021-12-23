@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/sort_0-9.xml" value="0.1" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/sort_AZ.xml" value="0.153125" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/sort_az.xml" value="0.15260416666666668" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-v24/notes_outline.xml" value="0.1425925925925926" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-v24/spinner_outline.xml" value="0.1425925925925926" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/activity_main.xml" value="0.1" />

@@ -24,6 +24,8 @@ import com.activitylogger.release1.databinding.FragmentHomeBinding
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() , OnRecordListener {
 
@@ -88,26 +90,29 @@ class HomeFragment : Fragment() , OnRecordListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.created_date -> {
-                recordsList.sortedWith(Records.compareCreatedTimes)
-                refreshAdapter()
-                true
-            }
-            R.id.created_date_rev -> {
-                recordsList.sortedWith(Records.compareUpdatedTimes)
-                recordsList.reverse()
+                Collections.sort(recordsList,Records.compareCreatedTimes)
                 refreshAdapter()
                 true
             }
             R.id.recent_updated -> {
-                recordsList.sortedWith(Records.compareUpdatedTimes)
+                Collections.sort(recordsList,Records.compareUpdatedTimes)
+                recordsList.reverse()
                 refreshAdapter()
                 true
             }
             R.id.success_fail -> {
-                recordsList.sortedWith(Records.compareSuccessStates)
+                Collections.sort(recordsList,Records.compareSuccessStates)
                 refreshAdapter()
                 true
             }
+            R.id.sort_A_to_Z ->{
+                Collections.sort(recordsList,Records.compareAlphabetized)
+                refreshAdapter()
+                true}
+            R.id.sort_by_rating -> {
+                Collections.sort(recordsList,Records.compareRatings)
+                refreshAdapter()
+                true}
             else -> false
         }
 

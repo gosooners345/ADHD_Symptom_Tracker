@@ -14,8 +14,6 @@ import java.util.*
 @Entity(tableName = "records")
 class Records(): Parcelable,Cloneable,Comparable<Records>
 {
-
-
     @JvmField
     @PrimaryKey(autoGenerate = true)
     var id : Int =0
@@ -88,30 +86,44 @@ this.title=titleContent
             return arrayOfNulls(size)
         }
     var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
-        if(record1.timeCreated!! == record2.timeCreated!!)record1.compareTo(record2)
-        else if(record1.timeCreated!! <= record2.timeCreated!!)-1
-        else 1
+        record1.compareTo(record2)
     }
         var compareUpdatedTimes = java.util.Comparator<Records> { record1, record2 ->
-            if(record1.timeUpdated!! == record2.timeUpdated!!)record1.compareTo(record2)
-            else if(record1.timeUpdated!! <= record2.timeUpdated!!)-1
-            else 1
+
+            if (record1.timeUpdated.compareTo(record2.timeUpdated) ==0)
+                record1.compareTo(record2)
+            else
+                record1.timeUpdated.compareTo(record2.timeUpdated)
+        }
+        var compareRatings = java.util.Comparator<Records>{
+            record1, record2 -> if( record1.rating.toInt().compareTo(record2.rating.toInt())==0)
+                record1.compareTo(record2)
+            else
+            record1.rating.toInt().compareTo(record2.rating.toInt())
         }
         var compareSuccessStates = java.util.Comparator<Records>{
             record1,record2->
-            if(record1.successState!! == record2.successState!!)
+           if(record1.successState!!.equals(record2.successState!!))
+               record1.compareTo(record2)
+            else
+                (record1.successState!!.compareTo(record2.successState!!))
+
+        }
+        var compareAlphabetized = java.util.Comparator<Records>{
+            record1, record2 ->
+            if(record1.title.lowercase(Locale.getDefault()).compareTo(record2.title.lowercase(
+                    Locale.getDefault()))==0)
                 record1.compareTo(record2)
             else
-                if ((record1.successState!! == true) && (record2.successState!! == false))
-                    1
-        else
-            -1
+                record1.title.lowercase(Locale.getDefault()).compareTo(record2.title.lowercase(
+                    Locale.getDefault()))
         }
 
      var compareIds = java.util.Comparator<Records>{
          record1, record2 ->
          record1.compareTo(record2)
      }
+
 
 
     }

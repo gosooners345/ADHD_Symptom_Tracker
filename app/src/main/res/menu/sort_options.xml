@@ -10,16 +10,24 @@
 
             <item
                 android:id="@+id/created_date"
-                android:title="Date Created" />
+                android:title="Date Created"
+                android:icon="@drawable/sort_date"/>
             <item
                 android:id="@+id/recent_updated"
-                android:title="Recently Updated" />
+                android:title="Recently Updated"
+                android:icon="@drawable/sort_date"/>
             <item
                 android:id="@+id/success_fail"
                 android:title="Success/Fail Rate" />
             <item
-                android:id="@+id/created_date_rev"
-                android:title="Oldest to Newest" />
+                android:id="@+id/sort_by_rating"
+                android:title="Rating"
+                android:icon="@drawable/sort_rating_star"
+                />
+            <item
+                android:id="@+id/sort_A_to_Z"
+                android:title="A-Z"
+                android:icon="@drawable/sort_az"/>
         </menu>
 
     </item>
