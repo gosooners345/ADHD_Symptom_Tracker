@@ -33,7 +33,6 @@ class HomeFragment : Fragment() , OnRecordListener {
     private var _binding: FragmentHomeBinding? = null
     lateinit var recordsRCV: RecyclerView
 
-    //lateinit var adapter : RecordsAdapter
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -52,7 +51,6 @@ class HomeFragment : Fragment() , OnRecordListener {
         adapter = RecordsAdapter(recordsList, this, requireContext())
         recordsRCV = root.findViewById(R.id.tracker_view)
         recordsRCV.layoutManager = LinearLayoutManager(context)
-        //binding.trackerView.layoutManager = LinearLayoutManager(requireContext())
         recordsRCV.itemAnimator = DefaultItemAnimator()
         recordsRCV.adapter = adapter
         val divider = RecyclerViewSpaceExtender(8)
@@ -74,15 +72,9 @@ class HomeFragment : Fragment() , OnRecordListener {
     }
 
     override fun onRecordClick(position: Int) {
-       // val intent = Intent(context, ComposeRecords::class.java)
-
-
          val recordSend = recordsList[position]
-
-        // intent.putExtra("record_selected",recordSend )
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
-
         Log.i("Tag", "${recordSend}")
         intent.putExtra("activityID", ACTIVITY_ID)
         startActivity(intent)
@@ -90,7 +82,6 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     fun refreshAdapter() {
         adapter.notifyDataSetChanged()
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -162,6 +153,7 @@ class HomeFragment : Fragment() , OnRecordListener {
                 refreshAdapter()
             }
         }
+
 
     private fun recordStore(record: Records) : Intent
     {
