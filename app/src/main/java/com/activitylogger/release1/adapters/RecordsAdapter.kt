@@ -12,6 +12,9 @@ import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.interfaces.OnRecordListener
 import org.w3c.dom.Text
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecordsAdapter constructor(private val recordList : ArrayList<Records>,private val onRecordListener: OnRecordListener,private  val context: Context) :RecyclerView.Adapter<RecordsAdapter.ViewHolder>(){
 
@@ -40,6 +43,8 @@ val record = recordList[position]
     emotionHolder.text = record.emotions
         sourcesHolder.text = record.sources
         successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
+        //val sdf:SimpleDateFormat = SimpleDateFormat("MMM dd yyyy HH:mm")
+        //val date : Date = Date(record.timeCreated)
         timeCreatedHolder.text="Time Created: "+ DateFormat.getInstance().format(record.timeCreated)
         timeStamp.text ="Last Updated: "+ DateFormat.getInstance().format(record.timeUpdated)
 

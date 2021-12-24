@@ -4,16 +4,17 @@ import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import org.jetbrains.annotations.NotNull
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
+import java.util.Date.parse
+import java.util.logging.Level.parse
 
 @Entity(tableName = "records")
-class Records(): Parcelable,Cloneable,Comparable<Records>
+class Records: Cloneable,Comparable<Records>
 {
     @JvmField
     @PrimaryKey(autoGenerate = true)
@@ -24,8 +25,9 @@ class Records(): Parcelable,Cloneable,Comparable<Records>
     var content : String=""
     @ColumnInfo(name="rating")
     var rating : Double=0.0
+    @TypeConverters(DateConverter::class)
     @ColumnInfo(name="time_created")
-    var timeCreated :Long =0
+    var timeCreated =Date()
     @ColumnInfo(name="time_updated")
     var timeUpdated :Long = 0
 @ColumnInfo(name="success")
@@ -35,50 +37,48 @@ var successState :Boolean?=null
     @ColumnInfo(name="sources",defaultValue = "")
     var sources : String = ""
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    constructor(
+        title: String?,
+        id: Int?,
+        dateValue: Date,
+        emotions: String?,
+        details: String?,
+        ratings: Double,
+        timeValue: Long,
+        success: Boolean,
+        sources: String?,
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    constructor(parcel: Parcel) : this() {
-       id=parcel.readInt()
-        title = parcel.readString()!!
-        content = parcel.readString()!!
-        emotions=parcel.readString().toString()
-        sources=parcel.readString().toString()
-        successState=parcel.readBoolean()
-        rating = parcel.readDouble()
-        timeCreated = parcel.readLong()
-        timeUpdated = parcel.readLong()
-
-
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-       parcel.writeInt(id)
-        parcel.writeString(title)
-        parcel.writeString(content)
-        parcel.writeString(emotions)
-        parcel.writeString(sources)
-        parcel.writeDouble(rating)
-        parcel.writeLong(timeCreated!!)
-        parcel.writeLong(timeUpdated!!)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            parcel.writeBoolean(successState!!)
-        }
+    ){
+        this.id=id!!
+        this.title=title!!
+content=details!!
+this.emotions=emotions!!
+this.rating=ratings
+        this.timeUpdated=timeValue
+        this.successState=success!!
+        this.sources=sources!!
+        this.timeCreated=dateValue
 
     }
+constructor(timeCreatedValue:Date){
+    this.title=""
+    this.content=""
+    this.sources=""
+    this.emotions=""
+    this.rating=0.0
+    this.timeUpdated=System.currentTimeMillis()
+       this.timeCreated = timeCreatedValue
+    this.successState=false
 
-    override fun describeContents(): Int {
-        return 0
-    }
 
-    companion object CREATOR : Parcelable.Creator<Records> {
-        @RequiresApi(Build.VERSION_CODES.Q)
-        override fun createFromParcel(parcel: Parcel): Records {
-            return Records(parcel)
-        }
+}
+constructor()
 
-        override fun newArray(size: Int): Array<Records?> {
-            return arrayOfNulls(size)
-        }
+
+    companion object  {
+
+
     var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
         record1.compareTo(record2)
     }

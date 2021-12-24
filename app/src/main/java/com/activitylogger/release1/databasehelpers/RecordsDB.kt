@@ -9,9 +9,9 @@ import com.activitylogger.release1.data.Records
 
 @Database(
     entities = [Records::class],
-    version = 2,
+    version = 1,
 exportSchema = true,
-    autoMigrations = [AutoMigration(from= 1, to= 2)]
+    autoMigrations = []
 )
 
 abstract class RecordsDB : RoomDatabase() {

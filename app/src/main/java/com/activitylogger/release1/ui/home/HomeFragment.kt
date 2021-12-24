@@ -31,8 +31,9 @@ class HomeFragment : Fragment() , OnRecordListener {
 
 
     private var _binding: FragmentHomeBinding? = null
-    lateinit var recordsRCV : RecyclerView
-//lateinit var adapter : RecordsAdapter
+    lateinit var recordsRCV: RecyclerView
+
+    //lateinit var adapter : RecordsAdapter
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -46,11 +47,11 @@ class HomeFragment : Fragment() , OnRecordListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        homeViewModel.recordsRepo= RecordsRepository(requireContext())
+        homeViewModel.recordsRepo = RecordsRepository(requireContext())
         getRecords()
         adapter = RecordsAdapter(recordsList, this, requireContext())
-        recordsRCV=root.findViewById(R.id.tracker_view)
-        recordsRCV.layoutManager=LinearLayoutManager(context)
+        recordsRCV = root.findViewById(R.id.tracker_view)
+        recordsRCV.layoutManager = LinearLayoutManager(context)
         //binding.trackerView.layoutManager = LinearLayoutManager(requireContext())
         recordsRCV.itemAnimator = DefaultItemAnimator()
         recordsRCV.adapter = adapter
@@ -63,26 +64,31 @@ class HomeFragment : Fragment() , OnRecordListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.sort_options,menu)
+        inflater.inflate(R.menu.sort_options, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun onRecordClick(position: Int) {
-        val intent = Intent(context, ComposeRecords::class.java)
-        var recordSend = Records()
+       // val intent = Intent(context, ComposeRecords::class.java)
 
-        recordSend=recordsList[position]
-        intent.putExtra("record_selected",recordSend )
-        Log.i("Tag","${recordSend.emotions}")
+
+         val recordSend = recordsList[position]
+
+        // intent.putExtra("record_selected",recordSend )
+        val intent = recordStore(recordSend)
+        intent.putExtra("record_selected_id", recordSend.id)
+
+        Log.i("Tag", "${recordSend}")
         intent.putExtra("activityID", ACTIVITY_ID)
         startActivity(intent)
     }
 
-    fun refreshAdapter(){
+    fun refreshAdapter() {
         adapter.notifyDataSetChanged()
 
     }
@@ -90,33 +96,36 @@ class HomeFragment : Fragment() , OnRecordListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.created_date -> {
-                Collections.sort(recordsList,Records.compareCreatedTimes)
+                Collections.sort(recordsList, Records.compareIds)
                 refreshAdapter()
                 true
             }
             R.id.recent_updated -> {
-                Collections.sort(recordsList,Records.compareUpdatedTimes)
+                Collections.sort(recordsList, Records.compareUpdatedTimes)
                 recordsList.reverse()
                 refreshAdapter()
                 true
             }
             R.id.success_fail -> {
-                Collections.sort(recordsList,Records.compareSuccessStates)
+                Collections.sort(recordsList, Records.compareSuccessStates)
                 refreshAdapter()
                 true
             }
-            R.id.sort_A_to_Z ->{
-                Collections.sort(recordsList,Records.compareAlphabetized)
+            R.id.sort_A_to_Z -> {
+                Collections.sort(recordsList, Records.compareAlphabetized)
                 refreshAdapter()
-                true}
+                true
+            }
             R.id.sort_by_rating -> {
-                Collections.sort(recordsList,Records.compareRatings)
+                Collections.sort(recordsList, Records.compareRatings)
                 refreshAdapter()
-                true}
+                true
+            }
             else -> false
         }
 
     }
+
     private fun getRecords() {
         try {
 
@@ -124,14 +133,13 @@ class HomeFragment : Fragment() , OnRecordListener {
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
                     recordsList.addAll(it)
-                    Collections.sort(recordsList,Records.compareUpdatedTimes)
+                    Collections.sort(recordsList, Records.compareUpdatedTimes)
                     recordsList.reverse()
                     refreshAdapter()
                 }
                 refreshAdapter()
             })
-        }
-        catch (ex: Exception) {
+        } catch (ex: Exception) {
             Toast.makeText(requireContext(), "This failed", Toast.LENGTH_LONG).show()
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -155,6 +163,21 @@ class HomeFragment : Fragment() , OnRecordListener {
             }
         }
 
+    private fun recordStore(record: Records) : Intent
+    {
+        val recordIntent = Intent(context, ComposeRecords::class.java)
+        recordIntent.putExtra(record_send,"SELECTED")
+        recordIntent.putExtra("RECORDID",record.id)
+        recordIntent.putExtra(RECORDTITLE,record.title)
+        recordIntent.putExtra(RECORDDETAILS,record.content)
+        recordIntent.putExtra(RECORDEMOTIONS,record.emotions)
+        recordIntent.putExtra(RECORDSOURCES,record.sources)
+        recordIntent.putExtra(RECORDRATINGS,record.rating)
+        recordIntent.putExtra("TIMECREATED",record.timeCreated)
+
+        return recordIntent
+    }
+
     @SuppressLint("StaticFieldLeak")
     companion object{
         var recordsList = ArrayList<Records>()
@@ -171,5 +194,16 @@ class HomeFragment : Fragment() , OnRecordListener {
         fun refreshData(){
             adapter.notifyDataSetChanged()
         }
+        const val record_send = "record_selected"
+        const val RECORDTITLE = "RECORDTITLE"
+        const val RECORDEMOTIONS = "RECORDEMOTIONS"
+        const val RECORDDETAILS = "RECORDDETAILS"
+        const val RECORDSOURCES = "RECORDSOURCES"
+        const val RECORDRATINGS = "RECORDRATINGS"
+        const val RECORDSUCCESS = "RECORDSUCCESS"
+
+
+
+
     }
 }

@@ -1,5 +1,7 @@
 package com.activitylogger.release1.records
 
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.SeekBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
@@ -22,13 +25,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.text.DateFormat
+import java.util.*
 import kotlin.properties.Delegates
 
 class ComposeRecords : AppCompatActivity(){
 
     lateinit var title : String
     lateinit var  content : String
- var timeUpdated =System.currentTimeMillis()
+ @RequiresApi(Build.VERSION_CODES.N)
+ var timeUpdated = Calendar.getInstance().timeInMillis
 lateinit var timeCreated : Any
 lateinit var record : Records
     var  mode =0
@@ -51,6 +56,7 @@ lateinit var saveButton : Button
     lateinit var successChip : Chip
      var success =false
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.records_compose_layout)
@@ -78,8 +84,7 @@ lateinit var saveButton : Button
 Log.i(TAG,"Accessing Record for Editing")
 
         } else {
-            record= Records()
-            record.timeCreated=System.currentTimeMillis()
+            record= Records(Date())
             recordTitle.editText!!.setText(emptyString)
             recordContent.editText!!.setText(emptyString)
             recordEmotion.editText!!.setText(emptyString)
@@ -131,9 +136,11 @@ Log.i(TAG,"Logging New Event")
 
     }
 private val intentInfo : Boolean
+@RequiresApi(Build.VERSION_CODES.O)
 get(){
         if (intent.hasExtra("record_selected")) {
-            record = intent.getParcelableExtra("record_selected")!!
+
+            record=getRecordData()
             Log.d(TAG, record.toString())
             mode= EDIT_ON
             isnewRecord=false
@@ -146,7 +153,21 @@ get(){
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun getRecordData():Records
+{
+    val recordID = intent.getIntExtra("RECORDID",0)
+    val recordtitle= intent.getStringExtra(HomeFragment.RECORDTITLE)
+    val recordContent = intent.getStringExtra(HomeFragment.RECORDDETAILS)
+    val recordEmotions = intent.getStringExtra(HomeFragment.RECORDEMOTIONS)
+    var recordRating = intent.getDoubleExtra(HomeFragment.RECORDRATINGS,0.0)
+    val recordTimeCreated=intent.getSerializableExtra("TIMECREATED")
+    val recordSources = intent.getStringExtra(HomeFragment.RECORDSOURCES)
+    val recordSuccess = intent.getBooleanExtra(HomeFragment.RECORDSUCCESS,false)
+    return Records(recordtitle,recordID,
+        recordTimeCreated as Date,recordEmotions,recordContent,recordRating,System.currentTimeMillis(),recordSuccess,recordSources)
 
+}
 
     override fun onBackPressed() {
         val messageString = if (!isnewRecord) "Save your edits?" else "Save new record?"
@@ -195,7 +216,7 @@ recordContentString=recordContent.editText!!.text.toString()
             if (isnewRecord) {
                 recordsRepo!!.insertRecord(record)
                 HomeFragment.refreshData()
-                HomeFragment.recordsList.add(record)
+                recordsList.add(record)
             } else {
                 homeViewModel.recordsRepo!!.updateRecord(record)
                 HomeFragment.refreshData()
