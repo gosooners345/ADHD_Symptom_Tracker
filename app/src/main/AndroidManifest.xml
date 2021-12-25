@@ -22,6 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<activity android:name=".searchhandlers.SearchActivity"
+    android:exported="false"
+    android:parentActivityName=".MainActivity"
+    >
+    <intent-filter>
+        <action android:name="android.intent.action.SEARCH"/>
+    </intent-filter>
+    <meta-data android:name="android.app.searchable"
+        android:resource="@xml/searchable"/></activity>
         <activity android:name=".records.ComposeRecords"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
 android:label="New Record"

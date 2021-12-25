@@ -22,4 +22,7 @@ interface RecordsDao {
     @Query("Select * from records where records.id =:searchid")
     fun getRecord(searchid : Int):LiveData<Records?>
 
+    @Query("Select * from records where records.rating=:ratings")
+    fun getRecord(ratings:Double):LiveData<Records?>
+
 }

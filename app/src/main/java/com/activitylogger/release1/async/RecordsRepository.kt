@@ -23,7 +23,9 @@ fun getRecords(): LiveData<List<Records>>{
 }
     fun getRecord(searchID : Int):LiveData<Records?>{
         return  recordsDB!!.recordDao!!.getRecord(searchID)
-
+    }
+    fun getRecord(ratings : Double):LiveData<Records?>{
+        return recordsDB!!.recordDao!!.getRecord(ratings)
     }
 
 }

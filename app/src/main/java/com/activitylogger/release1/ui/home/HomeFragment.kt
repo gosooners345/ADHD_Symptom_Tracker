@@ -1,6 +1,9 @@
 package com.activitylogger.release1.ui.home
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.app.SearchManager.APP_DATA
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +11,9 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +28,7 @@ import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.databinding.FragmentHomeBinding
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
+import com.activitylogger.release1.searchhandlers.SearchActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,11 +37,12 @@ class HomeFragment : Fragment() , OnRecordListener {
 
 
     private var _binding: FragmentHomeBinding? = null
-    lateinit var recordsRCV: RecyclerView
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +70,13 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort_options, menu)
+
+val searchManager : SearchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        ((menu.findItem(R.id.menu_search_widget).actionView) as SearchView).apply{
+            setSearchableInfo(searchManager.getSearchableInfo(ComponentName(context,SearchActivity::class.java)))
+        }
+
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -112,6 +126,7 @@ class HomeFragment : Fragment() , OnRecordListener {
                 refreshAdapter()
                 true
             }
+
             else -> false
         }
 
@@ -176,6 +191,7 @@ class HomeFragment : Fragment() , OnRecordListener {
         const val ACTIVITY_ID = 75
          lateinit var homeViewModel: HomeViewModel
         lateinit var adapter : RecordsAdapter
+        lateinit var recordsRCV: RecyclerView
         fun newRecord(context : Context?,activityID:Int)
         {
             val intent = Intent(context, ComposeRecords::class.java)
