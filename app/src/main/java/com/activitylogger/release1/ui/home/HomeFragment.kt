@@ -37,7 +37,7 @@ class HomeFragment : Fragment() , OnRecordListener {
 
 
     private var _binding: FragmentHomeBinding? = null
-
+var reversed=false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -101,29 +101,72 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.created_date -> {
+
                 Collections.sort(recordsList, Records.compareIds)
-                refreshAdapter()
+                if(!reversed) {
+                    recordsList.reverse()
+                    refreshAdapter()
+                    reversed = true
+                }
+                else
+                {
+                    refreshAdapter()
+                reversed=false
+                }
                 true
             }
             R.id.recent_updated -> {
                 Collections.sort(recordsList, Records.compareUpdatedTimes)
-                recordsList.reverse()
-                refreshAdapter()
+                if (!reversed) {
+                    recordsList.reverse()
+                    refreshAdapter()
+                    reversed = true
+                } else {
+                    refreshAdapter()
+                    reversed = false
+                }
                 true
             }
             R.id.success_fail -> {
                 Collections.sort(recordsList, Records.compareSuccessStates)
-                refreshAdapter()
+                if(!reversed)
+                {
+                    recordsList.reverse()
+                    refreshAdapter()
+                    reversed=true
+                }
+                else {
+                    refreshAdapter()
+                    reversed = false
+                }
                 true
             }
             R.id.sort_A_to_Z -> {
                 Collections.sort(recordsList, Records.compareAlphabetized)
-                refreshAdapter()
+                if(!reversed)
+                {
+                    recordsList.reverse()
+                    refreshAdapter()
+                    reversed=true
+                }
+                else {
+                    refreshAdapter()
+                    reversed=false
+                }
                 true
             }
             R.id.sort_by_rating -> {
                 Collections.sort(recordsList, Records.compareRatings)
-                refreshAdapter()
+                if(!reversed)
+                {
+                    recordsList.reverse()
+                    refreshAdapter()
+                    reversed=true
+                }
+                else {
+                    refreshAdapter()
+                    reversed=false
+                }
                 true
             }
 
@@ -170,18 +213,16 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
         }
 
 
-    private fun recordStore(record: Records) : Intent
-    {
+    private fun recordStore(record: Records) : Intent {
         val recordIntent = Intent(context, ComposeRecords::class.java)
-        recordIntent.putExtra(record_send,"SELECTED")
-        recordIntent.putExtra("RECORDID",record.id)
-        recordIntent.putExtra(RECORDTITLE,record.title)
-        recordIntent.putExtra(RECORDDETAILS,record.content)
-        recordIntent.putExtra(RECORDEMOTIONS,record.emotions)
-        recordIntent.putExtra(RECORDSOURCES,record.sources)
-        recordIntent.putExtra(RECORDRATINGS,record.rating)
-        recordIntent.putExtra("TIMECREATED",record.timeCreated)
-
+        recordIntent.putExtra(record_send, "SELECTED")
+        recordIntent.putExtra("RECORDID", record.id)
+        recordIntent.putExtra(RECORDTITLE, record.title)
+        recordIntent.putExtra(RECORDDETAILS, record.content)
+        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
+        recordIntent.putExtra(RECORDSOURCES, record.sources)
+        recordIntent.putExtra(RECORDRATINGS, record.rating)
+        recordIntent.putExtra("TIMECREATED", record.timeCreated)
         return recordIntent
     }
 

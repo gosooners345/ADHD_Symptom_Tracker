@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,12 +20,15 @@ import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import com.activitylogger.release1.ui.home.HomeFragment
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
+import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity(),OnRecordListener {
 
     lateinit var cancelButton: Button
 
-    val resultList = ArrayList<Records>()
+    var resultList = ArrayList<Records>()
     lateinit var recordsRCV : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,7 @@ class SearchActivity : AppCompatActivity(),OnRecordListener {
         if (Intent.ACTION_SEARCH == intent.action)
         {
             intent.getStringExtra(SearchManager.QUERY)?.also {
-                query -> searchDB(query)
+                query ->searchDB(query)
             }
         }
 
@@ -46,12 +51,23 @@ cancelButton=findViewById(R.id.clearButton)
         cancelButton.setOnClickListener(cancelButtonClickListener)
 
     }
-fun searchDB(query : String){
+ fun searchDB(query : String){
+/*
+homeViewModel.viewModelScope.launch {
+    resultList = homeViewModel.recordsRepo!!.search(query) as ArrayList<Records>
+    if(query.isNullOrBlank()){
+        homeViewModel.recordsRepo!!.let{
 
+        }
+    }
+    for (record in resultList)
+        Toast.makeText(applicationContext,record.toString(),Toast.LENGTH_LONG).show()
 
-
+}
+*/
     for(record in HomeFragment.recordsList)
     {
+
         val searchArray = ArrayList<String>()
         var counter=0
         searchArray.add(record.title)

@@ -137,3 +137,15 @@ constructor()
     }
 
 }
+
+@Fts4(contentEntity = Records::class)
+@Entity(tableName="recordsfts")
+data class RecordsFTS(
+    @ColumnInfo(name="title")
+    var title: String,
+    @ColumnInfo(name="content")
+    var content: String,
+    @ColumnInfo(name="emotions")
+    var emotions : String,
+    @ColumnInfo(name="sources")
+    var sources: String)

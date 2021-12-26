@@ -3,10 +3,11 @@ package com.activitylogger.release1.async
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.activitylogger.release1.data.Records
+import com.activitylogger.release1.data.RecordsFTS
 import com.activitylogger.release1.databasehelpers.RecordsDB
 
 class RecordsRepository(context: Context) {
-    private val recordsDB : RecordsDB? = RecordsDB.getInstance(context!!)
+    val recordsDB : RecordsDB? = RecordsDB.getInstance(context!!)
 
     //Update Record
     fun updateRecord(record : Records?){
@@ -27,5 +28,11 @@ fun getRecords(): LiveData<List<Records>>{
     fun getRecord(ratings : Double):LiveData<Records?>{
         return recordsDB!!.recordDao!!.getRecord(ratings)
     }
+
+    suspend fun search(query:String) : List<Records>{
+        return recordsDB!!.recordDao!!.search(query)
+    }
+
+
 
 }
