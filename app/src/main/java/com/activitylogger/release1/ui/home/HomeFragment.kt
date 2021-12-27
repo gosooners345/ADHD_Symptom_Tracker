@@ -177,6 +177,7 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
 
     private fun getRecords() {
         try {
+           // recordsList= homeViewModel.recordsList
 
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, { it ->
                 if (recordsList.size > 0) recordsList.clear()

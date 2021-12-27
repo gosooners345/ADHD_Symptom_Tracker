@@ -8,8 +8,7 @@ import com.activitylogger.release1.data.RecordsWithMatchInfo
 import com.activitylogger.release1.databasehelpers.RecordsDB
 
 class RecordsRepository(context: Context) {
-    val recordsDB : RecordsDB? = RecordsDB.getInstance(context!!)
-
+    val recordsDB : RecordsDB? = RecordsDB.getInstance(context)
     //Update Record
     fun updateRecord(record : Records?){
         UpdateAsync(recordsDB!!.recordDao!!).execute(record)
@@ -31,15 +30,7 @@ fun getRecords(): LiveData<List<Records>>{
         return recordsDB!!.recordDao!!.getRecord(ratings)
     }
 
-    suspend fun search(query:String) : List<Records>{
-        return recordsDB!!.recordDao!!.search(query)
-    }
 
-    suspend fun searchWithMatchInfo(query:String):List<RecordsWithMatchInfo>{
-        return recordsDB!!.recordDao!!.searchWithMatchInfo(query)
-    }
-suspend fun allRecords():List<Records>{
-    return recordsDB!!.recordDao!!.allRecords()
-}
+
 
 }

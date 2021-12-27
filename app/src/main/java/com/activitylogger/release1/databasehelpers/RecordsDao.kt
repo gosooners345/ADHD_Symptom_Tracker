@@ -25,19 +25,5 @@ interface RecordsDao {
     fun getRecord(searchid : Int):LiveData<Records?>
 
     @Query("Select * from records where records.rating=:ratings")
-    fun getRecord(ratings:Double):LiveData<Records?>
-
-    //This is for the Full Text Search DB implementation
-    @Query(""" SELECT * from records join recordsfts on records.title=recordsfts.title where recordsfts match :query""")
-        suspend  fun search(query : String) : List<Records>
-
-     @Query("""Select *, matchinfo("recordsfts") as matchInfo
-from records join recordsfts on records.title = recordsfts.title where
-recordsfts MATCH :query
-     """)
-    suspend fun searchWithMatchInfo(query:String):List<RecordsWithMatchInfo>
-
-    @Query("""Select * from records""")
-    suspend fun allRecords() : List<Records>
-}
+    fun getRecord(ratings:Double):LiveData<Records?>}
 

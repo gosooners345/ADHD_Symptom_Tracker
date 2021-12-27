@@ -49,16 +49,16 @@ var successState :Boolean?=null
         success: Boolean,
         sources: String?,
 
-    ){
-        this.id=id!!
-        this.title=title!!
-content=details!!
-this.emotions=emotions!!
-this.rating=ratings
-        this.timeUpdated=timeValue
-        this.successState=success!!
-        this.sources=sources!!
-        this.timeCreated=dateValue
+    ) {
+        this.id = id!!
+        this.title = title!!
+        content = details!!
+        this.emotions = emotions!!
+        this.rating = ratings
+        this.timeUpdated = timeValue
+        this.successState = success!!
+        this.sources = sources!!
+        this.timeCreated = dateValue
 
     }
 constructor(timeCreatedValue:Date){
@@ -76,50 +76,49 @@ constructor(timeCreatedValue:Date){
 constructor()
 
 
-    companion object  {
-
-
-    var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
-        record1.compareTo(record2)
-    }
+    companion object {
+        var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
+            record1.timeCreated.compareTo(record2.timeCreated)
+        }
         var compareUpdatedTimes = java.util.Comparator<Records> { record1, record2 ->
 
-            if (record1.timeUpdated.compareTo(record2.timeUpdated) ==0)
+            if (record1.timeUpdated.compareTo(record2.timeUpdated) == 0)
                 record1.compareTo(record2)
             else
                 record1.timeUpdated.compareTo(record2.timeUpdated)
         }
-        var compareRatings = java.util.Comparator<Records>{
-            record1, record2 -> if( record1.rating.toInt().compareTo(record2.rating.toInt())==0)
+        var compareRatings = java.util.Comparator<Records> { record1, record2 ->
+            if (record1.rating.toInt().compareTo(record2.rating.toInt()) == 0)
                 record1.compareTo(record2)
             else
-            record1.rating.toInt().compareTo(record2.rating.toInt())
+                record1.rating.toInt().compareTo(record2.rating.toInt())
         }
-        var compareSuccessStates = java.util.Comparator<Records>{
-            record1,record2->
-           if(record1.successState!!.equals(record2.successState!!))
-               record1.compareTo(record2)
+        var compareSuccessStates = java.util.Comparator<Records> { record1, record2 ->
+            if (record1.successState!!.equals(record2.successState!!))
+                record1.compareTo(record2)
             else
                 (record1.successState!!.compareTo(record2.successState!!))
 
         }
-        var compareAlphabetized = java.util.Comparator<Records>{
-            record1, record2 ->
-            if(record1.title.lowercase(Locale.getDefault()).compareTo(record2.title.lowercase(
-                    Locale.getDefault()))==0)
+        var compareAlphabetized = java.util.Comparator<Records> { record1, record2 ->
+            if (record1.title.lowercase(Locale.getDefault()).compareTo(
+                    record2.title.lowercase(
+                        Locale.getDefault()
+                    )
+                ) == 0
+            )
                 record1.compareTo(record2)
             else
-                record1.title.lowercase(Locale.getDefault()).compareTo(record2.title.lowercase(
-                    Locale.getDefault()))
+                record1.title.lowercase(Locale.getDefault()).compareTo(
+                    record2.title.lowercase(
+                        Locale.getDefault()
+                    )
+                )
         }
 
-     var compareIds = java.util.Comparator<Records>{
-         record1, record2 ->
-         record1.compareTo(record2)
-     }
-
-
-
+        var compareIds = java.util.Comparator<Records> { record1, record2 ->
+            record1.compareTo(record2)
+        }
     }
 
     override fun compareTo(other: Records): Int {
