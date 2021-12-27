@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.data.RecordsFTS
+import com.activitylogger.release1.data.RecordsWithMatchInfo
 
 @Dao
 interface RecordsDao {
@@ -28,7 +29,15 @@ interface RecordsDao {
 
     //This is for the Full Text Search DB implementation
     @Query(""" SELECT * from records join recordsfts on records.title=recordsfts.title where recordsfts match :query""")
-    suspend fun search(query : String) : List<Records>
+        suspend  fun search(query : String) : List<Records>
 
+     @Query("""Select *, matchinfo("recordsfts") as matchInfo
+from records join recordsfts on records.title = recordsfts.title where
+recordsfts MATCH :query
+     """)
+    suspend fun searchWithMatchInfo(query:String):List<RecordsWithMatchInfo>
+
+    @Query("""Select * from records""")
+    suspend fun allRecords() : List<Records>
 }
 

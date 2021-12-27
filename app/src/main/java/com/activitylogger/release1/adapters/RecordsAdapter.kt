@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
@@ -15,6 +16,19 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
+class RecordDiffer : DiffUtil.ItemCallback<Records>(){
+    override fun areContentsTheSame(oldItem: Records, newItem: Records): Boolean {
+return oldItem.equals(newItem)
+
+    }
+
+    override fun areItemsTheSame(oldItem: Records, newItem: Records): Boolean {
+return oldItem.timeCreated == newItem.timeCreated
+    }
+}
+
+
 
 class RecordsAdapter constructor(private val recordList : ArrayList<Records>,private val onRecordListener: OnRecordListener,private  val context: Context) :RecyclerView.Adapter<RecordsAdapter.ViewHolder>(){
 

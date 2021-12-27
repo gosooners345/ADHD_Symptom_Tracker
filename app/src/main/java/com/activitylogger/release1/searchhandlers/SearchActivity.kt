@@ -23,6 +23,8 @@ import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchActivity : AppCompatActivity(),OnRecordListener {
 
@@ -42,8 +44,10 @@ class SearchActivity : AppCompatActivity(),OnRecordListener {
                 query ->searchDB(query)
             }
         }
+Collections.sort(resultList,Records.compareAlphabetized)
 
         recordsRCV.adapter= RecordsAdapter(resultList,this,this)
+
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
        // ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
@@ -52,19 +56,9 @@ cancelButton=findViewById(R.id.clearButton)
 
     }
  fun searchDB(query : String){
-/*
-homeViewModel.viewModelScope.launch {
-    resultList = homeViewModel.recordsRepo!!.search(query) as ArrayList<Records>
-    if(query.isNullOrBlank()){
-        homeViewModel.recordsRepo!!.let{
 
-        }
-    }
-    for (record in resultList)
-        Toast.makeText(applicationContext,record.toString(),Toast.LENGTH_LONG).show()
 
-}
-*/
+
     for(record in HomeFragment.recordsList)
     {
 
@@ -105,7 +99,7 @@ finish()
 }
 
     override fun onRecordClick(position: Int) {
-        val recordSend = HomeFragment.recordsList[position]
+        val recordSend = resultList[position]
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
         Log.i("Tag", "${recordSend}")

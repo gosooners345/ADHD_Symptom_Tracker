@@ -149,3 +149,24 @@ data class RecordsFTS(
     var emotions : String,
     @ColumnInfo(name="sources")
     var sources: String)
+
+data class RecordsWithMatchInfo(
+    @Embedded val record : Records, @ColumnInfo(name="matchInfo")
+    val matchInfo: ByteArray
+){
+    override fun equals(other: Any?): Boolean {
+        if(this===other)return true
+        if (javaClass!= other?.javaClass)return false
+
+        other as RecordsWithMatchInfo
+        if(record!=other.record)return false
+        if(!matchInfo.contentEquals(other.matchInfo)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result=record.hashCode()
+        result=31*result+matchInfo.contentHashCode()
+        return  result
+    }
+}
