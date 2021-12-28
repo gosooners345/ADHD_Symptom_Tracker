@@ -76,6 +76,7 @@ constructor(timeCreatedValue:Date){
 constructor()
 
 
+
     companion object {
         var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
             record1.timeCreated.compareTo(record2.timeCreated)

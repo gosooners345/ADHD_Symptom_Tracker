@@ -17,8 +17,6 @@ import kotlin.collections.ArrayList
 class HomeViewModel() : ViewModel() {
 var recordsRepo: RecordsRepository? =null
 
-    val recordsList = ArrayList<Records>()
-
     fun deleteRecord(record: Records){
         recordsRepo!!.deleteRecord(record)
 

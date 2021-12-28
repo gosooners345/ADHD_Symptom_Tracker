@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.data.Records
+import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
@@ -26,7 +27,7 @@ class SearchActivity : AppCompatActivity(),OnRecordListener {
 
     lateinit var cancelButton: Button
 lateinit var homeTV : TextView
-    var resultList = ArrayList<Records>()
+    var resultList = RecordsList()
     lateinit var recordsRCV: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,7 @@ lateinit var homeTV : TextView
                 resultList.add(record)
 
         }
-
+resultList.setRecordData()
 
     }
 

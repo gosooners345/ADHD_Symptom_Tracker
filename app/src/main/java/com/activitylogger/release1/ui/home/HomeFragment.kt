@@ -25,6 +25,7 @@ import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.async.RecordsRepository
 import com.activitylogger.release1.data.Records
+import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.databinding.FragmentHomeBinding
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
@@ -95,6 +96,7 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     }
 
     fun refreshAdapter() {
+        recordsList.setRecordData()
         adapter.notifyDataSetChanged()
     }
 
@@ -177,7 +179,6 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
 
     private fun getRecords() {
         try {
-           // recordsList= homeViewModel.recordsList
 
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, { it ->
                 if (recordsList.size > 0) recordsList.clear()
@@ -229,7 +230,7 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
 
     @SuppressLint("StaticFieldLeak")
     companion object{
-        var recordsList = ArrayList<Records>()
+        var recordsList = RecordsList()
         const val ACTIVITY_ID = 75
          lateinit var homeViewModel: HomeViewModel
         lateinit var adapter : RecordsAdapter
@@ -242,7 +243,9 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
             context!!.startActivity(intent)
         }
         fun refreshData(){
+            recordsList.setRecordData()
             adapter.notifyDataSetChanged()
+
         }
         const val record_send = "record_selected"
         const val RECORDTITLE = "RECORDTITLE"
