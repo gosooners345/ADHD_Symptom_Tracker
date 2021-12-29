@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.activitylogger.release1.ui.dashboard.DashboardFragment"
-        android:label="fragment_dashboard"
+        android:label="Statistics"
         tools:layout="@layout/fragment_dashboard" />
 
 </navigation>
