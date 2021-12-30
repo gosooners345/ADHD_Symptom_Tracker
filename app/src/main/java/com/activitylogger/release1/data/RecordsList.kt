@@ -10,6 +10,8 @@ class RecordsList : ArrayList<Records>() {
 var recordIDs = ArrayList<Int>()
     var successCt = 0
     var failCt = 0
+    var emotionList = ArrayList<String>()
+
 
     fun setRecordData()
     {

@@ -48,6 +48,7 @@
 
 
                 <com.jjoe64.graphview.GraphView
+                app:seriesType="points"
                     android:id="@+id/stats_graph"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
