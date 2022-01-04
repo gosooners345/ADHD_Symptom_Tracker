@@ -39,6 +39,7 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     private var _binding: FragmentHomeBinding? = null
 var reversed=false
+    var tripped =false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -65,7 +66,7 @@ var reversed=false
         recordsRCV.addItemDecoration(divider)
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
         setHasOptionsMenu(true)
-
+tripped=true
         return root
     }
 
@@ -96,7 +97,10 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     }
 
     fun refreshAdapter() {
+
         recordsList.setRecordData()
+        recordsList.getEmotionCount()
+        Log.i("EmotionCt", recordsList.emotionDataList.toStringCount())
         adapter.notifyDataSetChanged()
     }
 

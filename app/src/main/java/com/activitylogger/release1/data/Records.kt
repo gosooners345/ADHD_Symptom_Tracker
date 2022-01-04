@@ -61,6 +61,13 @@ var successState :Boolean?=null
         this.timeCreated = dateValue
 
     }
+    private fun sanitizeSearchQuery(query: String?): String {
+        if (query == null) {
+            return "";
+        }
+        val queryWithEscapedQuotes = query.replace(Regex.fromLiteral("\""), "\"\"")
+        return "*\"$queryWithEscapedQuotes\"*"
+    }
 constructor(timeCreatedValue:Date){
     this.title=""
     this.content=""

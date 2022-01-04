@@ -7,18 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
+import com.activitylogger.release1.data.EmotionData
+import com.activitylogger.release1.data.EmotionList
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.ValueDependentColor
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
+import com.jjoe64.graphview.helper.StaticLabelsFormatter
+import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.series.PointsGraphSeries
@@ -38,6 +44,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
     //For Line Graph data
 lateinit var ratingGraphView:GraphView
+lateinit var barGraphView : GraphView
 //For Pie Chart Data
 lateinit var successPieChart :PieChart
 lateinit var successTV : TextView
@@ -57,13 +64,14 @@ lateinit var FailTV:TextView
         val root: View = binding.root
 Log.i("Graphing","Graphing Line Data")
 ratingGraphView = root.findViewById(R.id.stats_graph)
+        barGraphView = root.findViewById(R.id.barstats_graph)
 graphLineData(recordsList)
         Log.i("Graphing","Graphing Success/Fail rate")
 successPieChart = root.findViewById(R.id.piechart)
         successTV = root.findViewById(R.id.successLabel)
         FailTV = root.findViewById(R.id.failLabel)
         graphPieChart(recordsList)
-
+graphBarGraph(recordsList)
         return root
     }
 
@@ -111,6 +119,7 @@ ratingGraphView.gridLabelRenderer.setHumanRounding(false)
       catch(ex:Exception)
       {
           ex.printStackTrace()
+          Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
 
       }
   }
@@ -131,11 +140,51 @@ successPieChart.addPieSlice( PieModel("Fail",recordList.failCt.toFloat(),Color.p
       }
       catch (ex:Exception){
           ex.printStackTrace()
+          Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
 
       }
 
   }
 
+    private fun graphBarGraph(recordList: RecordsList)
+    {
+        try{
+            Collections.sort(recordList.emotionDataList,EmotionData.compareCounts)
+                // recordList.emotionDataList.sortedByDescending { it.emotionCount }.reversed()
+
+            val series = BarGraphSeries<DataPoint>()
+for(i in 0..recordList.emotionDataList.size-1){
+    series.appendData(DataPoint(i*1.0,recordList.emotionDataList[i].emotionCount!!*1.0),true,recordList.emotionDataList.size)
+
+            }
+series.title="Emotions"
+            var staticLabelFormatter = StaticLabelsFormatter(barGraphView)
+staticLabelFormatter.setHorizontalLabels(recordList.emotionDataList.getEmotions().toTypedArray())
+       barGraphView.gridLabelRenderer.labelFormatter=staticLabelFormatter
+barGraphView.title="Emotion usage"
+            series.spacing=2
+            series.isDrawValuesOnTop=true
+            series.valuesOnTopColor = Color.RED
+            barGraphView.addSeries(series)
+            barGraphView.gridLabelRenderer.numHorizontalLabels=3
+            barGraphView.viewport.isScrollable=true
+            barGraphView.viewport.setScrollableY(true)
+            barGraphView.viewport.isScalable=true
+            barGraphView.viewport.setScalableY(true)
+            //series.valueDependentColor=
+            series.setValueDependentColor { data ->
+                Color.rgb(
+                    data.x.toInt() * 255 / 4,
+                    Math.abs(data.y * 255 / 6).toInt(), 100
+                )
+            }
+        }
+        catch (ex:Exception)
+        {
+            ex.printStackTrace()
+            Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+        }
+    }
 
 
 
