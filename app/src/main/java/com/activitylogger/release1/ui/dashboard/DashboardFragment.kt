@@ -166,7 +166,7 @@ barGraphView.title="Emotion usage"
             series.isDrawValuesOnTop=true
             series.valuesOnTopColor = Color.RED
             barGraphView.addSeries(series)
-            barGraphView.gridLabelRenderer.numHorizontalLabels=3
+            barGraphView.gridLabelRenderer.numHorizontalLabels=5
             barGraphView.viewport.isScrollable=true
             barGraphView.viewport.setScrollableY(true)
             barGraphView.viewport.isScalable=true
