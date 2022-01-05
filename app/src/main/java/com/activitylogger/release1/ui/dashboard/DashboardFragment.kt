@@ -32,7 +32,12 @@ import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
+
+
+
+
 
 
 class DashboardFragment : Fragment() {
@@ -151,26 +156,36 @@ successPieChart.addPieSlice( PieModel("Fail",recordList.failCt.toFloat(),Color.p
         try{
             Collections.sort(recordList.emotionDataList,EmotionData.compareCounts)
                 // recordList.emotionDataList.sortedByDescending { it.emotionCount }.reversed()
+var barList = ArrayList<DataPoint>()
 
-            val series = BarGraphSeries<DataPoint>()
+
 for(i in 0..recordList.emotionDataList.size-1){
-    series.appendData(DataPoint(i*1.0,recordList.emotionDataList[i].emotionCount!!*1.0),true,recordList.emotionDataList.size)
-
+    //series.appendData(DataPoint(i*1.0,recordList.emotionDataList[i].emotionCount!!*1.0),true,recordList.emotionDataList.size)
+barList.add(DataPoint(i*1.0,recordList.emotionDataList[i].emotionCount!!*1.0))
             }
-series.title="Emotions"
+            val series = BarGraphSeries(barList.toTypedArray())
+            series.title="Emotions"
+
             var staticLabelFormatter = StaticLabelsFormatter(barGraphView)
-staticLabelFormatter.setHorizontalLabels(recordList.emotionDataList.getEmotions().toTypedArray())
+            val emotionLabels = ArrayList<String>()
+            emotionLabels.addAll(recordList.emotionDataList.getEmotions())
+
+staticLabelFormatter.setHorizontalLabels(emotionLabels.toTypedArray())
        barGraphView.gridLabelRenderer.labelFormatter=staticLabelFormatter
 barGraphView.title="Emotion usage"
             series.spacing=2
+            series.dataWidth=2.0
             series.isDrawValuesOnTop=true
             series.valuesOnTopColor = Color.RED
             barGraphView.addSeries(series)
+
             barGraphView.gridLabelRenderer.numHorizontalLabels=5
             barGraphView.viewport.isScrollable=true
+            barGraphView.viewport.setMinY(0.0)
             barGraphView.viewport.setScrollableY(true)
             barGraphView.viewport.isScalable=true
             barGraphView.viewport.setScalableY(true)
+
             //series.valueDependentColor=
             series.setValueDependentColor { data ->
                 Color.rgb(
