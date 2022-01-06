@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
 
     var correctPassword = false
-lateinit var  passWordPreferences :SharedPreferences
+
 lateinit var enterButton : Button
 lateinit var appPassword :String
 lateinit var passwordTextBox : TextInputLayout
@@ -80,7 +80,7 @@ enterButton.text = "Log In"
             // menu should be considered as top level destinations.
             val appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.navigation_home, R.id.navigation_dashboard
+                    R.id.navigation_home, R.id.navigation_dashboard,R.id.navigation_settings
                 )
             )
             setupActionBarWithNavController(navController, appBarConfiguration)
@@ -155,6 +155,7 @@ correctPassword = true
     companion object{
         const val versionName = BuildConfig.VERSION_NAME
         const val appName = BuildConfig.APPLICATION_ID
+        lateinit var  passWordPreferences :SharedPreferences
         const val buildType = BuildConfig.BUILD_TYPE
     }
 }
