@@ -26,7 +26,7 @@
 
 
             <TextView
-                android:id="@+id/subjectLabelTV"
+                android:id="@+id/Login_TitleHdr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -49,10 +49,10 @@
                 android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subjectLabelTV">
+                app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/titleTextBox"
+                    android:id="@+id/passwordTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
