@@ -8,10 +8,12 @@
 
     <TextView
         android:id="@+id/Login_TitleHdr"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Log in to view and record events"
+        android:layout_marginEnd="8dp"
+        android:text="Welcome Back! Log in to view your journal."
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,13 +23,13 @@
         android:id="@+id/passwordTextBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="8dp"
         android:hint="Enter password here"
         android:layoutDirection="locale"
-        app:endIconMode="clear_text"
         android:padding="5dp"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
@@ -36,8 +38,8 @@
             android:id="@+id/TextBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:layout_margin="8dp"
+            android:inputType="textPassword"
             android:singleLine="true"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -46,9 +48,9 @@
         android:id="@+id/enterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
         android:layout_marginTop="32dp"
         android:text="Enter"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ADHD Symptom Tracker</string>
+    <string name="app_name">ADHD Journal</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -12,10 +12,7 @@
     <string name="save_note">Save Note</string>
     <string name="edit_record">Edit record</string>
     <string name="record">Record</string>
-    <string name="third_page"> Record events using the record button on the bottom right corner of the loading screen.\r\n
-                You can record events that had an impact on you recently, or anything for the matter. You can jot down how you feel, think, any lessons learned, and much more. You can trace any ADHD symptoms down as well with the dropdown on the page.
-        You can rate how the event went by sliding the rating from 0 to 100. 0 for bad, 100 for good. \r\n Call it a success or failure in your mind by hitting the success/fail checkbox.
-    </string>
+
 <string-array name="symptom_array">
     <item>Impulsiveness</item>
     <item>Impatience</item>
@@ -23,6 +20,7 @@
     <item>Working Memory Issues</item>
     <item>Mental Sluggishness/Dopamine Hunt</item>
     <item>Having a bad day</item>
+    <item>Ooooh, shiny!!</item>
     <item>Brain Fog</item>
     <item>Everything\'s good here</item>
     <item>Positive Environment/Grace</item>

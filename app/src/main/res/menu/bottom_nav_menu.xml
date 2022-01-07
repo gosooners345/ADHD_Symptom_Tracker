@@ -13,4 +13,8 @@
         android:id="@+id/navigation_settings"
         android:title="Settings"
         android:icon="@drawable/ic_settings_drawable"/>
+    <!--<item
+        android:id="@+id/navigation_blank_settings"
+        android:title="tempS"
+        android:icon="@drawable/ic_settings_drawable"/>-->
 </menu>

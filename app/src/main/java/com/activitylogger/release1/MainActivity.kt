@@ -18,8 +18,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import android.content.SharedPreferences
 import android.text.Editable
+import android.text.InputType
+import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.FragmentManager
+import androidx.preference.EditTextPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import com.activitylogger.release1.settings.AppSettingsFragment
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -117,6 +124,8 @@ var fragmentTransaction = fragmentManager.beginTransaction()
 
             val navView: BottomNavigationView = binding.navView
 
+
+
             val navController = findNavController(R.id.nav_host_fragment_activity_main)
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
@@ -125,6 +134,9 @@ var fragmentTransaction = fragmentManager.beginTransaction()
                     R.id.navigation_home, R.id.navigation_dashboard,R.id.navigation_settings
                 )
             )
+            /*supportFragmentManager.beginTransaction()
+                .replace(R.id.settings_container, AppSettingsFragment())
+                .commit()*/
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
             mainActionButton = findViewById(R.id.record_button)
@@ -138,8 +150,6 @@ var fragmentTransaction = fragmentManager.beginTransaction()
 
     var mainButtonClick = View.OnClickListener {
         HomeFragment.newRecord(this, 75)
-
-
     }
 
 
@@ -147,21 +157,25 @@ var fragmentTransaction = fragmentManager.beginTransaction()
         val introList = ArrayList<PaperOnboardingPage>()
         val firstPage = PaperOnboardingPage(
             "Welcome!",
-            "Welcome to the ADHD Journal!\n Log any impactful events that affected your life here.\n You can record how you're feeling in the moment, add thoughts, trace symptoms, and much more!\n" +
-                    "\nAll in a secure place like your own personal diary." +
-                    "Swipe right to continue.",
+           String.format("Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
+                   "\nThis can help you in therapy and so much more!\n  Swipe right to continue."),
             resources.getColor(R.color.red),
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_next_arrow
         )
-        val secondPage = PaperOnboardingPage("Security", "Your personal thought diary outta have a password to keep prying eyes away from your stuff.\n " +
-            "You'll want to create a memorable password so you don't lose track of everything.\n" +
-            "Don't forget your password.\n Keep it simple or as secure as you want.\n " +"You can also change your password at will in settings.\n"+
-            "Nobody is going to be able to hack it unless they had access to your phone and could pry the data from it. ",resources.getColor(R.color.red), R.drawable.ic_security_lock,
+        val secondPage = PaperOnboardingPage("Security", String.format("This is your personal journal. \n" +
+                "    It would be wise to protect it with a passcode or password so other people do not go prying into your private matters without your permission. \n" +
+                "    Make sure you remember it or else you may have trouble accessing your info."),resources.getColor(R.color.red), R.drawable.ic_security_lock,
         R.drawable.ic_next_arrow)
-        val thirdPage = PaperOnboardingPage("Event Records",getString(R.string.third_page),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
-        val fourthPage = PaperOnboardingPage("Statistics","Track your statistics here. You can see how you're doing on rating, success/fail percentage, and emotional statistics.",resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
-val fifthPage= PaperOnboardingPage("Finally","I hope I could keep you focused long enough to make it to the end of this quick intro. \nBefore you start, you'll need to do is come up with a password to log in. That can happen after you exit this tutorial. \nAre you ready? Tap the home icon below to set a password and let's make mental health discussions better! \n Hit the skip button to continue.",R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
+        val thirdPage = PaperOnboardingPage("Logging",String.format("You can record events by simply hitting record on the home screen. \n" +
+                "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
+                "        You are able to rate how the event was from your perspective from 0(bad) to 100(good).\n" +
+                "        You are also able to record ADHD Symptoms that could've influenced the event by selecting from the dropdown on the form.\n" +
+                "        Hit save and its logged."),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
+        val fourthPage = PaperOnboardingPage("Statistics",String.format("    Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
+val fifthPage= PaperOnboardingPage("Finally",String.format("I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
+        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem!\n" +
+        "        Let us make mental health discussions a more pleasant experience for everyone!"),R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
 introList.add(firstPage)
         introList.add(secondPage)
         introList.add(thirdPage)
