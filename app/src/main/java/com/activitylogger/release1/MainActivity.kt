@@ -152,16 +152,16 @@ var fragmentTransaction = fragmentManager.beginTransaction()
                     "Swipe right to continue.",
             resources.getColor(R.color.red),
             R.drawable.ic_home_black_24dp,
-            R.drawable.ic_down_arrow
+            R.drawable.ic_next_arrow
         )
         val secondPage = PaperOnboardingPage("Security", "Your personal thought diary outta have a password to keep prying eyes away from your stuff.\n " +
             "You'll want to create a memorable password so you don't lose track of everything.\n" +
             "Don't forget your password.\n Keep it simple or as secure as you want.\n " +"You can also change your password at will in settings.\n"+
             "Nobody is going to be able to hack it unless they had access to your phone and could pry the data from it. ",resources.getColor(R.color.red), R.drawable.ic_security_lock,
-        R.drawable.ic_down_arrow)
-        val thirdPage = PaperOnboardingPage("Event Records",getString(R.string.third_page),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_down_arrow)
-        val fourthPage = PaperOnboardingPage("Statistics","Track your statistics here. You can see how you're doing on rating, success/fail percentage, and emotional statistics.",resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_down_arrow)
-val fifthPage= PaperOnboardingPage("Finally","I hope I could keep you focused long enough to make it to the end of this quick intro. \nBefore you start, you'll need to do is come up with a password to log in. That can happen after you exit this tutorial. \nAre you ready? Tap the home icon below to set a password and let's make mental health discussions better!",R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
+        R.drawable.ic_next_arrow)
+        val thirdPage = PaperOnboardingPage("Event Records",getString(R.string.third_page),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
+        val fourthPage = PaperOnboardingPage("Statistics","Track your statistics here. You can see how you're doing on rating, success/fail percentage, and emotional statistics.",resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
+val fifthPage= PaperOnboardingPage("Finally","I hope I could keep you focused long enough to make it to the end of this quick intro. \nBefore you start, you'll need to do is come up with a password to log in. That can happen after you exit this tutorial. \nAre you ready? Tap the home icon below to set a password and let's make mental health discussions better! \n Hit the skip button to continue.",R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
 introList.add(firstPage)
         introList.add(secondPage)
         introList.add(thirdPage)
