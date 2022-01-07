@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.ramotion.paperonboarding.PaperOnboardingFragment
+import com.ramotion.paperonboarding.PaperOnboardingPage
 import androidx.navigation.ui.setupWithNavController
 import com.activitylogger.release1.databinding.ActivityMainBinding
 import com.activitylogger.release1.ui.home.HomeFragment
@@ -17,6 +19,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -24,18 +27,60 @@ class MainActivity : AppCompatActivity() {
 
 
     var correctPassword = false
-
+lateinit var fragmentManager : FragmentManager
 lateinit var enterButton : Button
 lateinit var appPassword :String
-lateinit var passwordTextBox : TextInputLayout
+lateinit var skipButton :Button
+lateinit var firstUse :Any
+    lateinit var passwordTextBox : TextInputLayout
 var userPassword = ""
     private lateinit var binding: ActivityMainBinding
     lateinit var mainActionButton: ExtendedFloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        passWordPreferences = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
+
+        //Intro guide for new users
+        setContentView(R.layout.app_intro_layout)
+         firstUse = passWordPreferences.getBoolean("firstUse",false)
+        if(firstUse==false)
+        firstUser()
+else
+    firstUse()
+        //Log in to the app before accessing the records.
+        //For security purposes the password is stored locally
+
+
+
+    }
+
+
+    fun firstUser()
+    {
+fragmentManager = supportFragmentManager
+        val paperOnboardingFragment = PaperOnboardingFragment.newInstance(onBoarding())
+var fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.frameLayout,paperOnboardingFragment)
+        fragmentTransaction.commit()
+ skipButton = findViewById<Button>(R.id.skipButton)
+        skipButton.setOnClickListener(skipButtonClickListener)
+
+
+    }
+
+    fun firstUse()
+    {
+        if(firstUse==false)
+        firstUse = true
+        val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
+        passWordEditor.putBoolean("firstUse", firstUse as Boolean)
+        passWordEditor.apply()
         setContentView(R.layout.login_screen)
-        passWordPreferences= getSharedPreferences("ADHDTracker", MODE_PRIVATE)
-        appPassword = passWordPreferences.getString("password","").toString()
+
+
+
+        appPassword = passWordPreferences.getString("password", "").toString()
+
         enterButton = findViewById(R.id.enterButton)
         passwordTextBox = findViewById(R.id.passwordTextBox)
         passwordTextBox.editText!!.addTextChangedListener(object : TextWatcher {
@@ -49,23 +94,20 @@ var userPassword = ""
 
             }
         })
-
-        if(appPassword=="")
-        {
-
+        if (appPassword == "") {
             enterButton.text = "Save"
             enterButton.setOnClickListener(saveButtonClickListener)
-        }
-        else
-        {
-enterButton.text = "Log In"
+        } else {
+            enterButton.text = "Log In"
             enterButton.setOnClickListener(loginButtonClickListener)
         }
+    }
 
+    var skipButtonClickListener = View.OnClickListener {
+        firstUse()
 
 
     }
-
 
     fun loadApp(){
 
@@ -101,6 +143,34 @@ enterButton.text = "Log In"
     }
 
 
+    fun onBoarding() : ArrayList<PaperOnboardingPage> {
+        val introList = ArrayList<PaperOnboardingPage>()
+        val firstPage = PaperOnboardingPage(
+            "Welcome!",
+            "Welcome to the ADHD Journal!\n Log any impactful events that affected your life here.\n You can record how you're feeling in the moment, add thoughts, trace symptoms, and much more!\n" +
+                    "\nAll in a secure place like your own personal diary." +
+                    "Swipe right to continue.",
+            resources.getColor(R.color.red),
+            R.drawable.ic_home_black_24dp,
+            R.drawable.ic_down_arrow
+        )
+        val secondPage = PaperOnboardingPage("Security", "Your personal thought diary outta have a password to keep prying eyes away from your stuff.\n " +
+            "You'll want to create a memorable password so you don't lose track of everything.\n" +
+            "Don't forget your password.\n Keep it simple or as secure as you want.\n " +"You can also change your password at will in settings.\n"+
+            "Nobody is going to be able to hack it unless they had access to your phone and could pry the data from it. ",resources.getColor(R.color.red), R.drawable.ic_security_lock,
+        R.drawable.ic_down_arrow)
+        val thirdPage = PaperOnboardingPage("Event Records",getString(R.string.third_page),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_down_arrow)
+        val fourthPage = PaperOnboardingPage("Statistics","Track your statistics here. You can see how you're doing on rating, success/fail percentage, and emotional statistics.",resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_down_arrow)
+val fifthPage= PaperOnboardingPage("Finally","I hope I could keep you focused long enough to make it to the end of this quick intro. \nBefore you start, you'll need to do is come up with a password to log in. That can happen after you exit this tutorial. \nAre you ready? Tap the home icon below to set a password and let's make mental health discussions better!",R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
+introList.add(firstPage)
+        introList.add(secondPage)
+        introList.add(thirdPage)
+        introList.add(fourthPage)
+        introList.add(fifthPage)
+        return  introList
+    }
+
+
     var saveButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
         storePassword(userPassword)
@@ -121,7 +191,7 @@ if(password != appPassword)
 {
 
     MaterialAlertDialogBuilder(this)
-            .setTitle("Save Record?")
+            .setTitle("Incorrect Password")
             .setMessage(String.format("Invalid Password, Try Again?"))
             .setNegativeButton("No") { _, _ ->
                 finish()
@@ -144,11 +214,9 @@ return true
     fun storePassword(password: String)
     {
         val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
-
         passWordEditor.putString("password",password)
         passWordEditor.apply()
-
-correctPassword = true
+        correctPassword = true
     }
 
 

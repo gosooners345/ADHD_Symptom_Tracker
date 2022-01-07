@@ -169,7 +169,26 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sourcesContainer" />
+                app:layout_constraintTop_toBottomOf="@+id/symptomsCB" />
+
+            <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                android:id="@+id/symptomsCB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_8"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/spinner_outline"
+                android:paddingLeft="5dp"
+                android:spinnerMode="dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sourcesContainer"
+                app:smsp_arrowColor="?attr/colorOnBackground"
+                app:smsp_floatingLabelColor="?attr/colorPrimary"
+                app:smsp_itemColor="?attr/colorOnBackground"
+                app:smsp_itemListColor="?attr/colorOnBackground" />
 
             <SeekBar
                 android:id="@+id/ratingSeekbar"

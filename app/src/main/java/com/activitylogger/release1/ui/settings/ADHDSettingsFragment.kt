@@ -30,6 +30,7 @@ class ADHDSettingsFragment : Fragment() {
 lateinit var passwordTextBox : TextInputLayout
 lateinit var enterButton : Button
     var userPassword = ""
+    lateinit var resetButton : Button
     override fun onCreateView(inflater: LayoutInflater,container:ViewGroup?,savedInstanceState: Bundle?): View? {
 val view = inflater.inflate(R.layout.settings_screen,container,false)
 
@@ -37,6 +38,8 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
         passwordy = MainActivity.passWordPreferences.getString("password","")!!
         enterButton = view.findViewById(R.id.enterButton)
         enterButton.setOnClickListener(saveButtonListener)
+        resetButton = view.findViewById(R.id.resetButton)
+        resetButton.setOnClickListener(resetButtonListener)
         passwordTextBox=view.findViewById(R.id.passwordTextBox)
         passwordTextBox.editText!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -53,7 +56,12 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
 return  view
     }
 
-
+var resetButtonListener = View.OnClickListener {
+    val passwordEditor : SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+    passwordEditor.putString("password","")
+    passwordEditor.putBoolean("firstUse",false)
+    passwordEditor.apply()
+}
 
 var saveButtonListener = View.OnClickListener {
     userPassword = passwordTextBox.editText!!.text.toString()

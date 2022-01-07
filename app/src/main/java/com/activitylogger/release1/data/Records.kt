@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import androidx.room.*
+import androidx.room.ColumnInfo.VALUE_UNSPECIFIED
 import org.jetbrains.annotations.NotNull
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -36,6 +37,8 @@ var successState :Boolean?=null
     var emotions : String = ""
     @ColumnInfo(name="sources",defaultValue = "")
     var sources : String = ""
+    @ColumnInfo(name="symptoms", defaultValue = "")
+    var symptoms  = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(
@@ -48,18 +51,18 @@ var successState :Boolean?=null
         timeValue: Long,
         success: Boolean,
         sources: String?,
-
+symptoms : String
     ) {
         this.id = id!!
         this.title = title!!
         content = details!!
         this.emotions = emotions!!
+        this.symptoms=symptoms!!
         this.rating = ratings
         this.timeUpdated = timeValue
         this.successState = success!!
         this.sources = sources!!
         this.timeCreated = dateValue
-
     }
     private fun sanitizeSearchQuery(query: String?): String {
         if (query == null) {
@@ -73,6 +76,7 @@ constructor(timeCreatedValue:Date){
     this.content=""
     this.sources=""
     this.emotions=""
+this.symptoms=""
     this.rating=0.0
     this.timeUpdated=System.currentTimeMillis()
        this.timeCreated = timeCreatedValue
@@ -107,6 +111,12 @@ constructor()
             else
                 (record1.successState!!.compareTo(record2.successState!!))
 
+        }
+        var compareSymptoms = java.util.Comparator<Records>{record1,record2 ->
+            if(record1.symptoms!!.compareTo(record2.symptoms!!)==0)
+                record1.compareTo(record2)
+            else
+                record1.symptoms!!.compareTo(record2.symptoms!!)
         }
         var compareAlphabetized = java.util.Comparator<Records> { record1, record2 ->
             if (record1.title.lowercase(Locale.getDefault()).compareTo(
@@ -145,35 +155,4 @@ constructor()
 
 }
 
-@Fts4(contentEntity = Records::class)
-@Entity(tableName="recordsfts")
-data class RecordsFTS(
-    @ColumnInfo(name="title")
-    var title: String,
-    @ColumnInfo(name="content")
-    var content: String,
-    @ColumnInfo(name="emotions")
-    var emotions : String,
-    @ColumnInfo(name="sources")
-    var sources: String)
 
-data class RecordsWithMatchInfo(
-    @Embedded val record : Records, @ColumnInfo(name="matchInfo")
-    val matchInfo: ByteArray
-){
-    override fun equals(other: Any?): Boolean {
-        if(this===other)return true
-        if (javaClass!= other?.javaClass)return false
-
-        other as RecordsWithMatchInfo
-        if(record!=other.record)return false
-        if(!matchInfo.contentEquals(other.matchInfo)) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result=record.hashCode()
-        result=31*result+matchInfo.contentHashCode()
-        return  result
-    }
-}

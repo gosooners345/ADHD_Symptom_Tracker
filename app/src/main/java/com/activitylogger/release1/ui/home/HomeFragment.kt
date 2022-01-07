@@ -228,6 +228,11 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
         recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
         recordIntent.putExtra(RECORDSOURCES, record.sources)
         recordIntent.putExtra(RECORDRATINGS, record.rating)
+        if(record.symptoms!="")
+            recordIntent.putExtra("RECORDSYMPTOMS",record.symptoms)
+        else
+            recordIntent.putExtra("RECORDSYMPTOMS","")
+
         recordIntent.putExtra("TIMECREATED", record.timeCreated)
         return recordIntent
     }

@@ -61,6 +61,7 @@ lateinit var homeTV : TextView
             searchArray.add(record.content)
             searchArray.add(record.emotions)
             searchArray.add(record.sources)
+            searchArray.add(record.symptoms)
             for (i in 0..searchArray.size - 1) {
                 if (searchArray[i].contains(query)) {
                     counter++
@@ -70,7 +71,7 @@ lateinit var homeTV : TextView
                 resultList.add(record)
 
         }
-resultList.setRecordData()
+        resultList.setRecordData()
 
     }
 

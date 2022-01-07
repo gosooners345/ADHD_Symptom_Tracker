@@ -3,8 +3,6 @@ package com.activitylogger.release1.databasehelpers
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsFTS
-import com.activitylogger.release1.data.RecordsWithMatchInfo
 
 @Dao
 interface RecordsDao {

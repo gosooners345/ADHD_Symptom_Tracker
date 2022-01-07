@@ -10,6 +10,7 @@
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-v24/spinner_outline.xml" value="0.1425925925925926" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/app_intro_layout.xml" value="0.22676579925650558" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/content_records.xml" value="0.1" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/error_screen.xml" value="1.212171052631579" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/fragment_dashboard.xml" value="0.19122257053291536" />
@@ -17,11 +18,11 @@
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/login_screen.xml" value="0.2609375" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/notes_compose_layout.xml" value="0.15" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/notes_item_layout.xml" value="0.25" />
-        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout.xml" value="0.1" />
-        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/records_item_layout.xml" value="0.75" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout.xml" value="0.33" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/records_item_layout.xml" value="0.13742690058479531" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/search_results.xml" value="0.5" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/search_results_layout.xml" value="0.1" />
-        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/settings_screen.xml" value="0.146875" />
+        <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/layout/settings_screen.xml" value="0.25" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/menu/sort_options.xml" value="0.25" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/xml/settings_page.xml" value="0.375" />

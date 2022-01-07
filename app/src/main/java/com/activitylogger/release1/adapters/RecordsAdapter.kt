@@ -50,6 +50,7 @@ val record = recordList[position]
         var emotionHolder = holder.emotionTV
         var timeCreatedHolder = holder.timeCreated
         var sourcesHolder = holder.sourcesTV
+        var symptomHolder = holder.symptomsTV
         //Assign values to variable references
         recordTitle.text=record.title
         ratingHolder.text=record.rating.toString()
@@ -57,10 +58,9 @@ val record = recordList[position]
     emotionHolder.text = record.emotions
         sourcesHolder.text = record.sources
         successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
-        //val sdf:SimpleDateFormat = SimpleDateFormat("MMM dd yyyy HH:mm")
-        //val date : Date = Date(record.timeCreated)
         timeCreatedHolder.text="Time Created: "+ DateFormat.getInstance().format(record.timeCreated)
         timeStamp.text ="Last Updated: "+ DateFormat.getInstance().format(record.timeUpdated)
+        symptomHolder.text = "Symptoms affecting: ${if(record.symptoms!="")record.symptoms else "Record Symptoms Here"}"
 
 
     }
@@ -80,6 +80,7 @@ var timeCreated : TextView = itemView.findViewById(R.id.time_created)
         var emotionTV : TextView = itemView.findViewById(R.id.emotions_text)
         var successTV : TextView = itemView.findViewById(R.id.success_state_label)
         var sourcesTV : TextView=itemView.findViewById(R.id.sources_text)
+       var symptomsTV : TextView = itemView.findViewById(R.id.symptoms_text)
         override fun onClick(v: View?) {
 onRecordListener.onRecordClick(bindingAdapterPosition)
         }

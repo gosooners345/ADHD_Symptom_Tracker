@@ -7,16 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.SeekBar
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList as recordsList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel as homeViewModel
 
@@ -26,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 class ComposeRecords : AppCompatActivity(){
@@ -42,19 +41,22 @@ lateinit var saveButton : Button
     lateinit    var editButton : Button
     var recordTitleString=""
     var recordContentString=""
+    var recordSymptomString = ""
     var recordEmotionString=""
     var recordSourcesString=""
     val emptyString = ""
     var ratingsInfo =0.0
-
+var recordSymptoms = ""
     var isnewRecord = false
     lateinit var recordTitle : TextInputLayout
     lateinit var recordContent : TextInputLayout
     lateinit var recordEmotion : TextInputLayout
     lateinit var recordSources : TextInputLayout
+    lateinit var recordSymptomCB : SmartMaterialSpinner<String>
     lateinit var ratingSeekbar : SeekBar
     lateinit var successChip : Chip
      var success =false
+    lateinit var symptomArray : ArrayList<String>
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +70,13 @@ lateinit var saveButton : Button
         successChip = findViewById(R.id.successchip)
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
         successChip.setOnCheckedChangeListener(successChanged)
+        symptomArray=ArrayList()
+        symptomArray.addAll(resources.getStringArray(R.array.symptom_array))
         recordsRepo = RecordsRepository(this)
+recordSymptomCB = findViewById(R.id.symptomsCB)
 
+        recordSymptomCB.item = symptomArray
+        recordSymptomCB.onItemSelectedListener=symptomCBListener
         if (!intentInfo) {
             recordTitle.editText!!.setText(record!!.title)
             recordContent.editText!!.setText(record!!.content)
@@ -80,6 +87,8 @@ lateinit var saveButton : Button
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
+            recordSymptomCB.setSelection(0)
+
 
 Log.i(TAG,"Accessing Record for Editing")
 
@@ -91,7 +100,10 @@ Log.i(TAG,"Accessing Record for Editing")
             recordSources.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
-Log.i(TAG,"Logging New Event")
+            recordSymptomCB.setSelection(0)
+///            recordSymptoms = recordSymptomCB.selectedItem
+            recordSymptoms=emptyString
+            Log.i(TAG,"Logging New Event")
 
 
         }
@@ -163,9 +175,10 @@ fun getRecordData():Records
     var recordRating = intent.getDoubleExtra(HomeFragment.RECORDRATINGS,0.0)
     val recordTimeCreated=intent.getSerializableExtra("TIMECREATED")
     val recordSources = intent.getStringExtra(HomeFragment.RECORDSOURCES)
+    val recordSymptoms = intent.getStringExtra("RECORDSYMPTOMS")!!
     val recordSuccess = intent.getBooleanExtra(HomeFragment.RECORDSUCCESS,false)
     return Records(recordtitle,recordID,
-        recordTimeCreated as Date,recordEmotions,recordContent,recordRating,System.currentTimeMillis(),recordSuccess,recordSources)
+        recordTimeCreated as Date,recordEmotions,recordContent,recordRating,System.currentTimeMillis(),recordSuccess,recordSources,recordSymptoms)
 
 }
 
@@ -182,6 +195,20 @@ fun getRecordData():Records
             .setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+
+    var symptomCBListener : AdapterView.OnItemSelectedListener = object :
+    AdapterView.OnItemSelectedListener{
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+recordSymptoms =String.format(parent!!.selectedItem.toString())
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        }
+    }
+
 
     private var ratingSeekBarListener :SeekBar.OnSeekBarChangeListener = object :SeekBar.OnSeekBarChangeListener{
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -200,10 +227,12 @@ fun getRecordData():Records
     }
 
     private var saveRecord =View.OnClickListener{
+
 recordContentString=recordContent.editText!!.text.toString()
         recordTitleString=recordTitle.editText!!.text.toString()
         recordEmotionString=recordEmotion.editText!!.text.toString()
         recordSourcesString=recordSources.editText!!.text.toString()
+        recordSymptomString  = recordSymptoms
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
         record.title= recordTitleString
@@ -211,6 +240,7 @@ recordContentString=recordContent.editText!!.text.toString()
         record.emotions=recordEmotionString
         record.sources = recordSourcesString
         record.rating=ratingsInfo
+        record.symptoms = recordSymptomString
         record.successState = success
         run {
             if (isnewRecord) {
@@ -271,7 +301,7 @@ private var editRecord = View.OnClickListener {
         mode = savedInstanceState.getInt("mode")
         if (mode == EDIT_ON) {
             val anchorView = findViewById<View>(R.id.masterLayout)
-            Snackbar.make(anchorView, "Note Editing Enabled", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(anchorView, "Record Editing Enabled", Snackbar.LENGTH_SHORT).show()
 
         }
     }

@@ -3,8 +3,6 @@ package com.activitylogger.release1.async
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsFTS
-import com.activitylogger.release1.data.RecordsWithMatchInfo
 import com.activitylogger.release1.databasehelpers.RecordsDB
 
 class RecordsRepository(context: Context) {
