@@ -17,16 +17,19 @@ import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import android.content.SharedPreferences
+import android.opengl.Visibility
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.activitylogger.release1.settings.AppSettingsFragment
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -38,9 +41,12 @@ lateinit var fragmentManager : FragmentManager
 lateinit var enterButton : Button
 lateinit var appPassword :String
 lateinit var skipButton :Button
+var passwordEnabled =true
+    lateinit var title : TextView
 lateinit var firstUse :Any
     lateinit var passwordTextBox : TextInputLayout
 var userPassword = ""
+    lateinit var enablePasswordSwitch : SwitchMaterial
     private lateinit var binding: ActivityMainBinding
     lateinit var mainActionButton: ExtendedFloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,42 +55,46 @@ var userPassword = ""
 
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
-         firstUse = passWordPreferences.getBoolean("firstUse",false)
-        if(firstUse==false)
-        firstUser()
-else
-    firstUse()
+        firstUse = passWordPreferences.getBoolean("firstUse", false)
+        passwordEnabled= passWordPreferences.getBoolean("enablePassword",true)
+        if (firstUse == false)
+            firstUser()
+        else if(passwordEnabled)
+            loginScreen()
+        else
+            loadApp()
         //Log in to the app before accessing the records.
         //For security purposes the password is stored locally
-
 
 
     }
 
 
-    fun firstUser()
-    {
-fragmentManager = supportFragmentManager
+    fun firstUser() {
+        fragmentManager = supportFragmentManager
         val paperOnboardingFragment = PaperOnboardingFragment.newInstance(onBoarding())
-var fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.frameLayout,paperOnboardingFragment)
+        var fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.frameLayout, paperOnboardingFragment)
         fragmentTransaction.commit()
- skipButton = findViewById<Button>(R.id.skipButton)
+        skipButton = findViewById<Button>(R.id.skipButton)
         skipButton.setOnClickListener(skipButtonClickListener)
 
 
     }
 
-    fun firstUse()
-    {
-        if(firstUse==false)
-        firstUse = true
-        val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
-        passWordEditor.putBoolean("firstUse", firstUse as Boolean)
-        passWordEditor.apply()
+    fun loginScreen() {
         setContentView(R.layout.login_screen)
-
-
+        enablePasswordSwitch = findViewById(R.id.enablePasswordSwitch)
+        title = findViewById<TextView>(R.id.Login_TitleHdr)
+        val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
+        if (firstUse == false) {
+            firstUse = true
+            passWordEditor.putBoolean("firstUse", firstUse as Boolean)
+            passWordEditor.apply()
+            enablePasswordSwitch.isChecked=true
+        }
+        else
+enablePasswordSwitch.visibility= View.GONE
 
         appPassword = passWordPreferences.getString("password", "").toString()
 
@@ -97,21 +107,21 @@ var fragmentTransaction = fragmentManager.beginTransaction()
             }
 
             override fun afterTextChanged(editable: Editable) {
-
-
             }
         })
         if (appPassword == "") {
+     title.text = "Type in a password to secure your journal!"
             enterButton.text = "Save"
             enterButton.setOnClickListener(saveButtonClickListener)
         } else {
+            title.text="Welcome Back! Enter your password below to log into your journal!"
             enterButton.text = "Log In"
             enterButton.setOnClickListener(loginButtonClickListener)
         }
     }
 
     var skipButtonClickListener = View.OnClickListener {
-        firstUse()
+        loginScreen()
 
 
     }
@@ -121,11 +131,7 @@ var fragmentTransaction = fragmentManager.beginTransaction()
         try {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
-
             val navView: BottomNavigationView = binding.navView
-
-
-
             val navController = findNavController(R.id.nav_host_fragment_activity_main)
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
@@ -134,9 +140,7 @@ var fragmentTransaction = fragmentManager.beginTransaction()
                     R.id.navigation_home, R.id.navigation_dashboard,R.id.navigation_settings
                 )
             )
-            /*supportFragmentManager.beginTransaction()
-                .replace(R.id.settings_container, AppSettingsFragment())
-                .commit()*/
+
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
             mainActionButton = findViewById(R.id.record_button)
@@ -174,8 +178,8 @@ var fragmentTransaction = fragmentManager.beginTransaction()
                 "        Hit save and its logged."),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
         val fourthPage = PaperOnboardingPage("Statistics",String.format("    Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
 val fifthPage= PaperOnboardingPage("Finally",String.format("I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
-        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem!\n" +
-        "        Let us make mental health discussions a more pleasant experience for everyone!"),R.color.red,R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
+        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem! You can also disable password protection in the settings page.\n" +
+        "        Let us make mental health discussions a more pleasant experience for everyone!"),resources.getColor(R.color.red),R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
 introList.add(firstPage)
         introList.add(secondPage)
         introList.add(thirdPage)
@@ -187,6 +191,9 @@ introList.add(firstPage)
 
     var saveButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
+        val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
+        passWordEditor.putBoolean("enablePassword",passwordEnabled)
+        passWordEditor.apply()
         storePassword(userPassword)
         loadApp()
     }
@@ -194,7 +201,7 @@ introList.add(firstPage)
     var loginButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
        correctPassword =  LogIn(userPassword)
-   if(correctPassword)
+   if(correctPassword || !passwordEnabled)
        loadApp()
     }
 
@@ -229,6 +236,8 @@ return true
     {
         val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
         passWordEditor.putString("password",password)
+        passwordEnabled = enablePasswordSwitch.isChecked
+        passWordEditor.putBoolean("enablePassword",passwordEnabled)
         passWordEditor.apply()
         correctPassword = true
     }

@@ -5,7 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/enablePasswordSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        android:text="Enable Password?"
+        android:textColor="#8D6E63"
+        android:textOff="DISABLED"
+        android:textOn="ENABLED"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
     <TextView
         android:id="@+id/Login_TitleHdr"
         android:layout_width="0dp"
@@ -26,7 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:hint="Enter password here"
+        android:hint="Password"
         android:layoutDirection="locale"
         android:padding="5dp"
         app:endIconMode="clear_text"
@@ -52,5 +68,5 @@
         android:text="Enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
+        app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

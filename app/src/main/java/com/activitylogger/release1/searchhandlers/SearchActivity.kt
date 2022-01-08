@@ -107,6 +107,7 @@ lateinit var homeTV : TextView
         recordIntent.putExtra(HomeFragment.RECORDEMOTIONS, record.emotions)
         recordIntent.putExtra(HomeFragment.RECORDSOURCES, record.sources)
         recordIntent.putExtra(HomeFragment.RECORDRATINGS, record.rating)
+        recordIntent.putExtra(HomeFragment.RECORDSUCCESS,record.successState)
         recordIntent.putExtra("TIMECREATED", record.timeCreated)
 
         return recordIntent

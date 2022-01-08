@@ -10,10 +10,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -22,6 +21,7 @@ import androidx.preference.PreferenceManager
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 
 class ADHDSettingsFragment : Fragment() {
@@ -29,6 +29,8 @@ class ADHDSettingsFragment : Fragment() {
     lateinit var passwordy: String
 lateinit var passwordTextBox : TextInputLayout
 lateinit var enterButton : Button
+lateinit var enablePassword : SwitchMaterial
+var passwordEnabled = true
     var userPassword = ""
     lateinit var resetButton : Button
     override fun onCreateView(inflater: LayoutInflater,container:ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -36,6 +38,9 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
 
         prefs = MainActivity.passWordPreferences
         passwordy = MainActivity.passWordPreferences.getString("password","")!!
+        passwordEnabled = MainActivity.passWordPreferences.getBoolean("enablePassword",true)
+        enablePassword =view.findViewById(R.id.enablePasswordSwitch)
+        enablePassword.isChecked=passwordEnabled
         enterButton = view.findViewById(R.id.enterButton)
         enterButton.setOnClickListener(saveButtonListener)
         resetButton = view.findViewById(R.id.resetButton)
@@ -52,14 +57,27 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
 
             }
         })
+enablePassword.setOnCheckedChangeListener(enablePasswordChangeListener)
 
 return  view
     }
+
+
+    var enablePasswordChangeListener  = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        passwordEnabled = isChecked
+        val passWordEditor :SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+        passWordEditor.putBoolean("enablePassword",passwordEnabled)
+        Log.i("Check", "Password is  enabled = $passwordEnabled")
+        passWordEditor.apply()
+
+    }
+
 
 var resetButtonListener = View.OnClickListener {
     val passwordEditor : SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
     passwordEditor.putString("password","")
     passwordEditor.putBoolean("firstUse",false)
+    passwordEditor.putBoolean("enablePassword",false)
     passwordEditor.apply()
 }
 
