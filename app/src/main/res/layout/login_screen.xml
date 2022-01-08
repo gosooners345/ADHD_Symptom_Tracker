@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/enablePasswordSwitch"
         android:layout_width="0dp"
@@ -13,15 +14,16 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:minHeight="48dp"
-        android:text="Enable Password?"
+        android:text="@string/enable_password"
         android:textColor="#8D6E63"
-        android:textOff="DISABLED"
-        android:textOn="ENABLED"
+        android:textOff="@string/disabled"
+        android:textOn="@string/enabled"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox"
+        tools:ignore="TextContrastCheck,TextContrastCheck" />
     <TextView
         android:id="@+id/Login_TitleHdr"
         android:layout_width="0dp"
@@ -29,7 +31,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Welcome Back! Log in to view your journal."
+        android:text="@string/welcome_back_log_in_to_view_your_journal"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +44,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:hint="Password"
+        android:hint="@string/password"
         android:layoutDirection="locale"
         android:padding="5dp"
         app:endIconMode="clear_text"
@@ -65,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Enter"
+        android:text="@string/enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch" />
