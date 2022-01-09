@@ -2,20 +2,15 @@ package com.activitylogger.release1.ui.home
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
-import android.app.SearchManager.APP_DATA
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import android.widget.SearchView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -32,7 +27,6 @@ import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.searchhandlers.SearchActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() , OnRecordListener {
 
@@ -57,7 +51,7 @@ var reversed=false
         val root: View = binding.root
         homeViewModel.recordsRepo = RecordsRepository(requireContext())
         getRecords()
-        adapter = RecordsAdapter(recordsList, this, requireContext())
+        adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
         recordsRCV.layoutManager = LinearLayoutManager(context)
         recordsRCV.itemAnimator = DefaultItemAnimator()

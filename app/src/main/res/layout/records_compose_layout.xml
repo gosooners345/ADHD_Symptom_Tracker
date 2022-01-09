@@ -21,8 +21,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/notes_screen_layout"
             android:layout_width="match_parent"
-
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+           >
 
 
             <TextView
@@ -45,8 +45,8 @@
                 android:layout_marginEnd="5dp"
                 android:hint="What do you want to call this?"
                 android:layoutDirection="locale"
-                app:endIconMode="clear_text"
                 android:padding="5dp"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
@@ -65,12 +65,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
-                app:endIconMode="clear_text"
                 android:layout_marginEnd="5dp"
                 android:hint="What happened"
                 android:layoutDirection="locale"
-
                 android:padding="5dp"
+
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/topicContainer">
@@ -88,17 +88,17 @@
                 android:id="@+id/emotionsContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
                 android:hint="What are you feeling?"
                 android:layoutDirection="locale"
                 android:padding="5dp"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contentContainer"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/contentContainer">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emotionsTextBox"
                     android:layout_width="match_parent"
@@ -107,21 +107,22 @@
                     android:inputType="textMultiLine|text|textImeMultiLine"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/sourcesContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
                 android:hint="Is there a plan of action or are there sources behind this?"
                 android:layoutDirection="locale"
                 android:padding="5dp"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emotionsContainer"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/emotionsContainer">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/sourceTextBox"
                     android:layout_width="match_parent"
@@ -169,15 +170,16 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/symptomsCB" />
+                app:layout_constraintTop_toBottomOf="@+id/symptomSelectorCB" />
 
-            <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            <!--<com.chivorn.smartmaterialspinner.SmartMaterialSpinner
                 android:id="@+id/symptomsCB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_8"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/spinner_outline"
                 android:paddingLeft="5dp"
@@ -188,7 +190,34 @@
                 app:smsp_arrowColor="?attr/colorOnBackground"
                 app:smsp_floatingLabelColor="?attr/colorPrimary"
                 app:smsp_itemColor="?attr/colorOnBackground"
-                app:smsp_itemListColor="?attr/colorOnBackground" />
+                app:smsp_itemListColor="?attr/colorOnBackground" />-->
+            <TextView
+                android:id="@+id/symptomSelectorCB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:minHeight="48dp"
+                android:paddingStart="5dp"
+                android:text="here"
+                android:textAlignment="textStart"
+                android:textColor="@color/itemselected"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/symptomTH" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sourcesContainer" />
 
             <SeekBar
                 android:id="@+id/ratingSeekbar"
@@ -217,6 +246,7 @@
                 android:text="Success/Fail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingSeekbar" />
+
             <TextView
                 android:id="@+id/ratingTitleBar"
                 android:layout_width="wrap_content"
@@ -241,6 +271,19 @@
                 app:checkedIconVisible="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/successTV" />
+
+
+
+            <TextView
+                android:id="@+id/symptomTH"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:padding="2dp"
+                android:text="Symptoms Influencing Event"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

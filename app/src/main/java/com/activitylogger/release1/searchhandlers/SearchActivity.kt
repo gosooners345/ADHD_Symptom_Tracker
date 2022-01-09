@@ -43,7 +43,7 @@ lateinit var homeTV : TextView
             }
         }
         Collections.sort(resultList, Records.compareAlphabetized)
-        recordsRCV.adapter = RecordsAdapter(resultList, this, this)
+        recordsRCV.adapter = RecordsAdapter(resultList, this)
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
         cancelButton = findViewById(R.id.clearButton)

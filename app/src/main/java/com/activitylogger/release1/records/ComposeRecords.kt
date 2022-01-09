@@ -1,5 +1,7 @@
 package com.activitylogger.release1.records
 
+import android.app.Activity
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
@@ -8,10 +10,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
+import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -52,7 +56,8 @@ var recordSymptoms = ""
     lateinit var recordContent : TextInputLayout
     lateinit var recordEmotion : TextInputLayout
     lateinit var recordSources : TextInputLayout
-    lateinit var recordSymptomCB : SmartMaterialSpinner<String>
+    //lateinit var recordSymptomCB : SmartMaterialSpinner<String>
+    lateinit var symptomselectorCB : TextView
     lateinit var ratingSeekbar : SeekBar
     lateinit var successChip : Chip
      var success =false
@@ -73,10 +78,12 @@ var recordSymptoms = ""
         symptomArray=ArrayList()
         symptomArray.addAll(resources.getStringArray(R.array.symptom_array))
         recordsRepo = RecordsRepository(this)
-recordSymptomCB = findViewById(R.id.symptomsCB)
+//recordSymptomCB = findViewById(R.id.symptomsCB)
+        symptomselectorCB = findViewById(R.id.symptomSelectorCB)
 
-        recordSymptomCB.item = symptomArray
-        recordSymptomCB.onItemSelectedListener=symptomCBListener
+symptomselectorCB.setOnClickListener(symptomSelectedListener)
+        //recordSymptomCB.item = symptomArray
+        //recordSymptomCB.onItemSelectedListener=symptomCBListener
         if (!intentInfo) {
             recordTitle.editText!!.setText(record!!.title)
             recordContent.editText!!.setText(record!!.content)
@@ -87,7 +94,12 @@ recordSymptomCB = findViewById(R.id.symptomsCB)
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            recordSymptomCB.setSelection(0)
+            if(record!!.symptoms!="")
+            symptomselectorCB.text = record!!.symptoms
+            else
+            { symptomselectorCB.text = "Impulsiveness"
+            recordSymptoms=symptomselectorCB.text.toString()
+            }
 
 
 Log.i(TAG,"Accessing Record for Editing")
@@ -100,9 +112,10 @@ Log.i(TAG,"Accessing Record for Editing")
             recordSources.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
-            recordSymptomCB.setSelection(0)
+            symptomselectorCB.text = "Impulsiveness"
 ///            recordSymptoms = recordSymptomCB.selectedItem
-            recordSymptoms=emptyString
+            recordSymptoms=symptomselectorCB.text.toString()
+
             Log.i(TAG,"Logging New Event")
 
 
@@ -147,6 +160,7 @@ Log.i(TAG,"Accessing Record for Editing")
         editButton.setOnClickListener(editRecord)
 
     }
+    //This
 private val intentInfo : Boolean
 @RequiresApi(Build.VERSION_CODES.O)
 get(){
@@ -163,6 +177,11 @@ get(){
             return true
         }
 
+}
+var symptomSelectedListener = View.OnClickListener{
+val sendIntent = Intent(this,ItemSelectorFragment::class.java)
+    sendIntent.putExtra("symptom",recordSymptoms)
+startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -181,6 +200,8 @@ fun getRecordData():Records
         recordTimeCreated as Date,recordEmotions,recordContent,recordRating,System.currentTimeMillis(),recordSuccess,recordSources,recordSymptoms)
 
 }
+
+
 
     override fun onBackPressed() {
         val messageString = if (!isnewRecord) "Save your edits?" else "Save new record?"
@@ -210,6 +231,19 @@ recordSymptoms =String.format(parent!!.selectedItem.toString())
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        recordSymptoms=""
+        symptomselectorCB.text=""
+        if(requestCode == REQ_CODE_SYMPTOM)
+        {
+            if(resultCode== RESULT_OK)
+   recordSymptoms =data!!.getStringExtra("symptoms")!!.trimEnd(',')
+            symptomselectorCB.text =recordSymptoms
+
+        }
+    }
+
     private var ratingSeekBarListener :SeekBar.OnSeekBarChangeListener = object :SeekBar.OnSeekBarChangeListener{
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             ratingsInfo = progress.times(1.0)
@@ -225,14 +259,14 @@ recordSymptoms =String.format(parent!!.selectedItem.toString())
         }
 
     }
-
+//This
     private var saveRecord =View.OnClickListener{
 
 recordContentString=recordContent.editText!!.text.toString()
         recordTitleString=recordTitle.editText!!.text.toString()
         recordEmotionString=recordEmotion.editText!!.text.toString()
         recordSourcesString=recordSources.editText!!.text.toString()
-        recordSymptomString  = recordSymptoms
+        //recordSymptomString  = symptomselectorCB.text.toString()
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
         record.title= recordTitleString
@@ -240,7 +274,7 @@ recordContentString=recordContent.editText!!.text.toString()
         record.emotions=recordEmotionString
         record.sources = recordSourcesString
         record.rating=ratingsInfo
-        record.symptoms = recordSymptomString
+        record.symptoms = symptomselectorCB.text.toString()
         record.successState = success
         run {
             if (isnewRecord) {
@@ -257,7 +291,8 @@ recordContentString=recordContent.editText!!.text.toString()
         }
         finish()
     }
-private var editRecord = View.OnClickListener {
+//This
+    private var editRecord = View.OnClickListener {
     when (mode){
         EDIT_OFF -> enableEdit()
         EDIT_ON -> disableEdit()
@@ -316,6 +351,10 @@ private var editRecord = View.OnClickListener {
         const val EDIT_ON = 1
         const val EDIT_OFF = 0
         const val TAG = "ComposeRecords"
+        const val REQ_CODE_SYMPTOM = 45
 
     }
+}
+interface SelectedData{
+    fun SelectedData(stringdata : String)
 }

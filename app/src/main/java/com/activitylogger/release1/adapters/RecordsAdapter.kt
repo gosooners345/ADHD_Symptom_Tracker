@@ -1,7 +1,6 @@
 package com.activitylogger.release1.adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.interfaces.OnRecordListener
-import org.w3c.dom.Text
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class RecordDiffer : DiffUtil.ItemCallback<Records>(){
@@ -30,7 +26,10 @@ return oldItem.timeCreated == newItem.timeCreated
 
 
 
-class RecordsAdapter constructor(private val recordList : ArrayList<Records>,private val onRecordListener: OnRecordListener,private  val context: Context) :RecyclerView.Adapter<RecordsAdapter.ViewHolder>(){
+class RecordsAdapter(
+    private val recordList: ArrayList<Records>,
+    private val onRecordListener: OnRecordListener
+) :RecyclerView.Adapter<RecordsAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
