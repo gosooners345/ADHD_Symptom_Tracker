@@ -1,178 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_container"
+    style="@android:style/Widget.Material.ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/dimen_16">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="80dp"
+    android:padding="5dp"
+    android:scrollIndicators="end"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical">
 
-    <TextView
-        android:id="@+id/settings_Title_TV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_8"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="@dimen/dimen_8"
-        android:text="Settings"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDivider"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingslayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:dividerColor="?attr/colorPrimary"
-        app:dividerThickness="2dp"
-        app:layout_constraintBottom_toTopOf="@id/passwordTextBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:fitsSystemWindows="true"
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:scrollIndicators="right"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="right">
 
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/password_change_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:padding="5dp"
-        android:text="Password Settings"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settings_Title_TV"
+        <TextView
+            android:id="@+id/settings_Title_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/dimen_8"
+            android:text="Settings"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-        />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/password_change_item"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:dividerThickness="2dp"
-        app:dividerColor="?attr/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/settings_Title_TV" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Password"
-        android:layoutDirection="locale"
-        android:padding="5dp"
-        app:endIconMode="clear_text"
-        app:layout_constraintEnd_toStartOf="@+id/enterButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/TextBox"
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/materialDivider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            tools:ignore="TextContrastCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@id/passwordTextBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
 
-    <Button
-        android:id="@+id/enterButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:text="Enter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch" />
+            app:layout_constraintStart_toStartOf="parent"
 
-    <Button
-        android:id="@+id/resetButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Reset Tutorial and Password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reset_TitleHdr" />
+            app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch"
+            app:layout_constraintVertical_bias="1.0" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/enablePasswordSwitch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:minHeight="48dp"
-        android:text="Enable Password?"
-        android:textColor="#8D6E63"
-        android:textOff="DISABLED"
-        android:textOn="ENABLED"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_change_item" />
+        <TextView
+            android:id="@+id/password_change_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDivider4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:dividerColor="?attr/colorPrimary"
-        app:dividerThickness="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reset_TitleHdr" />
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDivider3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:dividerColor="?attr/colorPrimary"
-        app:dividerThickness="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:padding="5dp"
+            android:text="Password Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settings_Title_TV"
 
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:dividerColor="?attr/colorPrimary"
-        app:dividerThickness="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/enablePasswordSwitch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_change_item" />
+            />
 
-    <TextView
-        android:id="@+id/reset_TitleHdr"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="5dp"
-        android:text="Reset all settings?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@id/password_change_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settings_Title_TV" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Password"
+            android:layoutDirection="locale"
+            android:padding="5dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toStartOf="@+id/enterButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/TextBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/enterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:text="Enter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch" />
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="Reset all settings"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reset_TitleHdr" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/enablePasswordSwitch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="Enable Password?"
+            android:textColor="#8D6E63"
+            android:textOff="DISABLED"
+            android:textOn="ENABLED"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_change_item" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/materialDivider4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reset_TitleHdr" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/materialDivider3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/enablePasswordSwitch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_change_item" />
+        <TextView
+            android:id="@+id/layout_settingsHdr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:padding="5dp"
+            android:text="Layout View Controls"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordTextBox"
+
+
+            />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@id/password_change_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settings_Title_TV" />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@id/reset_TitleHdr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutControlChipGroup" />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerThickness="2dp"
+            app:layout_constraintBottom_toTopOf="@id/layout_settingsHdr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutControlChipGroup" />
+
+        <TextView
+            android:id="@+id/reset_TitleHdr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:text="Reset all settings?"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutControlChipGroup" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/layoutControlChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:padding="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_settingsHdr"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/gridChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:padding="5dp"
+                android:text="Grid Layout"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:chipEndPadding="5dp"
+                app:chipIcon="@drawable/ic_chip_grid_option"
+                app:chipIconVisible="true"
+                app:closeIconEnabled="false" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/linearChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:padding="5dp"
+                android:text="Linear Layout"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:chipEndPadding="5dp"
+                app:chipIcon="@drawable/ic_chip_linear_option"
+                app:chipIconVisible="true"
+                app:closeIconEnabled="false" />
+        </com.google.android.material.chip.ChipGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

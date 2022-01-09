@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,11 +47,18 @@ saveButton=findViewById(R.id.saveButton)
        //This works
         for( i in 0..resourceSymptoms.size-1)
         {
-           itemClassList.add(ItemClass(resourceSymptoms[i],if(symptoms.contains(resourceSymptoms[i]))true else false))
+           itemClassList.add(ItemClass(resourceSymptoms[i], symptoms.contains(resourceSymptoms[i])))
         }
 itemRCV = findViewById(R.id.itemListDropDown)
 itemClassAdapter= ItemClassAdapter(this)
-        itemRCV.layoutManager = LinearLayoutManager(this)
+
+        var itemLayoutPrefs = MainActivity.passWordPreferences.getString("layoutOption","linear")
+        var layoutMgr :RecyclerView.LayoutManager?
+if(itemLayoutPrefs=="linear")
+     layoutMgr = LinearLayoutManager(this)
+        else
+            layoutMgr = GridLayoutManager(this,3)
+        itemRCV.layoutManager = layoutMgr
         itemRCV.itemAnimator = DefaultItemAnimator()
         itemRCV.adapter=itemClassAdapter
     }

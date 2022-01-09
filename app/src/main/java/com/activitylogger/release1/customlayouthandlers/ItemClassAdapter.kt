@@ -29,41 +29,28 @@ val itemList = ItemSelectorFragment.itemClassList
         val item = itemList[position]
         val itemCB = holder.itemCheckBox
         itemCB.text = item.item
+
         itemCB.isChecked = item.selected
-        itemCB.setOnCheckedChangeListener { buttonView, isChecked -> item.selected=isChecked
-        itemList[position].selected = isChecked
-            Log.i("Test",itemList[position].item + "= ${itemList[position].selected}")
-        }
+
     }
 
     override fun getItemCount(): Int {
         return itemList.count()
     }
 
-    fun getSelectedItems() {
-        //val itemArray = ArrayList<String>()
-        itemClassList.selectedItems.clear()
-        itemClassList.getSelectedItems()
 
-     //   return  itemList.toString()
 
-    }
-
-class ViewHolder(itemView: View,var onItemSelected: onItemSelected): RecyclerView.ViewHolder(itemView),View.OnClickListener,CompoundButton.OnCheckedChangeListener
+class ViewHolder(itemView: View,var onItemSelected: onItemSelected): RecyclerView.ViewHolder(itemView),View.OnClickListener
 {
     var itemCheckBox : CheckBox = itemView.findViewById(R.id.itemSelectedCB)
 
 init {
 
-itemCheckBox.setOnCheckedChangeListener(this)
+
     itemCheckBox.setOnClickListener(this)
 }
 
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        onItemSelected.onItemChecked(bindingAdapterPosition,isChecked)
-        Log.i("tag",itemCheckBox.text.toString()+"= ${itemCheckBox.isChecked}")
 
-    }
     override fun onClick(v: View?) {
 
        onItemSelected.onItemChecked(bindingAdapterPosition,this.itemCheckBox.isChecked)

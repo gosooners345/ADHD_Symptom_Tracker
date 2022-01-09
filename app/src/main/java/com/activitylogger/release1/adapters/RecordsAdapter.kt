@@ -54,12 +54,12 @@ val record = recordList[position]
         recordTitle.text=record.title
         ratingHolder.text=record.rating.toString()
         contentHolder.text=record.content
-    emotionHolder.text = record.emotions
-        sourcesHolder.text = record.sources
+    emotionHolder.text = "I felt: "+ record.emotions
+        sourcesHolder.text = "Sources behind this/My plans are : "+record.sources
         successHolder.text="Success/Fail State: ${if(record.successState!!)"Success" else "Fail"}"
         timeCreatedHolder.text="Time Created: "+ DateFormat.getInstance().format(record.timeCreated)
         timeStamp.text ="Last Updated: "+ DateFormat.getInstance().format(record.timeUpdated)
-        symptomHolder.text = "Symptoms affecting: ${if(record.symptoms!="")record.symptoms else "Record Symptoms Here"}"
+        symptomHolder.text = "Impacting Symptoms: ${if(record.symptoms!="")record.symptoms else "Record Symptoms Here"}"
 
 
     }

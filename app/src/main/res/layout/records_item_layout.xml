@@ -65,7 +65,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="3"
             android:minLines="1"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
@@ -104,7 +104,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:minLines="1"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
@@ -117,7 +117,42 @@
             app:layout_constraintTop_toBottomOf="@+id/sources_text" />
 
         <TextView
+            android:id="@+id/success_state_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:text="@string/success"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/symptoms_text" />
+
+        <TextView
             android:id="@+id/timeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:text="@string/timestamp"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/time_created"
+            app:layout_constraintTop_toBottomOf="@+id/success_state_label"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/time_created"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -132,40 +167,9 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time_created"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/success_state_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:paddingStart="5dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="2dp"
-            android:text="@string/timestamp"
-            android:textSize="13sp"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/symptoms_text" />
-
-        <TextView
-            android:id="@+id/time_created"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:paddingStart="5dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="2dp"
-            android:text="TimeCreated"
-            android:textSize="10sp"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/success_state_label" />
+
+
 
         <TextView
             android:id="@+id/ratingTV"
