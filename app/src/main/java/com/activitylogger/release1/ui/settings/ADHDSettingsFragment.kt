@@ -3,26 +3,17 @@ package com.activitylogger.release1.ui.settings
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
-import androidx.preference.EditTextPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 
@@ -33,11 +24,13 @@ lateinit var passwordTextBox : TextInputLayout
 lateinit var enterButton : Button
 lateinit var enablePassword : SwitchMaterial
 lateinit var layoutOption : String
+lateinit var recordLayoutOption : String
 var passwordEnabled = true
     lateinit var layoutChipOptions :ChipGroup
-    lateinit var linearChip : Chip
-    lateinit var gridChip : Chip
-    lateinit var staggeredChip : Chip
+    lateinit var symptomlinearChipHorizontal : Chip
+    lateinit var symptomgridChip : Chip
+    lateinit var symptomstaggeredChip : Chip
+    lateinit var symptomlinearVerticalChip:Chip
     var userPassword = ""
     lateinit var resetButton : Button
     override fun onCreateView(inflater: LayoutInflater,container:ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -47,11 +40,16 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
         passwordy = MainActivity.passWordPreferences.getString("password","")!!
         passwordEnabled = MainActivity.passWordPreferences.getBoolean("enablePassword",true)
         layoutOption = MainActivity.passWordPreferences.getString("layoutOption","linear").toString()
-layoutChipOptions = view.findViewById(R.id.layoutControlChipGroup)
-linearChip = view.findViewById(R.id.linearChip)
-        gridChip = view.findViewById(R.id.gridChip)
-        staggeredChip = view.findViewById(R.id.staggeredChip)
-layoutChipOptions.setOnCheckedChangeListener(layoutOptionChipGroupListener)
+        recordLayoutOption = MainActivity.passWordPreferences.getString("recordLayoutOption","linear").toString()
+        layoutChipOptions = view.findViewById(R.id.layoutControlChipGroup)
+        symptomlinearChipHorizontal = view.findViewById(R.id.linearChip)
+        symptomgridChip = view.findViewById(R.id.gridChip)
+        symptomstaggeredChip = view.findViewById(R.id.staggeredChip)
+        layoutChipOptions.setOnCheckedChangeListener(layoutOptionChipGroupListener)
+
+        symptomlinearVerticalChip =view.findViewById(R.id.linearChip_vertical)
+
+
         enablePassword =view.findViewById(R.id.enablePasswordSwitch)
         enablePassword.isChecked=passwordEnabled
         enterButton = view.findViewById(R.id.enterButton)
@@ -72,12 +70,20 @@ layoutChipOptions.setOnCheckedChangeListener(layoutOptionChipGroupListener)
         })
 enablePassword.setOnCheckedChangeListener(enablePasswordChangeListener)
         layoutChipOptions.setOnClickListener {
-            if(MainActivity.passWordPreferences.getString("layoutOption","linear")=="linear")
-            linearChip.performClick()
-        else
-            gridChip.performClick()
+        when(MainActivity.passWordPreferences.getString("layoutOption","linear")){
+            "linear"->
+            symptomlinearChipHorizontal.performClick()
+        "grid"->
+            symptomgridChip.performClick()
+            "vertical" ->
+            symptomlinearVerticalChip.performClick()
+            "staggered"->
+                symptomstaggeredChip.performClick()
+        }
         }
         layoutChipOptions.performClick()
+
+
         return  view
     }
 
@@ -88,11 +94,15 @@ when(checkedId){
 R.id.gridChip->
     layoutOption = "grid"
    R.id.linearChip -> layoutOption = "linear"
+    R.id.linearChip_vertical -> layoutOption= "vertical"
     R.id.staggeredChip -> layoutOption = "staggered"
 }
     passwordEditor.putString("layoutOption",layoutOption)
     passwordEditor.apply()
 }
+
+
+
     var enablePasswordChangeListener  = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
         passwordEnabled = isChecked
         val passWordEditor :SharedPreferences.Editor = MainActivity.passWordPreferences.edit()

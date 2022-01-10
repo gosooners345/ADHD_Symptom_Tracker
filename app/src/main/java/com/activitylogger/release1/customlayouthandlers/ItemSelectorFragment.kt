@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
+import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -63,7 +64,10 @@ if(itemLayoutPrefs=="linear")
      layoutMgr = StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL)
         itemRCV.layoutManager = layoutMgr
         itemRCV.itemAnimator = DefaultItemAnimator()
+        val divider = RecyclerViewSpaceExtender(8)
+        itemRCV.addItemDecoration(divider)
         itemRCV.adapter=itemClassAdapter
+
     }
 
 fun closeSymptomBox(){

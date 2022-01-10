@@ -12,10 +12,8 @@ import android.widget.Toast
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
+import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.async.RecordsRepository
@@ -53,6 +51,7 @@ var reversed=false
         getRecords()
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
+
         recordsRCV.layoutManager = LinearLayoutManager(context)
         recordsRCV.itemAnimator = DefaultItemAnimator()
         recordsRCV.adapter = adapter
