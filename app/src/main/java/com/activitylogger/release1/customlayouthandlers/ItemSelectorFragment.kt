@@ -56,8 +56,10 @@ itemClassAdapter= ItemClassAdapter(this)
         var layoutMgr :RecyclerView.LayoutManager?
 if(itemLayoutPrefs=="linear")
      layoutMgr = LinearLayoutManager(this)
-        else
+        else if (itemLayoutPrefs=="grid")
             layoutMgr = GridLayoutManager(this,3)
+            else 
+     layoutMgr = StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL)
         itemRCV.layoutManager = layoutMgr
         itemRCV.itemAnimator = DefaultItemAnimator()
         itemRCV.adapter=itemClassAdapter
