@@ -34,17 +34,23 @@
     <item>Momentum driven</item>
     <item>Sensory Overload</item>
     <item>Overflowing with joy</item>
-    <item>A little win for today</item>
-    <item>A Big win today</item>
-    <item>Inability to focus</item>
-    <item>Hyperfocus</item>
-    <item>Stress induced ADHD Response</item>
-    <item>Freeze/Mental Paralysis</item>
+        <item>A little win</item>
+        <item>A moderate win</item>
+        <item>A Big win today</item>
+        <item>Unable to focus</item>
+        <item>Struggling to focus</item>
+        <item>Hyperfocus</item>
+        <item>ADHD Burnout</item>
+        <item>Lacking Motivation</item>
+        <item>Stress magnified ADHD Response</item>
+        <item>Stress induced ADHD Response</item>
+        <item>Existential crisis</item>
+        <item>Freeze/Mental Paralysis</item>
     <item>Emotional Flooding</item>
     <item>Emotion fueled response</item>
     <item>Emotional Meltdown</item>
     <item>Rejection Sensitivity Dysphoria</item>
     <item>Depression</item>
     <item>Anxiety</item>
-</string-array>
+    </string-array>
 </resources>

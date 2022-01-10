@@ -101,6 +101,7 @@
             app:layout_constraintBottom_toTopOf="@id/passwordTextBox"
             app:dividerColor="?attr/colorPrimary"
             />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordTextBox"
             android:layout_width="0dp"
@@ -108,7 +109,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:hint="Change Password Here"
+            android:hint="Change Password"
             android:layoutDirection="locale"
             android:padding="5dp"
             app:endIconMode="clear_text"

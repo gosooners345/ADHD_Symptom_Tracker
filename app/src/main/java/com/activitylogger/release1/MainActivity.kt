@@ -171,12 +171,12 @@ enablePasswordSwitch.visibility= View.GONE
                 "    It would be wise to protect it with a passcode or password so other people do not go prying into your private matters without your permission. \n" +
                 "    Make sure you remember it or else you may have trouble accessing your info."),resources.getColor(R.color.red), R.drawable.ic_security_lock,
         R.drawable.ic_next_arrow)
-        val thirdPage = PaperOnboardingPage("Logging",String.format("You can record events by simply hitting record on the home screen. \n" +
+        val thirdPage = PaperOnboardingPage("Record Entries",String.format("You can record events by simply hitting record on the home screen. \n" +
                 "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
-                "        You are able to rate how the event was from your perspective from 0(bad) to 100(good).\n" +
-                "        You are also able to record ADHD Symptoms that could've influenced the event by selecting from the dropdown on the form.\n" +
+                "        You can rate the entry  from your perspective on a scale from 0(bad) to 100(good).\n" +
+                " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
                 "        Hit save and its logged."),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
-        val fourthPage = PaperOnboardingPage("Statistics",String.format("    Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
+        val fourthPage = PaperOnboardingPage("Statistics",String.format("Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
 val fifthPage= PaperOnboardingPage("Finally",String.format("I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
         "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem! You can also disable password protection in the settings page.\n" +
         "        Let us make mental health discussions a more pleasant experience for everyone!"),resources.getColor(R.color.red),R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
