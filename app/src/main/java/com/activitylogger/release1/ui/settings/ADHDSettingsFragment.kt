@@ -37,6 +37,7 @@ var passwordEnabled = true
     lateinit var layoutChipOptions :ChipGroup
     lateinit var linearChip : Chip
     lateinit var gridChip : Chip
+    lateinit var staggeredChip : Chip
     var userPassword = ""
     lateinit var resetButton : Button
     override fun onCreateView(inflater: LayoutInflater,container:ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -49,6 +50,7 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
 layoutChipOptions = view.findViewById(R.id.layoutControlChipGroup)
 linearChip = view.findViewById(R.id.linearChip)
         gridChip = view.findViewById(R.id.gridChip)
+        staggeredChip = view.findViewById(R.id.staggeredChip)
 layoutChipOptions.setOnCheckedChangeListener(layoutOptionChipGroupListener)
         enablePassword =view.findViewById(R.id.enablePasswordSwitch)
         enablePassword.isChecked=passwordEnabled
@@ -86,6 +88,7 @@ when(checkedId){
 R.id.gridChip->
     layoutOption = "grid"
    R.id.linearChip -> layoutOption = "linear"
+    R.id.staggeredChip -> layoutOption = "staggered"
 }
     passwordEditor.putString("layoutOption",layoutOption)
     passwordEditor.apply()
