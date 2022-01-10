@@ -288,6 +288,18 @@
                 app:chipIcon="@drawable/ic_chip_linear_option"
                 app:chipIconVisible="true"
                 app:closeIconEnabled="false" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/staggeredChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:padding="5dp"
+                android:text="Staggered Grid"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:chipEndPadding="5dp"
+                app:chipIcon="@drawable/ic_chip_grid_option"
+                app:chipIconVisible="true"
+                app:closeIconEnabled="false" />
         </com.google.android.material.chip.ChipGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
