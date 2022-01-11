@@ -19,33 +19,30 @@
     <string name="welcome_back_log_in_to_view_your_journal">Welcome Back! Log in to view your journal.</string>
     <string name="enter">Enter</string>
     <string name="success">Success</string>
-
     <string-array name="symptom_array">
     <item>Impulsiveness</item>
     <item>Impatience</item>
     <item>Hyperactivity</item>
     <item>Working Memory Issues</item>
+        <item>Executive Dysfunction </item>
     <item>Mental Sluggishness/Dopamine Hunt</item>
     <item>Having a bad day</item>
-    <item>Ooooh, shiny!!</item>
+    <item>Distractions</item>
     <item>Brain Fog</item>
-    <item>Everything\'s good here</item>
+    <item>No Symptoms</item>
     <item>Positive Environment/Grace</item>
     <item>Momentum driven</item>
     <item>Sensory Overload</item>
-    <item>Overflowing with joy</item>
-        <item>A little win</item>
-        <item>A moderate win</item>
-        <item>A Big win today</item>
+        <item>A small/big win today</item>
         <item>Unable to focus</item>
         <item>Struggling to focus</item>
         <item>Hyperfocus</item>
         <item>ADHD Burnout</item>
         <item>Lacking Motivation</item>
-        <item>Stress magnified ADHD Response</item>
-        <item>Stress induced ADHD Response</item>
+        <item>Stress enhanced ADHD Response</item>
         <item>Existential crisis</item>
         <item>Freeze/Mental Paralysis</item>
+        <item>Procrastination</item>
     <item>Emotional Flooding</item>
     <item>Emotion fueled response</item>
     <item>Emotional Meltdown</item>

@@ -59,7 +59,7 @@ val record = recordList[position]
         successHolder.text="This was a : ${if(record.successState!!)"Success" else "Fail"}"
         timeCreatedHolder.text="Time Created: "+ DateFormat.getInstance().format(record.timeCreated)
         timeStamp.text ="Last Updated: "+ DateFormat.getInstance().format(record.timeUpdated)
-        symptomHolder.text = "ADHD Symptoms: ${if(record.symptoms!="")record.symptoms else "Record Symptoms Here"}"
+        symptomHolder.text = "ADHD Symptoms/Benefits: ${if(record.symptoms!="")record.symptoms else "Record Symptoms Here"}"
 
 
     }

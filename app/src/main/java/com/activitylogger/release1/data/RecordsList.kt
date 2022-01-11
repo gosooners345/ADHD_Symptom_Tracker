@@ -14,7 +14,9 @@ var recordIDs = ArrayList<Int>()
 var emotionDataList = EmotionList()
     var symptomDataList = SymptomList()
 var symptomCt = 0
-    var symptomList = ArrayList<String>()
+    var symptomCtList = ArrayList<Int>()
+    var symptomList = ArrayList<String>(    )
+    var symptomLabels = ArrayList<String>()
 
     private fun sanitizeSearchQuery(query: String?): String {
         if (query == null) {
@@ -63,6 +65,7 @@ var symptomCt = 0
             emotionDataList.clear()
        emotionDataList = importEmotions(emotionList)
 
+
     }
     fun importEmotions( emotionDataList:ArrayList<String>)  : EmotionList {
         emotionDataList.groupingBy { it }.eachCount()
@@ -88,6 +91,8 @@ var symptomCt = 0
         if (symptomDataList.count()>0)
             symptomDataList.clear()
         symptomDataList = importSymptoms(symptomList)
+        for (i in 0..symptomDataList.size-1)
+            symptomCt +=symptomDataList[i].count
 
     }
     fun importSymptoms(symptomData : ArrayList<String>) : SymptomList{
@@ -105,8 +110,11 @@ var symptomCounts = superList.values.toList()
 for (i in 0..superList.size-1)
 {
     symptomsList.add(Symptoms(symptomItems[i],symptomCounts[i]))
+
+
 }
-        //Collections.sort(symptomsList,Symptoms.compareCounts)
+    symptomCtList.addAll(symptomCounts)
+        symptomLabels.addAll(symptomItems)
         return symptomsList
     }
 }

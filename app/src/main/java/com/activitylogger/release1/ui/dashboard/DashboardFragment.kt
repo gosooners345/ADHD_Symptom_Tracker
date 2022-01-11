@@ -18,15 +18,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.PieLegendAdapter
-import com.activitylogger.release1.data.EmotionData
-import com.activitylogger.release1.data.EmotionList
-import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsList
+import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
-import com.faskn.lib.ClickablePieChart
 import com.faskn.lib.Slice
+import com.faskn.lib.ClickablePieChart
+import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPie
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeries
+import com.faskn.lib.PieChart as Pies
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.ValueDependentColor
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
@@ -58,11 +60,11 @@ class DashboardFragment : Fragment() {
 
     //For Line Graph data
     lateinit var ratingGraphView: GraphView
-    lateinit var symptomPieChart: com.faskn.lib.PieChart
+    lateinit var symptomPieChart: Pies
     lateinit var symptomClickablePieChart: ClickablePieChart
     lateinit var barGraphView: GraphView
 lateinit var  legendLayout : LinearLayoutCompat
-
+lateinit var symptomPieCharttest : AAChartView
     //For Pie Chart Data
     lateinit var successPieChart: PieChart
     lateinit var successTV: TextView
@@ -80,20 +82,20 @@ lateinit var  legendLayout : LinearLayoutCompat
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        legendLayout = root.findViewById(R.id.legendLayout)
+
         Log.i("Graphing", "Graphing Line Data")
         ratingGraphView = root.findViewById(R.id.stats_graph)
         barGraphView = root.findViewById(R.id.barstats_graph)
         graphLineData(recordsList)
-        symptomClickablePieChart = root.findViewById(R.id.symptomPieChart)
-
+        //symptomClickablePieChart = root.findViewById(R.id.symptomPieChart)
+symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
         Log.i("Graphing", "Graphing Success/Fail rate")
         successPieChart = root.findViewById(R.id.piechart)
         successTV = root.findViewById(R.id.successLabel)
         FailTV = root.findViewById(R.id.failLabel)
         graphPieChart(recordsList)
         graphBarGraph(recordsList)
-        //graphSymptoms(recordsList)
+        graphSymptoms(recordsList)
         return root
     }
 
@@ -174,12 +176,11 @@ lateinit var  legendLayout : LinearLayoutCompat
     private fun graphBarGraph(recordList: RecordsList) {
         try {
             Collections.sort(recordList.emotionDataList, EmotionData.compareCounts)
-            // recordList.emotionDataList.sortedByDescending { it.emotionCount }.reversed()
+
             var barList = ArrayList<DataPoint>()
 
 
             for (i in 0..recordList.emotionDataList.size - 1) {
-                //series.appendData(DataPoint(i*1.0,recordList.emotionDataList[i].emotionCount!!*1.0),true,recordList.emotionDataList.size)
                 barList.add(DataPoint(i * 1.0, recordList.emotionDataList[i].emotionCount!! * 1.0))
             }
             val series = BarGraphSeries(barList.toTypedArray())
@@ -221,23 +222,31 @@ lateinit var  legendLayout : LinearLayoutCompat
     @RequiresApi(Build.VERSION_CODES.O)
     private fun graphSymptoms(recordList: RecordsList)
     {
-        symptomPieChart= com.faskn.lib.PieChart(slices = getpieChartData(), clickListener = null,sliceStartPoint = 0f, sliceWidth = 50f).build()
-symptomClickablePieChart.setPieChart(symptomPieChart)
-        symptomClickablePieChart.showLegend(legendLayout,PieLegendAdapter())
 
-    }
+        val pieCountList = ArrayList<Int>()
+        val symptomString = ArrayList<String>()
 
-@RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("ResourceType")
-private fun getpieChartData() : ArrayList<Slice>{
-    val sliceList = ArrayList<Slice>()
-    for (i in 0..recordsList.symptomDataList.size-1)
-    {val number = Random()
-        sliceList.add(Slice(recordsList.symptomDataList.count().toFloat(),Color.argb(255,number.nextInt(256),number.nextInt(256),number.nextInt(256)),
-            recordsList.symptomDataList[i].symptom))
-    }
-return sliceList
+val pieList = ArrayList<AASeriesElement>()
+for(i in 0..recordList.symptomDataList.size-1)
+{
+pieCountList.add(recordList.symptomDataList[i].count)
+    symptomString .add(recordList.symptomDataList[i].symptom)
+pieList.add(AASeriesElement().name("ADHD Symptoms").data(arrayOf(recordList.symptomDataList.toArray())))//[i].symptom,recordList.symptomDataList[i].count))
 }
+        val item = AASeriesElement().data(arrayOf(symptomString.toArray(),pieCountList.toArray())).name("ADHD Symptoms/Benefits")
+
+        val pieChartModel = AAChartModel()
+            .chartType(AAChartType.Pie)
+            .title("ADHD Symptoms/Benefits")
+
+            .dataLabelsEnabled(true)
+    .polar(true)
+    .series(pieList.toTypedArray())
+            symptomPieCharttest.aa_drawChartWithChartModel(pieChartModel)
+
+    }
+
+
   companion object{
   }
 

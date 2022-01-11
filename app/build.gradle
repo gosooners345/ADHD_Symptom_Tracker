@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+
 }
 
 android {
@@ -57,6 +58,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+   implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
     testImplementation 'junit:junit:4.+'
     kapt 'androidx.room:room-compiler:2.4.0'
     implementation 'com.ramotion.paperonboarding:paper-onboarding:1.1.3'
