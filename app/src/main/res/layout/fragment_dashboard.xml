@@ -188,7 +188,7 @@
             android:background="@drawable/notes_outline"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pieChartCard">
@@ -230,6 +230,67 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/symptomCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/dimen_16"
+
+            android:layout_marginEnd="@dimen/dimen_8"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/notes_outline"
+            android:elevation="10dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barGraphCard">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/notes_outline">
+
+                <TextView
+                    android:id="@+id/symptomPieTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="ADHD Symptom Tracker"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.faskn.lib.ClickablePieChart
+                    android:id="@+id/symptomPieChart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_8"
+                    android:layout_marginTop="@dimen/dimen_16"
+                    android:layout_marginEnd="@dimen/dimen_8"
+                    android:layout_marginBottom="@dimen/dimen_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:animationDuration="3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/symptomPieTitle" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/legendLayout"
+                    app:layout_constraintTop_toBottomOf="@id/symptomPieChart"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

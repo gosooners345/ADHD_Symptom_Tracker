@@ -93,7 +93,9 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
 
         recordsList.setRecordData()
         recordsList.getEmotionCount()
+        recordsList.getSymptomCount()
         Log.i("EmotionCt", recordsList.emotionDataList.toStringCount())
+        Log.i("SymptomCt",recordsList.symptomDataList.size.toString())
         adapter.notifyDataSetChanged()
     }
 
