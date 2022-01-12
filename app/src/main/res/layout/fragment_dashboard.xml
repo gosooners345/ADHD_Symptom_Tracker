@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/notes_outline">
 
-                <TextView
+
+                <!--<TextView
                     android:id="@+id/dashboard_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -59,9 +60,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashboard_title"
-                    app:seriesType="points" />
-
-
+                    app:seriesType="points" />-->
+<com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+    android:layout_width="match_parent"
+    android:layout_marginStart="@dimen/dimen_8"
+    android:layout_marginEnd="@dimen/dimen_8"
+    android:layout_marginTop="@dimen/dimen_8"
+    android:layout_marginBottom="@dimen/dimen_8"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_height="700dp"
+    android:id="@+id/graphView"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

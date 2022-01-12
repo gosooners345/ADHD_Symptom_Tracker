@@ -17,8 +17,10 @@ import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.async.RecordsRepository
+import com.activitylogger.release1.data.EmotionList
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.data.RecordsList
+import com.activitylogger.release1.data.SymptomList
 import com.activitylogger.release1.databinding.FragmentHomeBinding
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
@@ -92,10 +94,8 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     fun refreshAdapter() {
 
         recordsList.setRecordData()
-        recordsList.getEmotionCount()
-        recordsList.getSymptomCount()
-        Log.i("EmotionCt", recordsList.emotionDataList.toStringCount())
-        Log.i("SymptomCt",recordsList.symptomDataList.size.toString())
+       symptomsList = SymptomList.importData(recordsList.symptomList)
+emotionList = EmotionList.importData(recordsList.emotionList)
         adapter.notifyDataSetChanged()
     }
 
@@ -259,6 +259,8 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
         const val RECORDSOURCES = "RECORDSOURCES"
         const val RECORDRATINGS = "RECORDRATINGS"
         const val RECORDSUCCESS = "RECORDSUCCESS"
+        var symptomsList = SymptomList()
+        var emotionList = EmotionList()
 
 
 

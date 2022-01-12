@@ -248,5 +248,6 @@ return true
         const val appName = BuildConfig.APPLICATION_ID
         lateinit var  passWordPreferences :SharedPreferences
         const val buildType = BuildConfig.BUILD_TYPE
+
     }
 }

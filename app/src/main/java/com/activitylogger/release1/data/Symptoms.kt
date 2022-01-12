@@ -1,6 +1,9 @@
 package com.activitylogger.release1.data
 
-class Symptoms() :Comparable<Symptoms> {
+import com.activitylogger.release1.interfaces.Indexer
+import java.lang.Exception
+
+class Symptoms() : Indexer,Comparable<Symptoms> {
     var symptom: String = ""
     var count = 0
 
@@ -16,34 +19,51 @@ class Symptoms() :Comparable<Symptoms> {
         }
     }
 
-    override fun compareTo(other: Symptoms): Int {
+        override fun compareTo(other: Symptoms): Int {
 return this.count.compareTo(other.count)
     }
 
-}
-class SymptomList():ArrayList<Symptoms>() {
+    override fun get(propertyIndex: Int): Any {
 
-    val originalSymptomList =ArrayList<String>()
-
-    constructor(symptomList :ArrayList<String>,resourceList : ArrayList<String>):this()
-    {
-        originalSymptomList.addAll(resourceList)
-        for(i in 0..symptomList.size-1)
-        this.add(Symptoms(symptomList[i],0))
-    }
-fun addSymptoms(symptomList :ArrayList<String>){
-    for(i in 0..symptomList.size-1)
-    this.add(Symptoms(symptomList[i],0))
-}
-
-    override fun toArray(): Array<Any> {
-        var symptomLists = ArrayList<Symptoms>()
-        for (items in this)
+       when(propertyIndex)
         {
-            symptomLists.add(Symptoms(items.symptom,items.count))
+            1 ->return  symptom
+            2 ->return  count
+            else -> throw Exception("Invalid Property Index")
         }
-
-        return symptomLists.toArray()
     }
+
+    override fun get(propertyName: String): Any {
+       when (propertyName.lowercase())
+       {
+           "symptom","symptoms" -> return symptom
+           "count","counts","quantity"->return count
+           else -> throw Exception("Invalid property name")
+       }
+    }
+
+}
+class SymptomList:ArrayList<Symptoms>() {
+
+fun getSymptoms():ArrayList<String>{
+    val symptomList = ArrayList<String>()
+    for(i in 0..this.size-1)
+        symptomList.add(this[i].symptom)
+    return symptomList
+}
+
+companion object{
+    fun importData(symptomData : ArrayList<String>):SymptomList{
+        val symptomList = SymptomList()
+        val sortedList = symptomData.groupingBy { it.trimStart() }.eachCount()
+        val itemSymptoms = sortedList.keys.toList()
+        val itemCounts = sortedList.values.toList()
+        for(i in 0..sortedList.size-1)
+            symptomList.add(Symptoms(itemSymptoms[i],itemCounts[i]))
+        return symptomList
+    }
+}
+
+
 
     }

@@ -14,7 +14,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList as emotionList
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.symptomsList as symptomList
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.PieLegendAdapter
@@ -25,10 +26,7 @@ import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.faskn.lib.Slice
 import com.faskn.lib.ClickablePieChart
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPie
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeries
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.*
 import com.faskn.lib.PieChart as Pies
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.ValueDependentColor
@@ -41,6 +39,7 @@ import com.jjoe64.graphview.series.PointsGraphSeries
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import java.text.DateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -63,6 +62,7 @@ class DashboardFragment : Fragment() {
     lateinit var ratingGraphView: GraphView
     lateinit var barGraphView: GraphView
 lateinit var symptomPieCharttest : AAChartView
+lateinit var ratingLineGraphTest : AAChartView
     //For Pie Chart Data
     lateinit var successPieChart: PieChart
     lateinit var successTV: TextView
@@ -82,11 +82,13 @@ lateinit var symptomPieCharttest : AAChartView
         val root: View = binding.root
 
         Log.i("Graphing", "Graphing Line Data")
-        ratingGraphView = root.findViewById(R.id.stats_graph)
+        //ratingGraphView = root.findViewById(R.id.stats_graph)
         barGraphView = root.findViewById(R.id.barstats_graph)
+        ratingLineGraphTest = root.findViewById(R.id.graphView)
+
         graphLineData(recordsList)
         //symptomClickablePieChart = root.findViewById(R.id.symptomPieChart)
-symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
+symptomPieCharttest = root.findViewById(R.id.symptomPieChart)
         Log.i("Graphing", "Graphing Success/Fail rate")
         successPieChart = root.findViewById(R.id.piechart)
         successTV = root.findViewById(R.id.successLabel)
@@ -107,8 +109,55 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
     private fun graphLineData(recordList: RecordsList) {
         try {
 
-            Collections.sort(recordList, Records.compareCreatedTimes)
-            val series = PointsGraphSeries<DataPoint>()
+
+
+            val ratingSeries =ArrayList<AASeriesElement>()
+
+     //var  testMap =recordList.groupBy { it.timeCreated }
+        //    testMap.
+
+            val dateString = ArrayList<String>()
+Collections.sort(recordList,Records.compareCreatedTimes)
+        //var test=     recordList.groupBy { it.timeCreated  }
+            /*recordList.forEach { ratingSeries.add(AASeriesElement().name(it.timeCreated.toString()).data(
+                arrayOf(it.rating))) }*/
+          //  test.forEach{
+            var ratingsList = ArrayList<Any>()
+            var date = recordList.recordDates[0]
+              for(i in 0..recordList.recordDates.size-1)
+              {
+dateString.add(String.format("${recordList.recordDates[i]}"))
+                  if(date.month == recordList.recordDates[i].month && date.day ==recordList.recordDates[i].day)
+                      ratingsList.add(recordList.recordStats[i])
+                  else
+                  {
+                      val statArray = (ratingsList).toTypedArray()
+                      date = recordList.recordDates[i]
+                      ratingsList.clear()
+
+                ratingSeries.add(AASeriesElement()
+
+                    .name(String.format("Date : ${recordList.recordDates[i].toGMTString()}")).data(statArray))}
+Log.i("Testing",i.toString())
+              }
+
+//ratingSeries.addAll(arrayOf(AASeriesElement().name("Date").data((arrayOf(recordList.recordDates.toTypedArray(),recordList.recordStats.toTypedArray())))))
+            //}
+ val ratingArray = ratingSeries.toTypedArray()
+            val ratingGraphModel = AAChartModel()
+                .xAxisLabelsEnabled(true)
+.categories(dateString.toTypedArray())
+                .series(ratingArray)
+
+.yAxisLabelsEnabled(true)
+                .legendEnabled(true)
+                .chartType(AAChartType.Line)
+                .zoomType(AAChartZoomType.XY)
+                .dataLabelsEnabled(true)
+
+ratingLineGraphTest.aa_drawChartWithChartModel(ratingGraphModel)
+
+           /* val series = PointsGraphSeries<DataPoint>()
 
             for (i in 0..recordList.size - 1) {
                 series.appendData(
@@ -137,7 +186,7 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
             ratingGraphView.viewport.isScrollable = true
             ratingGraphView.viewport.setScrollableY(true)
             ratingGraphView.viewport.isScalable = true
-            ratingGraphView.viewport.setScalableY(true)
+            ratingGraphView.viewport.setScalableY(true)*/
 
 
         } catch (ex: Exception) {
@@ -173,20 +222,17 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
 
     private fun graphBarGraph(recordList: RecordsList) {
         try {
-            Collections.sort(recordList.emotionDataList, EmotionData.compareCounts)
-
+            Collections.sort(emotionList, EmotionData.compareCounts)
             var barList = ArrayList<DataPoint>()
-
-
-            for (i in 0..recordList.emotionDataList.size - 1) {
-                barList.add(DataPoint(i * 1.0, recordList.emotionDataList[i].emotionCount!! * 1.0))
+            for (i in 0..emotionList.size - 1) {
+                barList.add(DataPoint(i * 1.0, emotionList[i].emotionCount!! * 1.0))
             }
             val series = BarGraphSeries(barList.toTypedArray())
             series.title = "Emotions"
 
             var staticLabelFormatter = StaticLabelsFormatter(barGraphView)
             val emotionLabels = ArrayList<String>()
-            emotionLabels.addAll(recordList.emotionDataList.getEmotions())
+            emotionLabels.addAll(emotionList.getEmotions())
 
             staticLabelFormatter.setHorizontalLabels(emotionLabels.toTypedArray())
             barGraphView.gridLabelRenderer.labelFormatter = staticLabelFormatter
@@ -211,6 +257,8 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
                     Math.abs(data.y * 255 / 6).toInt(), 100
                 )
             }
+
+
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -223,9 +271,9 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
 
         val pieCountList = ArrayList<Int>()
         val symptomString = ArrayList<String>()
-Collections.sort(recordList.symptomDataList,Symptoms.compareCounts)
+Collections.sort(symptomList,Symptoms.compareCounts)
 val pieList = ArrayList<AASeriesElement>()
-        for (items in recordList.symptomDataList)
+        for (items in symptomList)
         {
          pieCountList.add(items.count)
          symptomString.add(items.symptom)
@@ -239,7 +287,7 @@ pieChartModel
             .chartType(AAChartType.Bar)
             .title("ADHD Symptoms/Benefits")
     .polar(true)
-    .categories(symptomString.toTypedArray())
+    .categories(arrayOf("Symptoms"))
     //.stacking(AAChartStackingType.Percent)
     .legendEnabled(true)
             .zoomType(AAChartZoomType.XY)

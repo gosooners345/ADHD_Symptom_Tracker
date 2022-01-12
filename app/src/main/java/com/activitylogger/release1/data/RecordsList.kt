@@ -1,5 +1,6 @@
 package com.activitylogger.release1.data
 
+import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -11,12 +12,11 @@ var recordIDs = ArrayList<Int>()
     var successCt = 0
     var failCt = 0
     var emotionList = ArrayList<String>()
-var emotionDataList = EmotionList()
-    var symptomDataList = SymptomList()
-var symptomCt = 0
-    var symptomCtList = ArrayList<Int>()
-    var symptomList = ArrayList<String>(    )
-    var symptomLabels = ArrayList<String>()
+    var symptomList = ArrayList<String>()
+var dateRatingList = ArrayList<DatesandRatings>()
+
+
+
 
     private fun sanitizeSearchQuery(query: String?): String {
         if (query == null) {
@@ -26,8 +26,26 @@ var symptomCt = 0
         return "*\"$queryWithEscapedQuotes\"*"
     }
 
-    fun setRecordData()
-    {
+    fun sortDatesAndRatings(){
+        var date = Date()
+        var ratingsList=ArrayList<Double>()
+        date = this.recordDates[0]
+        for(i in 0..this.size-1)
+        {
+            if(date.month ==recordDates[i].month && date.day==recordDates[i].day)
+                    ratingsList.add(recordStats[i])
+            else
+                {
+                    val dateItem = DatesandRatings(date,ratingsList)
+                    date=this.recordDates[i]
+                    ratingsList.clear()
+                    dateRatingList.add(dateItem)
+                }
+
+        }
+    }
+
+    fun setRecordData(){
         if(emotionList.size>0)
             emotionList.clear()
         for(record in this) {
@@ -52,71 +70,20 @@ var symptomCt = 0
             if (record.symptoms != "") {
                 symptomList.addAll(record.symptoms.trim().split(","))
             } else {
-                symptomList.add("Impulsiveness")
+                symptomList.add("")
             }
 
         }
 
     }
 
-
-    fun getEmotionCount(){
-        if(emotionDataList.count()>0)
-            emotionDataList.clear()
-       emotionDataList = importEmotions(emotionList)
-
-
-    }
-    fun importEmotions( emotionDataList:ArrayList<String>)  : EmotionList {
-        emotionDataList.groupingBy { it }.eachCount()
-/*
-        val frequencyMap: MutableMap<String, Int> = HashMap()
-        for (count in emotionDataList) {
-            var itemCt = frequencyMap[count]
-            if (itemCt == null) itemCt = 0
-            frequencyMap[count] = itemCt + 1
-        }*/
-        val emotionList = EmotionList()
-        val superList = emotionDataList.groupingBy { it.trimStart().trimEnd() }.eachCount()
-        val itememotions = superList.keys.toList()
-        val itemCounts = superList.values.toList()
-        for (i in 0..superList.size - 1) {
-            emotionList.add(EmotionData(itememotions[i], itemCounts[i]!!))
-        }
-        Collections.sort(emotionList, EmotionData.compareCounts)
-        return emotionList
-
-    }
-    fun getSymptomCount(){
-        if (symptomDataList.count()>0)
-            symptomDataList.clear()
-
-        symptomDataList = importSymptoms(symptomList)
-        for (i in 0..symptomDataList.size-1)
-            symptomCt +=symptomDataList[i].count
-
-    }
-    fun importSymptoms(symptomData : ArrayList<String>) : SymptomList{
-        this.symptomDataList.clear()
-        symptomData.groupingBy { it }.eachCount()
-    /*    val frequencyMap :MutableMap<String,Int> = HashMap()
-        for(count in symptomData){
-            var itemCt = frequencyMap[count]
-            if(itemCt == null) itemCt=0
-            frequencyMap[count]=itemCt+1
-        }*/
-        val symptomsList = SymptomList()
-        var superList = symptomData.groupingBy { it.trim() }.eachCount()
-var symptomItems = superList.keys.toList()
-var symptomCounts = superList.values.toList()
-for (i in 0..superList.size-1)
-{
-    symptomsList.add(Symptoms(symptomItems[i],symptomCounts[i]))
-
-
 }
-    symptomCtList.addAll(symptomCounts)
-        symptomLabels.addAll(symptomItems)
-        return symptomsList
+
+class DatesandRatings(var date : Date,var rating:ArrayList<Double>)
+{
+    companion object{
+        var compareDates = java.util.Comparator<DatesandRatings>{
+            r1,r2 -> r1.date.compareTo(r2.date)
+        }
     }
 }
