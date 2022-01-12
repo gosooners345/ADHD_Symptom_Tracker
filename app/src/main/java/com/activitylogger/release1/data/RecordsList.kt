@@ -69,17 +69,17 @@ var symptomCt = 0
     }
     fun importEmotions( emotionDataList:ArrayList<String>)  : EmotionList {
         emotionDataList.groupingBy { it }.eachCount()
-
+/*
         val frequencyMap: MutableMap<String, Int> = HashMap()
         for (count in emotionDataList) {
             var itemCt = frequencyMap[count]
             if (itemCt == null) itemCt = 0
             frequencyMap[count] = itemCt + 1
-        }
-        var emotionList = EmotionList()
-        var superList = emotionDataList.groupingBy { it.trimStart().trimEnd() }.eachCount()
-        var itememotions = superList.keys.toList()
-        var itemCounts = superList.values.toList()
+        }*/
+        val emotionList = EmotionList()
+        val superList = emotionDataList.groupingBy { it.trimStart().trimEnd() }.eachCount()
+        val itememotions = superList.keys.toList()
+        val itemCounts = superList.values.toList()
         for (i in 0..superList.size - 1) {
             emotionList.add(EmotionData(itememotions[i], itemCounts[i]!!))
         }
@@ -90,19 +90,21 @@ var symptomCt = 0
     fun getSymptomCount(){
         if (symptomDataList.count()>0)
             symptomDataList.clear()
+
         symptomDataList = importSymptoms(symptomList)
         for (i in 0..symptomDataList.size-1)
             symptomCt +=symptomDataList[i].count
 
     }
     fun importSymptoms(symptomData : ArrayList<String>) : SymptomList{
+        this.symptomDataList.clear()
         symptomData.groupingBy { it }.eachCount()
-        val frequencyMap :MutableMap<String,Int> = HashMap()
+    /*    val frequencyMap :MutableMap<String,Int> = HashMap()
         for(count in symptomData){
             var itemCt = frequencyMap[count]
             if(itemCt == null) itemCt=0
             frequencyMap[count]=itemCt+1
-        }
+        }*/
         val symptomsList = SymptomList()
         var superList = symptomData.groupingBy { it.trim() }.eachCount()
 var symptomItems = superList.keys.toList()

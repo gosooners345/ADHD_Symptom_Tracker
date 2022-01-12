@@ -27,6 +27,7 @@ import com.faskn.lib.ClickablePieChart
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPie
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeries
 import com.faskn.lib.PieChart as Pies
 import com.jjoe64.graphview.GraphView
@@ -60,10 +61,7 @@ class DashboardFragment : Fragment() {
 
     //For Line Graph data
     lateinit var ratingGraphView: GraphView
-    lateinit var symptomPieChart: Pies
-    lateinit var symptomClickablePieChart: ClickablePieChart
     lateinit var barGraphView: GraphView
-lateinit var  legendLayout : LinearLayoutCompat
 lateinit var symptomPieCharttest : AAChartView
     //For Pie Chart Data
     lateinit var successPieChart: PieChart
@@ -225,24 +223,34 @@ symptomPieCharttest = root.findViewById<AAChartView>(R.id.symptomPieChart)
 
         val pieCountList = ArrayList<Int>()
         val symptomString = ArrayList<String>()
-
+Collections.sort(recordList.symptomDataList,Symptoms.compareCounts)
 val pieList = ArrayList<AASeriesElement>()
-for(i in 0..recordList.symptomDataList.size-1)
-{
-pieCountList.add(recordList.symptomDataList[i].count)
-    symptomString .add(recordList.symptomDataList[i].symptom)
-pieList.add(AASeriesElement().name("ADHD Symptoms").data(arrayOf(recordList.symptomDataList.toArray())))//[i].symptom,recordList.symptomDataList[i].count))
-}
-        val item = AASeriesElement().data(arrayOf(symptomString.toArray(),pieCountList.toArray())).name("ADHD Symptoms/Benefits")
+        for (items in recordList.symptomDataList)
+        {
+         pieCountList.add(items.count)
+         symptomString.add(items.symptom)
+            pieList.add(AASeriesElement().name(items.symptom).data(arrayOf(items.count)).showInLegend(true))
+        }
+
 
         val pieChartModel = AAChartModel()
-            .chartType(AAChartType.Pie)
+pieChartModel
+    .xAxisLabelsEnabled(true)
+            .chartType(AAChartType.Bar)
             .title("ADHD Symptoms/Benefits")
-
-            .dataLabelsEnabled(true)
     .polar(true)
-    .series(pieList.toTypedArray())
-            symptomPieCharttest.aa_drawChartWithChartModel(pieChartModel)
+    .categories(symptomString.toTypedArray())
+    //.stacking(AAChartStackingType.Percent)
+    .legendEnabled(true)
+            .zoomType(AAChartZoomType.XY)
+      //      .animationType(AAChartAnimationType.EaseInCirc)
+            .dataLabelsEnabled(true)
+pieChartModel.series=pieList.toTypedArray()
+
+
+            symptomPieCharttest.aa_drawChartWithChartModel(pieChartModel as AAChartModel)
+        symptomPieCharttest.aa_refreshChartWithChartModel(pieChartModel)
+        //symptomPieCharttest.aa_drawChartWithChartOptions(AAOptions().plotOptions(AAPlotOptions().series(AASeries().keys(symptomString.toTypedArray()))))
 
     }
 

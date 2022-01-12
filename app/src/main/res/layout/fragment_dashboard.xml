@@ -231,17 +231,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/symptomCard"
             android:layout_width="match_parent"
-            android:layout_height="800dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
-
             android:layout_marginEnd="@dimen/dimen_8"
             android:layout_marginBottom="64dp"
             android:background="@drawable/notes_outline"
             android:elevation="10dp"
+
             app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -268,14 +269,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 -->
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                    android:layout_width="wrap_content"
-                    android:layout_height="600dp"
                     android:id="@+id/symptomPieChart"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="800dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent"
-                    />
+                    app:layout_constraintTop_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
