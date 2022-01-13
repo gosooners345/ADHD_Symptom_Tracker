@@ -3,45 +3,80 @@ package com.activitylogger.release1.settings
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
-import androidx.preference.EditTextPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import com.activitylogger.release1.MainActivity
+import androidx.preference.*
 import com.activitylogger.release1.R
 
-class AppSettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
+class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-    lateinit var passwordValue : String
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.settings_page,rootKey)
-        val passwordPreference : EditTextPreference? = findPreference("password")
-        passwordPreference?.summaryProvider= Preference.SummaryProvider<EditTextPreference>{
-                preference ->
-            val text = preference.text
-            if(TextUtils.isEmpty(text))
-                "Set Password"
-            else
-                "Change your password"
-        }
-        passwordPreference?.setOnBindEditTextListener {  editText ->
-            editText.inputType= InputType.TYPE_TEXT_VARIATION_PASSWORD
-            editText.setText(MainActivity.passWordPreferences.getString("password",""))
-            passwordValue=editText.text.toString()
-        }
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        if(preferenceManager.sharedPreferences.equals(MainActivity.passWordPreferences)==true)
-            Log.i("SAME","They're The same")
-        else
-            Log.i("UHOH","WE have trouble here")
+lateinit var enablePasswordSwitch: SwitchPreferenceCompat
+lateinit var  customLayoutOptionPrefs : ListPreference
+    lateinit var passwordChangeTextEditor: EditTextPreference
+    lateinit var resetPreference : Preference
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.settings_page, rootKey)
 
+resetPreference=findPreference("firstUse")!!
+
+            resetPreference.setOnPreferenceClickListener {
+                it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+                    ?.putBoolean("enablePassword",false)!!.commit()
+            }
+         customLayoutOptionPrefs= findPreference("layoutOption")!!
+customLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
+    preference.sharedPreferences.edit().putString(preference.key,newValue as String).commit()
+}
+
+
+
+    enablePasswordSwitch= findPreference("enablePassword")!!
+enablePasswordSwitch.setOnPreferenceChangeListener { preference, newValue ->
+when(newValue as Boolean)
+{
+    true ->{ passwordChangeTextEditor.isEnabled=true
     }
+    false ->{
+        passwordChangeTextEditor.isEnabled=false
+    }
+}
+        preference.sharedPreferences.edit().putBoolean(preference.key, newValue as Boolean).commit()
+}
+        enablePasswordSwitch.summaryOff = String.format("Password Protection Disabled")
+        enablePasswordSwitch.summaryOn = String.format("Password Protection Enabled")
 
-    override fun onPause() {
-        super.onPause()
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+       passwordChangeTextEditor=findPreference("password")!!
+
+            passwordChangeTextEditor.setOnBindEditTextListener { editText ->
+                editText.inputType=InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            passwordChangeTextEditor.setOnPreferenceChangeListener { preference, newValue ->
+                Log.i(preference.key,"Password is $newValue")
+                preference.sharedPreferences.edit()
+                            .putString(preference.key, newValue as String).commit()
+            }
+        }
+
+
+
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when (key)
+        {
+"linearOption" -> Log.i(key,"value is " + sharedPreferences?.getString(key,"linear"))
+            "password" ->Log.i(key, "Password is "+sharedPreferences?.getString(key,""))
+            "enablePassword"->{Log.i(key,"Password protection is" +
+                    " ${if(sharedPreferences?.getBoolean(key,false)==false) "Disabled" else "Enabled"}" )
+
+            }
+        "firstUse" ->{
+        Log.i(key,"Everything has been reset except records")
+        Toast.makeText(requireContext(),"Everything has been reset except your logs.",Toast.LENGTH_LONG).show()
+
+        }
+        }
+
+
     }
 
     override fun onResume() {
@@ -49,24 +84,9 @@ class AppSettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
         preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-        Log.i("Preference Change","$newValue")
-
-        return true
+    override fun onPause() {
+        super.onPause()
+        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if(key=="password") {
-            val passwordSaver = sharedPreferences?.edit()
-            passwordSaver?.putString(key!!, passwordValue)
-            passwordSaver?.commit()
-            Toast.makeText(
-                requireContext(),
-                "New Password is ${sharedPreferences?.getString(key, "")}",
-                Toast.LENGTH_LONG
-            ).show()
-            Log.i("Saved", "Password saved is ${sharedPreferences?.getString(key, "")}")
-        }
-    }
-
 }
+

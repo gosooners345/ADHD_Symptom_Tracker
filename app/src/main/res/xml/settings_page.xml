@@ -2,16 +2,69 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
+            app:key="symptomLayoutOption"
+            app:title="Custom Layout Options"
+            >
+                <ListPreference
+                    app:key="layoutOption"
+                    app:title="Choose Layout Option"
+                    app:summary="@string/layout_option_summary"
+                    android:defaultValue="linear"
+                    app:entries="@array/layoutOptionLabels_Array"
+                    app:entryValues="@array/layoutOptionValues_Array"
+                    />
+        </PreferenceCategory>
+        <PreferenceCategory
+            app:key="password_category"
             app:title="Password Settings">
-
+                <SwitchPreferenceCompat
+                    android:defaultValue="true"
+                    android:title="Enable password protection"
+                    app:key="enablePassword" />
                 <EditTextPreference
                     android:defaultValue=""
                     app:key="password"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    android:title="Change Password?" />
+                    android:title="Change Password"
+                    />
+        </PreferenceCategory>
+        <PreferenceCategory
+            app:key="help_category"
+            app:title="Help">
+<Preference
+    app:key="feedback"
+    app:title="Contact Me"
+    app:summary="Tell me about your experience using this app or request new features here.
+    I would love to hear about them!">
+<intent
+ android:action="android.intent.action.VIEW"
+    android:data="@string/dev_email_uri">
+    <extra android:name="android.intent.extra.TEXT"
+        android:value="What can I help you with?"/>
+            <extra
+                android:name="android.intent.extra.SUBJECT"
+                android:value="Feedback about ADHD Journal"/>
+    />
+</intent>
+</Preference>
+            <Preference
+            app:key="rating"
+            app:title="Rate My App on the Play Store!"
+                app:summary="Please take a moment to rate my application on the Play Store!">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=com.activitylogger.release1"
+           />
+            </Preference>
+/>
 
-
+                <Preference
+                        app:key="firstUse"
+                        app:title="Reset Everything"
+                        app:summary="Click here to reset your password, layout options and view the tutorial again."
+                        />
 
         </PreferenceCategory>
+
 </PreferenceScreen>

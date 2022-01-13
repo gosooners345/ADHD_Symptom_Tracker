@@ -45,7 +45,7 @@ class EmotionList : ArrayList<EmotionData>()
    companion object {
        fun importData(emotionData: ArrayList<String>): EmotionList {
            val emotionList = EmotionList()
-           val superList = emotionData.groupingBy { it.trimStart().trimEnd() }.eachCount()
+           val superList = emotionData.groupingBy { it.trimStart().trimEnd().lowercase() }.eachCount()
            val itemEmotions = superList.keys.toList()
            val itemCounts = superList.values.toList()
            for (i in 0..superList.size - 1) {

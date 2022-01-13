@@ -15,17 +15,17 @@
         android:name="com.activitylogger.release1.ui.dashboard.DashboardFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_dashboard" />
-    <fragment
+    <!--<fragment
         android:id="@+id/navigation_settings"
         android:name="com.activitylogger.release1.ui.settings.ADHDSettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_screen"
-        />
-   <!-- <fragment
-        android:id="@+id/navigation_blank_settings"
+        />-->
+  <fragment
+        android:id="@+id/navigation_settings"
         android:name="com.activitylogger.release1.settings.AppSettingsFragment"
         tools:layout="@layout/blank_settings"
-        android:label="Settings"/>-->
+        android:label="Settings"/>
 
 
 </navigation>

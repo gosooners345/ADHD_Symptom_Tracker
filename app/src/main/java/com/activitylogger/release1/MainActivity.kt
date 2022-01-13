@@ -1,5 +1,6 @@
 package com.activitylogger.release1
 
+import android.app.Application
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -38,24 +39,49 @@ class MainActivity : AppCompatActivity() {
 
     var correctPassword = false
 lateinit var fragmentManager : FragmentManager
+    lateinit var  passWordPreferences :SharedPreferences
 lateinit var enterButton : Button
 lateinit var appPassword :String
 lateinit var skipButton :Button
+lateinit var oldPrefs : SharedPreferences
 var passwordEnabled =true
     lateinit var title : TextView
 lateinit var firstUse :Any
     lateinit var passwordTextBox : TextInputLayout
+
 var userPassword = ""
     lateinit var enablePasswordSwitch : SwitchMaterial
     private lateinit var binding: ActivityMainBinding
     lateinit var mainActionButton: ExtendedFloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        passWordPreferences = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
+
+        oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
+        passWordPreferences =getSharedPreferences(PREFNAME, MODE_PRIVATE)
+var transferred = passWordPreferences.getBoolean("transferred",false)
+
+        if(transferred==false)
+        {
+
+            passWordPreferences.edit().putBoolean("firstUse",oldPrefs.getBoolean("firstUse",false))
+                .putString("password",oldPrefs.getString("password",""))
+                .putString("layoutOption",oldPrefs.getString("layoutOption","linear"))
+                .putBoolean("enablePassword",oldPrefs.getBoolean("enablePassword",true))
+                .putBoolean("transferred",true).apply()
+
+        }
+
 
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
-        firstUse = passWordPreferences.getBoolean("firstUse", false)
+        try {
+            firstUse = passWordPreferences.getBoolean("firstUse", false)
+        }
+        catch (ex : Exception)
+        {
+            ex.printStackTrace()
+            firstUse=false
+        }
         passwordEnabled= passWordPreferences.getBoolean("enablePassword",true)
         if (firstUse == false)
             firstUser()
@@ -246,7 +272,8 @@ return true
     companion object{
         const val versionName = BuildConfig.VERSION_NAME
         const val appName = BuildConfig.APPLICATION_ID
-        lateinit var  passWordPreferences :SharedPreferences
+        const val PREFNAME = appName+"_preferences"
+
         const val buildType = BuildConfig.BUILD_TYPE
 
     }

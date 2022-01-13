@@ -13,11 +13,24 @@
     <string name="edit_record">Edit record</string>
     <string name="record">Record</string>
     <string name="password">Password</string>
+    <string name="layout_option_summary">Customize how you want to view the layout for choosing
+items</string>
     <string name="enable_password">Enable Password?</string>
     <string name="disabled">DISABLED</string>
     <string name="enabled">ENABLED</string>
     <string name="welcome_back_log_in_to_view_your_journal">Welcome Back! Log in to view your journal.</string>
     <string name="enter">Enter</string>
+    <string-array name="layoutOptionLabels_Array">
+        <item>Linear</item>
+        <item>Staggered</item>
+        <item>Grid</item>
+    </string-array>
+    <string-array name="layoutOptionValues_Array">
+        <item>linear</item>
+        <item>staggered</item>
+        <item>grid</item>
+    </string-array>
+    <string name="dev_email_uri">mailto:Boomersooner12345@gmail.com</string>
     <string name="success">Success</string>
     <string-array name="symptom_array">
     <item>Impulsiveness</item>

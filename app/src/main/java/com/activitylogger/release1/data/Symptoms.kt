@@ -55,10 +55,11 @@ fun getSymptoms():ArrayList<String>{
 companion object{
     fun importData(symptomData : ArrayList<String>):SymptomList{
         val symptomList = SymptomList()
-        val sortedList = symptomData.groupingBy { it.trimStart() }.eachCount()
+        val sortedList = symptomData.groupingBy { it.trimStart().trimEnd().trim() }.eachCount()
         val itemSymptoms = sortedList.keys.toList()
         val itemCounts = sortedList.values.toList()
         for(i in 0..sortedList.size-1)
+            if(itemSymptoms[i]!="")
             symptomList.add(Symptoms(itemSymptoms[i],itemCounts[i]))
         return symptomList
     }

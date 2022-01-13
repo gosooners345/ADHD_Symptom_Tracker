@@ -15,11 +15,13 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.DialogFragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.activitylogger.release1.BuildConfig
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
@@ -45,6 +47,8 @@ saveButton=findViewById(R.id.saveButton)
         symptomList = intent.getStringExtra("symptom")
         symptoms.addAll(symptomList!!.split(","))
         resourceSymptoms.addAll(resources.getStringArray(R.array.symptom_array))
+var layoutPrefs = getSharedPreferences(MainActivity.PREFNAME, MODE_PRIVATE)
+
 
        //This works
         for( i in 0..resourceSymptoms.size-1)
@@ -54,7 +58,7 @@ saveButton=findViewById(R.id.saveButton)
 itemRCV = findViewById(R.id.itemListDropDown)
 itemClassAdapter= ItemClassAdapter(this)
 
-        var itemLayoutPrefs = MainActivity.passWordPreferences.getString("layoutOption","linear")
+        var itemLayoutPrefs = layoutPrefs.getString("layoutOption","linear")
         var layoutMgr :RecyclerView.LayoutManager?
 if(itemLayoutPrefs=="linear")
      layoutMgr = LinearLayoutManager(this)

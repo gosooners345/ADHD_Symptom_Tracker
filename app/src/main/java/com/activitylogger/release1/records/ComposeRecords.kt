@@ -218,19 +218,6 @@ fun getRecordData():Records
     }
 
 
-    var symptomCBListener : AdapterView.OnItemSelectedListener = object :
-    AdapterView.OnItemSelectedListener{
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-recordSymptoms =String.format(parent!!.selectedItem.toString())
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-
-        }
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         recordSymptoms=""
@@ -354,7 +341,4 @@ recordContentString=recordContent.editText!!.text.toString()
         const val REQ_CODE_SYMPTOM = 45
 
     }
-}
-interface SelectedData{
-    fun SelectedData(stringdata : String)
 }

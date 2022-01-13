@@ -3,5 +3,8 @@
     android:layout_width="match_parent"
     android:id="@+id/settings_container"
     android:layout_height="match_parent">
-
+<androidx.fragment.app.FragmentContainerView
+    android:layout_width="match_parent"
+    android:id="@+id/settings_fragment"
+    android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

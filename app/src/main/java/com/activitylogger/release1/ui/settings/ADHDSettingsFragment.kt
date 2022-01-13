@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.google.android.material.chip.Chip
@@ -36,11 +37,11 @@ var passwordEnabled = true
     override fun onCreateView(inflater: LayoutInflater,container:ViewGroup?,savedInstanceState: Bundle?): View? {
 val view = inflater.inflate(R.layout.settings_screen,container,false)
 
-        prefs = MainActivity.passWordPreferences
-        passwordy = MainActivity.passWordPreferences.getString("password","")!!
-        passwordEnabled = MainActivity.passWordPreferences.getBoolean("enablePassword",true)
-        layoutOption = MainActivity.passWordPreferences.getString("layoutOption","linear").toString()
-        recordLayoutOption = MainActivity.passWordPreferences.getString("recordLayoutOption","linear").toString()
+        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        passwordy = prefs.getString("password","")!!
+        passwordEnabled = prefs.getBoolean("enablePassword",true)
+        layoutOption = prefs.getString("layoutOption","linear").toString()
+        recordLayoutOption = prefs.getString("recordLayoutOption","linear").toString()
         layoutChipOptions = view.findViewById(R.id.layoutControlChipGroup)
         symptomlinearChipHorizontal = view.findViewById(R.id.linearChip)
         symptomgridChip = view.findViewById(R.id.gridChip)
@@ -70,7 +71,7 @@ val view = inflater.inflate(R.layout.settings_screen,container,false)
         })
 enablePassword.setOnCheckedChangeListener(enablePasswordChangeListener)
         layoutChipOptions.setOnClickListener {
-        when(MainActivity.passWordPreferences.getString("layoutOption","linear")){
+        when(prefs.getString("layoutOption","linear")){
             "linear"->
             symptomlinearChipHorizontal.performClick()
         "grid"->
@@ -89,7 +90,7 @@ enablePassword.setOnCheckedChangeListener(enablePasswordChangeListener)
 
 var layoutOptionChipGroupListener= ChipGroup.OnCheckedChangeListener{
 group, checkedId ->
-    val passwordEditor : SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+    val passwordEditor : SharedPreferences.Editor = prefs.edit()
 when(checkedId){
 R.id.gridChip->
     layoutOption = "grid"
@@ -105,7 +106,7 @@ R.id.gridChip->
 
     var enablePasswordChangeListener  = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
         passwordEnabled = isChecked
-        val passWordEditor :SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+        val passWordEditor :SharedPreferences.Editor = prefs.edit()
         passWordEditor.putBoolean("enablePassword",passwordEnabled)
         Log.i("Check", "Password is  enabled = $passwordEnabled")
         passWordEditor.apply()
@@ -114,7 +115,7 @@ R.id.gridChip->
 
 
 var resetButtonListener = View.OnClickListener {
-    val passwordEditor : SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+    val passwordEditor : SharedPreferences.Editor = prefs.edit()
     passwordEditor.putString("password","")
     passwordEditor.putBoolean("firstUse",false)
     passwordEditor.putBoolean("enablePassword",false)
@@ -131,7 +132,7 @@ var saveButtonListener = View.OnClickListener {
 
     fun changePassword(newpassword : String)
     {
-        val passWordEditor :SharedPreferences.Editor = MainActivity.passWordPreferences.edit()
+        val passWordEditor :SharedPreferences.Editor = prefs.edit()
         passWordEditor.putString("password",newpassword)
         passWordEditor.apply()
 Log.i("newPassword","Password $newpassword saved")
