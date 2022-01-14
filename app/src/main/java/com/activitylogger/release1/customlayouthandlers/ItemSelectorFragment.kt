@@ -47,7 +47,7 @@ saveButton=findViewById(R.id.saveButton)
         symptomList = intent.getStringExtra("symptom")
         symptoms.addAll(symptomList!!.split(","))
         resourceSymptoms.addAll(resources.getStringArray(R.array.symptom_array))
-var layoutPrefs = getSharedPreferences(MainActivity.PREFNAME, MODE_PRIVATE)
+var layoutPrefs =MainActivity.appPreferences
 
 
        //This works

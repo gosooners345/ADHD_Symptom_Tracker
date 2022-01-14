@@ -1,10 +1,13 @@
 package com.activitylogger.release1
 
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.datastore.preferences.*
+import androidx.preference.PreferenceDataStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -19,21 +22,29 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import android.content.SharedPreferences
 import android.opengl.Visibility
+import android.os.Build
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.fragment.app.FragmentManager
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.activitylogger.release1.settings.AppSettingsFragment
+import com.activitylogger.release1.settings.AppSettingsStorage
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : AppCompatActivity() {
 
 
@@ -53,25 +64,38 @@ var userPassword = ""
     lateinit var enablePasswordSwitch : SwitchMaterial
     private lateinit var binding: ActivityMainBinding
     lateinit var mainActionButton: ExtendedFloatingActionButton
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
-        passWordPreferences =getSharedPreferences(PREFNAME, MODE_PRIVATE)
+        oldPrefs.edit().clear().commit()
+
+        oldPrefs =getSharedPreferences(PREFNAME, MODE_PRIVATE)
+passWordPreferences = getSecretSharedPref(this)
+
+
+
+
 var transferred = passWordPreferences.getBoolean("transferred",false)
 
         if(transferred==false)
         {
-
+transferred=true
             passWordPreferences.edit().putBoolean("firstUse",oldPrefs.getBoolean("firstUse",false))
                 .putString("password",oldPrefs.getString("password",""))
                 .putString("layoutOption",oldPrefs.getString("layoutOption","linear"))
                 .putBoolean("enablePassword",oldPrefs.getBoolean("enablePassword",true))
-                .putBoolean("transferred",true).apply()
+                .putBoolean("transferred",transferred).apply()
 
         }
+        if(transferred)
+        {
+            oldPrefs.edit().clear().commit()
+        }
 
-
+appPreferences = passWordPreferences
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
         try {
@@ -214,7 +238,7 @@ introList.add(firstPage)
         return  introList
     }
 
-
+    //Store Password
     var saveButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
         val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
@@ -232,31 +256,25 @@ introList.add(firstPage)
     }
 
     fun LogIn(password: String) : Boolean {
+        if (password != appPassword) {
 
-
-if(password != appPassword)
-{
-
-    MaterialAlertDialogBuilder(this)
-            .setTitle("Incorrect Password")
-            .setMessage(String.format("Invalid Password, Try Again?"))
-            .setNegativeButton("No") { _, _ ->
-                finish()
-            }
-            .setPositiveButton("Yes") { dialog, _ -> dialog.dismiss() }
-            .setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            .show()
-    Toast.makeText(this,"Invalid Password, try again",Toast.LENGTH_LONG).show()
-return false
-}
-        else{
-    Toast.makeText(this,"Password correct",Toast.LENGTH_LONG).show()
-return true
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Incorrect Password")
+                .setMessage(String.format("Invalid Password, Try Again?"))
+                .setNegativeButton("No") { _, _ ->
+                    finish()
+                }
+                .setPositiveButton("Yes") { dialog, _ -> dialog.dismiss() }
+                .setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+                .show()
+            Toast.makeText(this, "Invalid Password, try again", Toast.LENGTH_LONG).show()
+            return false
+        } else {
+            Toast.makeText(this, "Password correct", Toast.LENGTH_LONG).show()
+            return true
 
         }
     }
-
-
 
     fun storePassword(password: String)
     {
@@ -268,13 +286,26 @@ return true
         correctPassword = true
     }
 
+    private fun getSecretSharedPref(context: Context): SharedPreferences {
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        return EncryptedSharedPreferences.create(context,
+            PREFNAME+"_secured",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
 
     companion object{
         const val versionName = BuildConfig.VERSION_NAME
         const val appName = BuildConfig.APPLICATION_ID
         const val PREFNAME = appName+"_preferences"
-
         const val buildType = BuildConfig.BUILD_TYPE
+        lateinit var appPreferences: SharedPreferences
 
     }
 }

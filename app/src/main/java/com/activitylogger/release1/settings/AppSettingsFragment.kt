@@ -1,11 +1,16 @@
 package com.activitylogger.release1.settings
 
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.preference.*
+import androidx.security.crypto.EncryptedSharedPreferences
+import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 
 class AppSettingsFragment : PreferenceFragmentCompat(),
@@ -15,22 +20,30 @@ lateinit var  customLayoutOptionPrefs : ListPreference
     lateinit var passwordChangeTextEditor: EditTextPreference
     lateinit var resetPreference : Preference
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.settings_page, rootKey)
+// Look into data store
+preferenceManager.preferenceDataStore = AppSettingsStorage()
+
+            setPreferencesFromResource(R.xml.settings_page, rootKey)
 
 resetPreference=findPreference("firstUse")!!
 
+
             resetPreference.setOnPreferenceClickListener {
-                it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+             it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
                     ?.putBoolean("enablePassword",false)!!.commit()
+                MainActivity.appPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+                ?.putBoolean("enablePassword",false)!!.commit()
             }
          customLayoutOptionPrefs= findPreference("layoutOption")!!
 customLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
     preference.sharedPreferences.edit().putString(preference.key,newValue as String).commit()
+    MainActivity.appPreferences!!.edit().putString(preference.key,newValue as String).commit()
 }
 
 
 
     enablePasswordSwitch= findPreference("enablePassword")!!
+            enablePasswordSwitch.isChecked = MainActivity.appPreferences.getBoolean("enablePassword",false)
 enablePasswordSwitch.setOnPreferenceChangeListener { preference, newValue ->
 when(newValue as Boolean)
 {
@@ -38,10 +51,14 @@ when(newValue as Boolean)
     }
     false ->{
         passwordChangeTextEditor.isEnabled=false
+
     }
+
 }
-        preference.sharedPreferences.edit().putBoolean(preference.key, newValue as Boolean).commit()
+    changePasswordTextBoxVisibility(newValue)
+        MainActivity.appPreferences.edit().putBoolean(preference.key, newValue as Boolean).commit()
 }
+
         enablePasswordSwitch.summaryOff = String.format("Password Protection Disabled")
         enablePasswordSwitch.summaryOn = String.format("Password Protection Enabled")
 
@@ -52,14 +69,20 @@ when(newValue as Boolean)
             }
             passwordChangeTextEditor.setOnPreferenceChangeListener { preference, newValue ->
                 Log.i(preference.key,"Password is $newValue")
-                preference.sharedPreferences.edit()
-                            .putString(preference.key, newValue as String).commit()
+                MainActivity.appPreferences.edit().putString(preference.key, newValue as String).commit()
             }
+
+            MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
+
         }
 
+fun changePasswordTextBoxVisibility(visible: Boolean){
+    passwordChangeTextEditor.isVisible = visible
+
+}
 
 
-
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key)
         {
@@ -75,18 +98,18 @@ when(newValue as Boolean)
 
         }
         }
-
+requireContext().getSharedPreferences(MainActivity.PREFNAME,MODE_PRIVATE).edit().clear().commit()
 
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        MainActivity.appPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 }
 
