@@ -21,7 +21,7 @@ lateinit var  customLayoutOptionPrefs : ListPreference
     lateinit var resetPreference : Preference
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 // Look into data store
-preferenceManager.preferenceDataStore = AppSettingsStorage()
+
 
             setPreferencesFromResource(R.xml.settings_page, rootKey)
 
@@ -30,13 +30,13 @@ resetPreference=findPreference("firstUse")!!
 
             resetPreference.setOnPreferenceClickListener {
              it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
-                    ?.putBoolean("enablePassword",false)!!.commit()
+                    ?.putBoolean("enablePassword",false)!!.apply()
                 MainActivity.appPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
                 ?.putBoolean("enablePassword",false)!!.commit()
             }
          customLayoutOptionPrefs= findPreference("layoutOption")!!
 customLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
-    preference.sharedPreferences.edit().putString(preference.key,newValue as String).commit()
+    preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
     MainActivity.appPreferences!!.edit().putString(preference.key,newValue as String).commit()
 }
 
@@ -71,7 +71,6 @@ when(newValue as Boolean)
                 Log.i(preference.key,"Password is $newValue")
                 MainActivity.appPreferences.edit().putString(preference.key, newValue as String).commit()
             }
-
             MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
 
         }
@@ -80,6 +79,10 @@ fun changePasswordTextBoxVisibility(visible: Boolean){
     passwordChangeTextEditor.isVisible = visible
 
 }
+    fun restorePasswordonResume(password : String?)
+    {
+        passwordChangeTextEditor.text=password!!
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -98,13 +101,15 @@ fun changePasswordTextBoxVisibility(visible: Boolean){
 
         }
         }
-requireContext().getSharedPreferences(MainActivity.PREFNAME,MODE_PRIVATE).edit().clear().commit()
+//requireContext().getSharedPreferences(MainActivity.PREFNAME,MODE_PRIVATE).edit().clear().commit()
 
     }
 
     override fun onResume() {
         super.onResume()
         MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
+        changePasswordTextBoxVisibility(MainActivity.appPreferences.getBoolean("enablePassword",false))
+        restorePasswordonResume(MainActivity.appPreferences.getString("password",""))
     }
 
     override fun onPause() {

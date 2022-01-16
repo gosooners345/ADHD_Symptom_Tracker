@@ -49,19 +49,19 @@ class MainActivity : AppCompatActivity() {
 
 
     var correctPassword = false
-lateinit var fragmentManager : FragmentManager
-    lateinit var  passWordPreferences :SharedPreferences
-lateinit var enterButton : Button
-lateinit var appPassword :String
-lateinit var skipButton :Button
-lateinit var oldPrefs : SharedPreferences
-var passwordEnabled =true
-    lateinit var title : TextView
-lateinit var firstUse :Any
-    lateinit var passwordTextBox : TextInputLayout
+    lateinit var fragmentManager: FragmentManager
+    lateinit var passWordPreferences: SharedPreferences
+    lateinit var enterButton: Button
+    lateinit var appPassword: String
+    lateinit var skipButton: Button
+    lateinit var oldPrefs: SharedPreferences
+    var passwordEnabled = true
+    lateinit var title: TextView
+    lateinit var firstUse: Any
+    lateinit var passwordTextBox: TextInputLayout
 
-var userPassword = ""
-    lateinit var enablePasswordSwitch : SwitchMaterial
+    var userPassword = ""
+    lateinit var enablePasswordSwitch: SwitchMaterial
     private lateinit var binding: ActivityMainBinding
     lateinit var mainActionButton: ExtendedFloatingActionButton
 
@@ -70,53 +70,43 @@ var userPassword = ""
         super.onCreate(savedInstanceState)
 
         oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
-        oldPrefs.edit().clear().commit()
+        oldPrefs.edit().clear().apply()
 
-        oldPrefs =getSharedPreferences(PREFNAME, MODE_PRIVATE)
-passWordPreferences = getSecretSharedPref(this)
+        oldPrefs = getSharedPreferences(PREFNAME, MODE_PRIVATE)
+        passWordPreferences = getSecretSharedPref(this)
 
+        var transferred = passWordPreferences.getBoolean("transferred", false)
 
-
-
-var transferred = passWordPreferences.getBoolean("transferred",false)
-
-        if(transferred==false)
-        {
-transferred=true
-            passWordPreferences.edit().putBoolean("firstUse",oldPrefs.getBoolean("firstUse",false))
-                .putString("password",oldPrefs.getString("password",""))
-                .putString("layoutOption",oldPrefs.getString("layoutOption","linear"))
-                .putBoolean("enablePassword",oldPrefs.getBoolean("enablePassword",true))
-                .putBoolean("transferred",transferred).apply()
+        if (transferred == false) {
+            transferred = true
+            passWordPreferences.edit()
+                .putBoolean("firstUse", oldPrefs.getBoolean("firstUse", false))
+                .putString("password", oldPrefs.getString("password", ""))
+                .putString("layoutOption", oldPrefs.getString("layoutOption", "linear"))
+                .putBoolean("enablePassword", oldPrefs.getBoolean("enablePassword", true))
+                .putBoolean("transferred", transferred).apply()
 
         }
-        if(transferred)
-        {
-            oldPrefs.edit().clear().commit()
+        if (transferred) {
+            oldPrefs.edit().clear().apply()
         }
 
-appPreferences = passWordPreferences
+        appPreferences = passWordPreferences
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
         try {
             firstUse = passWordPreferences.getBoolean("firstUse", false)
-        }
-        catch (ex : Exception)
-        {
+        } catch (ex: Exception) {
             ex.printStackTrace()
-            firstUse=false
+            firstUse = false
         }
-        passwordEnabled= passWordPreferences.getBoolean("enablePassword",true)
+        passwordEnabled = passWordPreferences.getBoolean("enablePassword", true)
         if (firstUse == false)
             firstUser()
-        else if(passwordEnabled)
+        else if (passwordEnabled)
             loginScreen()
         else
             loadApp()
-        //Log in to the app before accessing the records.
-        //For security purposes the password is stored locally
-
-
     }
 
 
@@ -141,10 +131,9 @@ appPreferences = passWordPreferences
             firstUse = true
             passWordEditor.putBoolean("firstUse", firstUse as Boolean)
             passWordEditor.apply()
-            enablePasswordSwitch.isChecked=true
-        }
-        else
-enablePasswordSwitch.visibility= View.GONE
+            enablePasswordSwitch.isChecked = true
+        } else
+            enablePasswordSwitch.visibility = View.GONE
 
         appPassword = passWordPreferences.getString("password", "").toString()
 
@@ -160,11 +149,11 @@ enablePasswordSwitch.visibility= View.GONE
             }
         })
         if (appPassword == "") {
-     title.text = "Type in a password to secure your journal!"
+            title.text = "Type in a password to secure your journal!"
             enterButton.text = "Save"
             enterButton.setOnClickListener(saveButtonClickListener)
         } else {
-            title.text="Welcome Back! Enter your password below to log into your journal!"
+            title.text = "Welcome Back! Enter your password below to log into your journal!"
             enterButton.text = "Log In"
             enterButton.setOnClickListener(loginButtonClickListener)
         }
@@ -176,7 +165,7 @@ enablePasswordSwitch.visibility= View.GONE
 
     }
 
-    fun loadApp(){
+    fun loadApp() {
 
         try {
             binding = ActivityMainBinding.inflate(layoutInflater)
@@ -187,7 +176,7 @@ enablePasswordSwitch.visibility= View.GONE
             // menu should be considered as top level destinations.
             val appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.navigation_home, R.id.navigation_dashboard,R.id.navigation_settings
+                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_settings
                 )
             )
 
@@ -207,42 +196,70 @@ enablePasswordSwitch.visibility= View.GONE
     }
 
 
-    fun onBoarding() : ArrayList<PaperOnboardingPage> {
+    fun onBoarding(): ArrayList<PaperOnboardingPage> {
         val introList = ArrayList<PaperOnboardingPage>()
         val firstPage = PaperOnboardingPage(
             "Welcome!",
-           String.format("Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
-                   "\nThis can help you in therapy and so much more!\n  Swipe right to continue."),
+            String.format(
+                "Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
+                        "\nThis can help you in therapy and so much more!\n  Swipe right to continue."
+            ),
             resources.getColor(R.color.red),
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_next_arrow
         )
-        val secondPage = PaperOnboardingPage("Security", String.format("This is your personal journal. \n" +
-                "    It would be wise to protect it with a passcode or password so other people do not go prying into your private matters without your permission. \n" +
-                "    Make sure you remember it or else you may have trouble accessing your info."),resources.getColor(R.color.red), R.drawable.ic_security_lock,
-        R.drawable.ic_next_arrow)
-        val thirdPage = PaperOnboardingPage("Record Entries",String.format("You can record events by simply hitting record on the home screen. \n" +
-                "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
-                "        You can rate the entry  from your perspective on a scale from 0(bad) to 100(good).\n" +
-                " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
-                "        Hit save and its logged."),resources.getColor(R.color.red),R.drawable.ic_baseline_edit_24,R.drawable.ic_next_arrow)
-        val fourthPage = PaperOnboardingPage("Statistics",String.format("Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),resources.getColor(R.color.red),R.drawable.ic_dashboard_black_24dp,R.drawable.ic_next_arrow)
-val fifthPage= PaperOnboardingPage("Finally",String.format("I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
-        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem! You can also disable password protection in the settings page.\n" +
-        "        Let us make mental health discussions a more pleasant experience for everyone!"),resources.getColor(R.color.red),R.drawable.ic_home_black_24dp,R.drawable.ic_home_black_24dp)
-introList.add(firstPage)
+        val secondPage = PaperOnboardingPage(
+            "Security", String.format(
+                "This is your personal journal. \n" +
+                        "    It would be wise to protect it with a passcode or password so other people do not go prying into your private matters without your permission. \n" +
+                        "    Make sure you remember it or else you may have trouble accessing your info."
+            ), resources.getColor(R.color.red), R.drawable.ic_security_lock,
+            R.drawable.ic_next_arrow
+        )
+        val thirdPage = PaperOnboardingPage(
+            "Record Entries",
+            String.format(
+                "You can record events by simply hitting record on the home screen. \n" +
+                        "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
+                        "        You can rate the entry  from your perspective on a scale from 0(bad) to 100(good).\n" +
+                        " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
+                        "        Hit save and its logged."
+            ),
+            resources.getColor(R.color.red),
+            R.drawable.ic_baseline_edit_24,
+            R.drawable.ic_next_arrow
+        )
+        val fourthPage = PaperOnboardingPage(
+            "Statistics",
+            String.format("Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),
+            resources.getColor(R.color.red),
+            R.drawable.ic_dashboard_black_24dp,
+            R.drawable.ic_next_arrow
+        )
+        val fifthPage = PaperOnboardingPage(
+            "Finally",
+            String.format(
+                "I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
+                        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem! You can also disable password protection in the settings page.\n" +
+                        "        Let us make mental health discussions a more pleasant experience for everyone!"
+            ),
+            resources.getColor(R.color.red),
+            R.drawable.ic_home_black_24dp,
+            R.drawable.ic_home_black_24dp
+        )
+        introList.add(firstPage)
         introList.add(secondPage)
         introList.add(thirdPage)
         introList.add(fourthPage)
         introList.add(fifthPage)
-        return  introList
+        return introList
     }
 
     //Store Password
     var saveButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
-        val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
-        passWordEditor.putBoolean("enablePassword",passwordEnabled)
+        val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
+        passWordEditor.putBoolean("enablePassword", passwordEnabled)
         passWordEditor.apply()
         storePassword(userPassword)
         loadApp()
@@ -250,12 +267,12 @@ introList.add(firstPage)
 
     var loginButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
-       correctPassword =  LogIn(userPassword)
-   if(correctPassword || !passwordEnabled)
-       loadApp()
+        correctPassword = LogIn(userPassword)
+        if (correctPassword || !passwordEnabled)
+            loadApp()
     }
 
-    fun LogIn(password: String) : Boolean {
+    fun LogIn(password: String): Boolean {
         if (password != appPassword) {
 
             MaterialAlertDialogBuilder(this)
@@ -276,12 +293,11 @@ introList.add(firstPage)
         }
     }
 
-    fun storePassword(password: String)
-    {
-        val passWordEditor :SharedPreferences.Editor = passWordPreferences.edit()
-        passWordEditor.putString("password",password)
+    fun storePassword(password: String) {
+        val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
+        passWordEditor.putString("password", password)
         passwordEnabled = enablePasswordSwitch.isChecked
-        passWordEditor.putBoolean("enablePassword",passwordEnabled)
+        passWordEditor.putBoolean("enablePassword", passwordEnabled)
         passWordEditor.apply()
         correctPassword = true
     }
@@ -291,8 +307,9 @@ introList.add(firstPage)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
 
-        return EncryptedSharedPreferences.create(context,
-            PREFNAME+"_secured",
+        return EncryptedSharedPreferences.create(
+            context,
+            PREFNAME + "_secured",
             masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -300,10 +317,10 @@ introList.add(firstPage)
     }
 
 
-    companion object{
+    companion object {
         const val versionName = BuildConfig.VERSION_NAME
         const val appName = BuildConfig.APPLICATION_ID
-        const val PREFNAME = appName+"_preferences"
+        const val PREFNAME = appName + "_preferences"
         const val buildType = BuildConfig.BUILD_TYPE
         lateinit var appPreferences: SharedPreferences
 

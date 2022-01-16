@@ -1,5 +1,7 @@
 package com.activitylogger.release1.ui.dashboard
 
+import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,9 +12,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ComplexColorCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
+import com.activitylogger.release1.R.*
 import com.activitylogger.release1.data.EmotionData
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.data.RecordsList
@@ -22,12 +27,21 @@ import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.card.MaterialCardView
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.symptomsList as symptomList
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 
 class DashboardFragment : Fragment() {
@@ -41,13 +55,17 @@ private var switchGraphs = false
 
     //For Line Graph data
     private lateinit var barGraphView: AAChartView
-    private lateinit var ratingLineGraphTest : AAChartView
+    //private lateinit var ratingLineGraphTest : AAChartView'
+    private lateinit var ratingGraphTest : LineChart
+    lateinit var barGraphCard : MaterialCardView
     //For Pie Chart Data
     private lateinit var successPieChart: PieChart
     private lateinit var successTV: TextView
     private lateinit var failTV: TextView
-
-
+    lateinit var lineGraphTitle : TextView
+lateinit var xAxisTitleLabel : TextView
+lateinit var  yAxisTitleLabel : TextView
+lateinit var avgRatingLabel : TextView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -62,18 +80,25 @@ private var switchGraphs = false
         val root: View = binding.root
 
         Log.i("Graphing", "Graphing Line Data")
-
-        ratingLineGraphTest = root.findViewById(R.id.graphView)
+        lineGraphTitle = root.findViewById(R.id.lineChartTitleLabel)
+        avgRatingLabel = binding.avgRatingTV
+        ratingGraphTest=root.findViewById(R.id.graphViewTest)
+        xAxisTitleLabel = root.findViewById(R.id.xAxisLabel)
+        yAxisTitleLabel=root.findViewById(R.id.yAxisLabel)
         graphLineData(recordsList)
         Log.i("Graphing", "Graphing Success/Fail rate")
         successPieChart = root.findViewById(R.id.piechart)
         successTV = root.findViewById(R.id.successLabel)
         failTV = root.findViewById(R.id.failLabel)
+        barGraphCard=root.findViewById(R.id.barGraphCard)
+
+
+        //barGraphCard.setOnClickListener(barGraphCardListener)
         barGraphView = root.findViewById(R.id.emotionBarChart)
         graphPieChart(recordsList)
         graphBarGraph()
 
-        //graphSymptoms()
+        graphSymptoms()
         return root
     }
 
@@ -84,37 +109,61 @@ private var switchGraphs = false
     }
 
 
+    @SuppressLint("ResourceType")
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun graphLineData(recordList: RecordsList) {
         try {
             Collections.sort(recordList, Records.compareCreatedTimes)
-            val ratingSeries = ArrayList<AASeriesElement>()
-            //Sort the list into ascending order, put relevant data into chart
-            val ratingList =ArrayList<Any>()
-            val ratingLabels = ArrayList<String>()
-            for (item in recordList) {
-                    ratingList.add(arrayOf(item.timeCreated,item.rating))
-                ratingLabels.add(item.timeCreated.toString())
+            val ratingsData = ArrayList<Entry>()
+var avgRating =0.0
+            val recordDateList = ArrayList<String>()
+            for (record in recordList)
+            {
+                val pattern = "MM/dd/yyyy HH:mm:ss aa"
+                val formatter = SimpleDateFormat(pattern)
+                val formattedRecordDate = formatter.format(record.timeCreated)
+                recordDateList.add(formattedRecordDate)
+                ratingsData.add(Entry((recordDateList.size-1).toFloat(),record.rating.toFloat()))
+                avgRating+=record.rating
             }
-            //Add Data to a series element to add to graph
-            val ratingElement =
-                AASeriesElement().name("Ratings").dashStyle(AAChartLineDashStyleType.ShortDashDot).showInLegend(true)
-                    .lineWidth(2.0f).data(ratingList.toTypedArray())
-            ratingSeries.add(ratingElement)
+val recordDataSet = LineDataSet(ratingsData,"Ratings")
+            recordDataSet.axisDependency = YAxis.AxisDependency.LEFT
 
-            val ratingArray = ratingSeries.toTypedArray()
-            val labelArray = ratingLabels.toTypedArray()
-            val ratingGraphModel = AAChartModel()
-                .title("Ratings over time")
-                .xAxisLabelsEnabled(true)
-                .series(ratingArray)
-                .yAxisLabelsEnabled(true)
-                .yAxisTitle("Ratings")
-                .legendEnabled(true)
-                .categories(labelArray)
-                .chartType(AAChartType.Line)
-                .zoomType(AAChartZoomType.XY)
-                .dataLabelsEnabled(true)
-            ratingLineGraphTest.aa_drawChartWithChartModel(ratingGraphModel)
+            val data = LineData(recordDataSet)
+
+var totavgRating =Math.round(avgRating/recordDateList.size.toDouble()).toDouble()
+            val formatter: ValueFormatter = object : ValueFormatter() {
+                val recordLabels = recordDateList.toTypedArray()
+
+                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                   return recordLabels.getOrNull(value.toInt())?:value.toString()
+                }
+                override fun getPointLabel(entry: Entry?): String {
+                    return super.getPointLabel(entry)
+                }
+
+                }
+            avgRatingLabel.text = "Average Rating from Records is : $totavgRating"
+data.setDrawValues(true)
+//data.setValueTextColor(R.color.red)
+            ratingGraphTest.setBackgroundColor(Color.WHITE)
+            ratingGraphTest.data = data
+val xAxis = ratingGraphTest.xAxis
+            xAxis.labelRotationAngle = 45f
+xAxis.setLabelCount(recordDateList.size)
+            xAxis.granularity = 1f
+            ratingGraphTest.setScaleEnabled(true)
+            ratingGraphTest.isScaleXEnabled=true
+
+xAxis.position=XAxis.XAxisPosition.BOTTOM
+            xAxis.valueFormatter=formatter
+ratingGraphTest.isAutoScaleMinMaxEnabled = true
+            ratingGraphTest.invalidate()
+lineGraphTitle.text = "Ratings from Records"
+            yAxisTitleLabel.text = "Ratings"
+            yAxisTitleLabel.rotation = 270f
+            xAxisTitleLabel.text = "Dates"
+
 
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -122,6 +171,7 @@ private var switchGraphs = false
 
         }
     }
+
 
     private fun graphPieChart(recordList: RecordsList) {
         try {
@@ -149,8 +199,7 @@ private var switchGraphs = false
 
     private fun graphBarGraph() {
         try {
-            if(!switchGraphs)
-            {            Collections.sort(emotionList, EmotionData.compareCounts)
+                       Collections.sort(emotionList, EmotionData.compareCounts)
             val emotionSeries = ArrayList<AASeriesElement>()
             val emotionArray = ArrayList<Any>()
             val emotionLabels = ArrayList<String>()
@@ -173,45 +222,65 @@ private var switchGraphs = false
                 .scrollablePlotArea(AAScrollablePlotArea().scrollPositionY(24f))
                 .series(emotionSeriesArray)
             barGraphView.aa_drawChartWithChartModel(emotionChartModel)
-            switchGraphs=true}
-            else {
-                Collections.sort(symptomList, Symptoms.compareCounts)
-                val symptomArrayList = ArrayList<Any>()
-                val symptomSeries = ArrayList<AASeriesElement>()
-                val symptomLabels = ArrayList<String>()
-                for (symptom in symptomList) {
-                    symptomArrayList.add(arrayOf(symptom.symptom, symptom.count))
-                    symptomLabels.add(symptom.symptom)
-                }
-     try{
-                val symptomElement = AASeriesElement().name("Symptoms").data(symptomArrayList.toTypedArray())
-                symptomSeries.add(symptomElement)
-                val symptomChartModel: AAChartModel = AAChartModel()
-                    .chartType(AAChartType.Bar)
-                    .title("Symptom Data from Logs")
-                    .categories(symptomLabels.toTypedArray())
-                    .zoomType(AAChartZoomType.XY)
-                    .polar(true)
-                    .dataLabelsEnabled(true)
-                    .legendEnabled(true)
-                    .xAxisLabelsEnabled(true)
-                    .scrollablePlotArea(AAScrollablePlotArea().scrollPositionY(24f))
-                    .series(symptomSeries.toTypedArray())
-                barGraphView.aa_refreshChartWithChartModel(symptomChartModel)
-                switchGraphs=false
-     }
-     catch (ex:Exception){
-         Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
-         ex.printStackTrace()
-     }
             }
-
-        } catch (ex: Exception) {
+         catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
         }
 
     }
+    @SuppressWarnings("variableexpected")
+fun graphSymptoms()
+{
+    try {
+        Collections.sort(symptomList, Symptoms.compareCounts)
+        val symptomArray = ArrayList<BarEntry>()
+        val symptomListLabels = ArrayList<String>()
+        var i =0
+        for (symptom in symptomList)
+        {
 
+            symptomArray.add(BarEntry(i.toFloat(),symptom.count.toFloat()))
+            symptomListLabels.add(symptom.symptom)
+            i++
+
+        }
+        val symptomDataSet = BarDataSet(symptomArray,"Symptoms")
+        symptomDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        val data = BarData(symptomDataSet)
+        binding.symptomGraphTest.data = data
+        val xAxis = binding.symptomGraphTest.xAxis
+        xAxis.labelRotationAngle = 45f
+        xAxis.setLabelCount(symptomArray.size)
+xAxis.position=XAxis.XAxisPosition.BOTTOM
+        binding.symptomGraphTest.setBackgroundColor(resources.getColor((R.color.white)))
+        xAxis.granularity = 1f
+        val formatter: ValueFormatter = object : ValueFormatter() {
+            val recordLabels = symptomListLabels.toTypedArray()
+
+            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                return recordLabels.getOrNull(value.toInt())?:value.toString()
+            }
+
+            override fun getBarLabel(barEntry: BarEntry?): String {
+                return super.getBarLabel(barEntry)
+            }
+
+        }
+binding.symptomGraphTest.setScaleEnabled(true)
+        binding.symptomGraphTest.isScaleXEnabled = true
+        xAxis.valueFormatter=formatter
+        binding.xSymptomAxisLabel.text = "Symptoms"
+        binding.symptomGraphTest.isAutoScaleMinMaxEnabled=true
+binding.ySymptomAxisLabel.text = "Quantity"
+        binding.ySymptomAxisLabel.rotation = 270f
+        binding.symptomGraphLabel.text = "ADHD Symptoms/Benefits from Records"
+    }
+    catch (ex:Exception)
+    {
+        ex.printStackTrace()
+        Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+    }
+}
 
 }

@@ -4,6 +4,7 @@
         <PreferenceCategory
             app:key="symptomLayoutOption"
             app:title="Custom Layout Options"
+            app:icon="@drawable/ic_chip_linear_option"
             >
                 <ListPreference
                     app:key="layoutOption"
@@ -16,7 +17,8 @@
         </PreferenceCategory>
         <PreferenceCategory
             app:key="password_category"
-            app:title="Password Settings">
+            app:title="Password Settings"
+            app:icon="@drawable/ic_security_lock">
                 <SwitchPreferenceCompat
                     android:defaultValue="true"
                     android:title="Enable password protection"
@@ -31,10 +33,12 @@
         </PreferenceCategory>
         <PreferenceCategory
             app:key="help_category"
+            app:icon="@drawable/help_icon"
             app:title="Help">
 <Preference
     app:key="feedback"
     app:title="Contact Me"
+    app:icon="@drawable/ic_review_icon"
     app:summary="Tell me about your experience using this app or request new features here.
     I would love to hear about them!">
 <intent
@@ -49,6 +53,7 @@
 </intent>
 </Preference>
             <Preference
+                app:icon="@drawable/ic_star"
             app:key="rating"
             app:title="Rate My App on the Play Store!"
                 app:summary="Please take a moment to rate my application on the Play Store!">
