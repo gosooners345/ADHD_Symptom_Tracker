@@ -53,20 +53,24 @@ private var switchGraphs = false
     // onDestroyView.
     private val binding get() = _binding!!
 
-    //For Line Graph data
+    //AA Chart Library used for Emotions Bar graph
     private lateinit var barGraphView: AAChartView
-    //private lateinit var ratingLineGraphTest : AAChartView'
-    private lateinit var ratingGraphTest : LineChart
     lateinit var barGraphCard : MaterialCardView
-    //For Pie Chart Data
+    
+// MP Android Chart Library and surrounding labels 
+    private lateinit var ratingGraphTest : LineChart 
+    lateinit var lineGraphTitle : TextView
+    lateinit var xAxisTitleLabel : TextView
+    lateinit var  yAxisTitleLabel : TextView
+    lateinit var avgRatingLabel : TextView
+    
+    
+    
+    //For Pie Chart Data EazeGraph PieChart Library and affiliated Labels
     private lateinit var successPieChart: PieChart
     private lateinit var successTV: TextView
     private lateinit var failTV: TextView
-    lateinit var lineGraphTitle : TextView
-lateinit var xAxisTitleLabel : TextView
-lateinit var  yAxisTitleLabel : TextView
-lateinit var avgRatingLabel : TextView
-
+    
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +82,7 @@ lateinit var avgRatingLabel : TextView
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+//Ratings Line Graph Call
         Log.i("Graphing", "Graphing Line Data")
         lineGraphTitle = root.findViewById(R.id.lineChartTitleLabel)
         avgRatingLabel = binding.avgRatingTV
@@ -86,18 +90,16 @@ lateinit var avgRatingLabel : TextView
         xAxisTitleLabel = root.findViewById(R.id.xAxisLabel)
         yAxisTitleLabel=root.findViewById(R.id.yAxisLabel)
         graphLineData(recordsList)
+        //Success Pie Chart Call
         Log.i("Graphing", "Graphing Success/Fail rate")
         successPieChart = root.findViewById(R.id.piechart)
         successTV = root.findViewById(R.id.successLabel)
         failTV = root.findViewById(R.id.failLabel)
-        barGraphCard=root.findViewById(R.id.barGraphCard)
-
-
-        //barGraphCard.setOnClickListener(barGraphCardListener)
-        barGraphView = root.findViewById(R.id.emotionBarChart)
         graphPieChart(recordsList)
+//Emotions Bar Graph Call
+        barGraphView = root.findViewById(R.id.emotionBarChart)
         graphBarGraph()
-
+// Symptoms Bar graph Call
         graphSymptoms()
         return root
     }
@@ -108,7 +110,7 @@ lateinit var avgRatingLabel : TextView
         _binding = null
     }
 
-
+//Line Graph Method Code
     @SuppressLint("ResourceType")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun graphLineData(recordList: RecordsList) {
@@ -172,7 +174,7 @@ lineGraphTitle.text = "Ratings from Records"
         }
     }
 
-
+//Pie Chart Graph Method Code
     private fun graphPieChart(recordList: RecordsList) {
         try {
             val successCTNum = recordList.successCt
@@ -196,7 +198,7 @@ lineGraphTitle.text = "Ratings from Records"
         }
 
     }
-
+//Emotion Bar Graph Method Code
     private fun graphBarGraph() {
         try {
                        Collections.sort(emotionList, EmotionData.compareCounts)
@@ -229,6 +231,7 @@ lineGraphTitle.text = "Ratings from Records"
         }
 
     }
+    //Symptoms Bar Graph Method Code
     @SuppressWarnings("variableexpected")
 fun graphSymptoms()
 {
