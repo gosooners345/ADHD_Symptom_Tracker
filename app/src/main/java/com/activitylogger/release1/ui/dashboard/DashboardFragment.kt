@@ -18,10 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
 import com.activitylogger.release1.R.*
-import com.activitylogger.release1.data.EmotionData
-import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsList
-import com.activitylogger.release1.data.Symptoms
+import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
@@ -100,7 +97,7 @@ private var switchGraphs = false
         barGraphView = root.findViewById(R.id.emotionBarChart)
         graphBarGraph()
 // Symptoms Bar graph Call
-        graphSymptoms()
+        graphSymptoms(recordsList)
         return root
     }
 
@@ -147,7 +144,6 @@ var totavgRating =Math.round(avgRating/recordDateList.size.toDouble()).toDouble(
                 }
             avgRatingLabel.text = "Average Rating from Records is : $totavgRating"
 data.setDrawValues(true)
-//data.setValueTextColor(R.color.red)
             ratingGraphTest.setBackgroundColor(Color.WHITE)
             ratingGraphTest.data = data
 val xAxis = ratingGraphTest.xAxis
@@ -233,14 +229,16 @@ lineGraphTitle.text = "Ratings from Records"
     }
     //Symptoms Bar Graph Method Code
     @SuppressWarnings("variableexpected")
-fun graphSymptoms()
+fun graphSymptoms(recordList: RecordsList)
 {
     try {
-        Collections.sort(symptomList, Symptoms.compareCounts)
+        val symptomLists = SymptomList.importData(recordList.symptomList)
+        Collections.sort(symptomLists,Symptoms.compareCounts)
+        //Collections.sort(symptomList, Symptoms.compareCounts)
         val symptomArray = ArrayList<BarEntry>()
         val symptomListLabels = ArrayList<String>()
         var i =0
-        for (symptom in symptomList)
+        for (symptom in symptomLists)
         {
 
             symptomArray.add(BarEntry(i.toFloat(),symptom.count.toFloat()))
@@ -278,6 +276,7 @@ binding.symptomGraphTest.setScaleEnabled(true)
 binding.ySymptomAxisLabel.text = "Quantity"
         binding.ySymptomAxisLabel.rotation = 270f
         binding.symptomGraphLabel.text = "ADHD Symptoms/Benefits from Records"
+        binding.symptomGraphTest.invalidate()
     }
     catch (ex:Exception)
     {
@@ -285,5 +284,14 @@ binding.ySymptomAxisLabel.text = "Quantity"
         Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
     }
 }
+
+    override fun onResume() {
+        super.onResume()
+        binding.symptomGraphTest.invalidate()
+        ratingGraphTest.invalidate(
+        )
+
+    }
+
 
 }

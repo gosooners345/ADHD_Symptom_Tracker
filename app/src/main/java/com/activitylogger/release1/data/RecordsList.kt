@@ -48,6 +48,8 @@ var dateRatingList = ArrayList<DatesandRatings>()
     fun setRecordData(){
         if(emotionList.size>0)
             emotionList.clear()
+        if(symptomList.size>0)
+            symptomList.clear()
         for(record in this) {
             recordStats.add(record.rating)
             recordDates.add(record.timeCreated)

@@ -107,7 +107,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_8"
-            android:layout_marginBottom="@dimen/dimen_64"
+            android:layout_marginBottom="@dimen/dimen_8"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"

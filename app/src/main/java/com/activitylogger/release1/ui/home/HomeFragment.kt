@@ -94,6 +94,7 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     fun refreshAdapter() {
 
         recordsList.setRecordData()
+
        symptomsList = SymptomList.importData(recordsList.symptomList)
 emotionList = EmotionList.importData(recordsList.emotionList)
         adapter.notifyDataSetChanged()
@@ -175,6 +176,7 @@ emotionList = EmotionList.importData(recordsList.emotionList)
         }
 
     }
+
 
     private fun getRecords() {
         try {
