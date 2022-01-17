@@ -31,7 +31,7 @@ resetPreference=findPreference("firstUse")!!
             resetPreference.setOnPreferenceClickListener {
              it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
                     ?.putBoolean("enablePassword",false)!!.apply()
-                MainActivity.appPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+                MainActivity.appPreferences.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
                 ?.putBoolean("enablePassword",false)!!.commit()
             }
          customLayoutOptionPrefs= findPreference("layoutOption")!!

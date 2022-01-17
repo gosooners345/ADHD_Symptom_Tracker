@@ -131,8 +131,19 @@
 
                     />
 
+<com.github.mikephil.charting.charts.PieChart
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:id="@+id/successfail_piechart"
+    app:layout_constraintTop_toBottomOf="@id/successfailTitle"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="@dimen/dimen_16"
+    android:layout_marginStart="@dimen/dimen_8"
+    android:layout_marginEnd="@dimen/dimen_8"
+    />
 
-                <org.eazegraph.lib.charts.PieChart
+<!--                <org.eazegraph.lib.charts.PieChart
                     android:id="@+id/piechart"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
@@ -206,7 +217,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/colorFailView"
 
-                    app:layout_constraintTop_toBottomOf="@id/successLabel" />
+                    app:layout_constraintTop_toBottomOf="@id/successLabel" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -218,12 +229,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_8"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="@dimen/dimen_16"
             android:background="@drawable/notes_outline"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
             android:isScrollContainer="true"
-app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pieChartCard">

@@ -37,6 +37,7 @@ import com.activitylogger.release1.ui.home.HomeFragment.Companion.symptomsList a
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 
@@ -60,11 +61,8 @@ private var switchGraphs = false
     lateinit var xAxisTitleLabel : TextView
     lateinit var  yAxisTitleLabel : TextView
     lateinit var avgRatingLabel : TextView
-    
-    
-    
     //For Pie Chart Data EazeGraph PieChart Library and affiliated Labels
-    private lateinit var successPieChart: PieChart
+    private lateinit var successPieChart: com.github.mikephil.charting.charts.PieChart
     private lateinit var successTV: TextView
     private lateinit var failTV: TextView
     
@@ -89,9 +87,8 @@ private var switchGraphs = false
         graphLineData(recordsList)
         //Success Pie Chart Call
         Log.i("Graphing", "Graphing Success/Fail rate")
-        successPieChart = root.findViewById(R.id.piechart)
-        successTV = root.findViewById(R.id.successLabel)
-        failTV = root.findViewById(R.id.failLabel)
+        successPieChart = root.findViewById(R.id.successfail_piechart)
+
         graphPieChart(recordsList)
 //Emotions Bar Graph Call
         barGraphView = root.findViewById(R.id.emotionBarChart)
@@ -108,7 +105,7 @@ private var switchGraphs = false
     }
 
 //Line Graph Method Code
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceType", "SetTextI18n", "SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun graphLineData(recordList: RecordsList) {
         try {
@@ -144,10 +141,11 @@ var totavgRating =Math.round(avgRating/recordDateList.size.toDouble()).toDouble(
                 }
             avgRatingLabel.text = "Average Rating from Records is : $totavgRating"
 data.setDrawValues(true)
+            ratingGraphTest.description.isEnabled=false
             ratingGraphTest.setBackgroundColor(Color.WHITE)
             ratingGraphTest.data = data
 val xAxis = ratingGraphTest.xAxis
-            xAxis.labelRotationAngle = 45f
+            xAxis.labelRotationAngle = 90f
 xAxis.setLabelCount(recordDateList.size)
             xAxis.granularity = 1f
             ratingGraphTest.setScaleEnabled(true)
@@ -176,7 +174,21 @@ lineGraphTitle.text = "Ratings from Records"
             val successCTNum = recordList.successCt
             val failCTNum = recordList.failCt
             val totalCtNum = successCTNum + failCTNum
-            successPieChart.addPieSlice(
+
+            val pieEntries = ArrayList<PieEntry>()
+            pieEntries.add(PieEntry((successCTNum.toDouble()/totalCtNum.toDouble()).toFloat(),"Success"))
+            pieEntries.add(PieEntry((failCTNum.toDouble()/totalCtNum.toDouble()).toFloat(),"Fail"))
+val pieDataSet = PieDataSet(pieEntries,"Success/Fail Ratio from Logs")
+val pieColors =ArrayList<Int>()
+pieColors.addAll(ColorTemplate.MATERIAL_COLORS.asList())
+            val pieData = PieData(pieDataSet)
+  successPieChart.setUsePercentValues(true)
+pieDataSet.colors=pieColors
+  successPieChart.data=pieData
+            successPieChart.description.isEnabled=false
+  successPieChart.invalidate()
+//binding.successfailPiechart.data(pieData)
+            /*successPieChart.addPieSlice(
                 PieModel("Success", recordList.successCt.toFloat(), Color.parseColor("#29B6F6"))
             )
             successPieChart.addPieSlice(
@@ -186,7 +198,7 @@ lineGraphTitle.text = "Ratings from Records"
                 String.format("Success : ${((successCTNum.toDouble() / totalCtNum.toDouble()) * 100).roundToInt()} percent")
             failTV.text =
                 String.format("Fail : ${((failCTNum.toDouble() / totalCtNum.toDouble()) * 100).roundToInt()} percent")
-            successPieChart.startAnimation()
+            successPieChart.startAnimation()*/
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -227,8 +239,10 @@ lineGraphTitle.text = "Ratings from Records"
         }
 
     }
+
     //Symptoms Bar Graph Method Code
-    @SuppressWarnings("variableexpected")
+    @SuppressLint("SetTextI18n")
+    @SuppressWarnings("Variableexpected")
 fun graphSymptoms(recordList: RecordsList)
 {
     try {
@@ -255,6 +269,7 @@ fun graphSymptoms(recordList: RecordsList)
         xAxis.setLabelCount(symptomArray.size)
 xAxis.position=XAxis.XAxisPosition.BOTTOM
         binding.symptomGraphTest.setBackgroundColor(resources.getColor((R.color.white)))
+        binding.symptomGraphTest.description.isEnabled=false
         xAxis.granularity = 1f
         val formatter: ValueFormatter = object : ValueFormatter() {
             val recordLabels = symptomListLabels.toTypedArray()
@@ -272,7 +287,7 @@ binding.symptomGraphTest.setScaleEnabled(true)
         binding.symptomGraphTest.isScaleXEnabled = true
         xAxis.valueFormatter=formatter
         binding.xSymptomAxisLabel.text = "Symptoms"
-        binding.symptomGraphTest.isAutoScaleMinMaxEnabled=true
+        //binding.symptomGraphTest.isAutoScaleMinMaxEnabled=true
 binding.ySymptomAxisLabel.text = "Quantity"
         binding.ySymptomAxisLabel.rotation = 270f
         binding.symptomGraphLabel.text = "ADHD Symptoms/Benefits from Records"
