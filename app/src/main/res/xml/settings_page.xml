@@ -14,7 +14,44 @@
                     app:entries="@array/layoutOptionLabels_Array"
                     app:entryValues="@array/layoutOptionValues_Array"
                     />
+<SeekBarPreference
+    app:key="gridSize"
+    app:defaultValue="3"
+    app:title="Layout Grid Size"
+    app:min="1"
+    android:max="5"
+    app:seekBarIncrement="1"
+    app:updatesContinuously="true"
+    app:adjustable="true"
+    app:showSeekBarValue="true"
+    />
+
         </PreferenceCategory>
+    <PreferenceCategory
+        app:key="record_layout_settings"
+        app:title="Record Layout Customization"
+        app:icon="@drawable/ic_chip_linear_option">
+        <ListPreference
+            app:key="layoutOption_record"
+            app:title="Choose Layout Option"
+            app:summary="@string/layout_option_summary"
+            android:defaultValue="linear"
+            app:entries="@array/layoutOptionLabels_Array"
+            app:entryValues="@array/layoutOptionValues_Array"
+            />
+        <SeekBarPreference
+            app:key="gridSize_record"
+            app:defaultValue="3"
+            app:title="Layout Grid Size"
+            app:min="1"
+            android:max="5"
+            app:seekBarIncrement="1"
+            app:updatesContinuously="true"
+            app:adjustable="true"
+            app:showSeekBarValue="true"
+            />
+
+    </PreferenceCategory>
         <PreferenceCategory
             app:key="password_category"
             app:title="Password Settings"

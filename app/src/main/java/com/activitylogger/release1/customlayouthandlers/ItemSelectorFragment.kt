@@ -59,13 +59,14 @@ itemRCV = findViewById(R.id.itemListDropDown)
 itemClassAdapter= ItemClassAdapter(this)
 
         var itemLayoutPrefs = layoutPrefs.getString("layoutOption","linear")
+        var gridSize = layoutPrefs.getInt("gridSize",3)
         var layoutMgr :RecyclerView.LayoutManager?
 if(itemLayoutPrefs=="linear")
      layoutMgr = LinearLayoutManager(this)
         else if (itemLayoutPrefs=="grid")
-            layoutMgr = GridLayoutManager(this,3)
+            layoutMgr = GridLayoutManager(this,gridSize)
             else 
-     layoutMgr = StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL)
+     layoutMgr = StaggeredGridLayoutManager(gridSize,StaggeredGridLayoutManager.VERTICAL)
         itemRCV.layoutManager = layoutMgr
         itemRCV.itemAnimator = DefaultItemAnimator()
         val divider = RecyclerViewSpaceExtender(8)

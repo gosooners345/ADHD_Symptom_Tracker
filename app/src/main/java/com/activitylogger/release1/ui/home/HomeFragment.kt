@@ -51,10 +51,23 @@ var reversed=false
         val root: View = binding.root
         homeViewModel.recordsRepo = RecordsRepository(requireContext())
         getRecords()
+
+
+        val gridSize = MainActivity.appPreferences.getInt("gridSize_record",3)
+        val layoutString = MainActivity.appPreferences.getString("layoutOption_record","linear")
+        var layoutMgr : RecyclerView.LayoutManager?
+        if(layoutString == "linear")
+            layoutMgr = LinearLayoutManager(context)
+        else if(layoutString=="grid")
+            layoutMgr = GridLayoutManager(context, gridSize)
+        else
+            layoutMgr=StaggeredGridLayoutManager(gridSize,StaggeredGridLayoutManager.VERTICAL)
+
+
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
 
-        recordsRCV.layoutManager = LinearLayoutManager(context)
+        recordsRCV.layoutManager =layoutMgr
         recordsRCV.itemAnimator = DefaultItemAnimator()
         recordsRCV.adapter = adapter
         val divider = RecyclerViewSpaceExtender(8)

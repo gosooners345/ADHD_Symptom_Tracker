@@ -15,9 +15,16 @@ import com.activitylogger.release1.R
 
 class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-lateinit var enablePasswordSwitch: SwitchPreferenceCompat
+//Symptom Custom Layout Options
 lateinit var  customLayoutOptionPrefs : ListPreference
+    lateinit var gridSizePreference : SeekBarPreference
+    //Record Layout Settings
+    lateinit var recordLayoutOptions : ListPreference
+    lateinit var recordGridSizePreference: SeekBarPreference
+    //Password Change and Enable
     lateinit var passwordChangeTextEditor: EditTextPreference
+    lateinit var enablePasswordSwitch: SwitchPreferenceCompat
+    //Reset everything
     lateinit var resetPreference : Preference
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 // Look into data store
@@ -25,23 +32,40 @@ lateinit var  customLayoutOptionPrefs : ListPreference
 
             setPreferencesFromResource(R.xml.settings_page, rootKey)
 
+//Reset Everything
 resetPreference=findPreference("firstUse")!!
-
-
             resetPreference.setOnPreferenceClickListener {
-             it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+             it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")?.putInt("gridSize",3)
+                 ?.putString("layoutOption_record","linear")?.putInt("gridSize_record",3)
                     ?.putBoolean("enablePassword",false)!!.apply()
-                MainActivity.appPreferences.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")
+                MainActivity.appPreferences.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")?.putInt("gridSize",3)
+                    ?.putString("layoutOption_record","linear")?.putInt("gridSize_record",3)
                 ?.putBoolean("enablePassword",false)!!.commit()
             }
+            //Symptom List Custom Prefs
          customLayoutOptionPrefs= findPreference("layoutOption")!!
 customLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
     preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
-    MainActivity.appPreferences!!.edit().putString(preference.key,newValue as String).commit()
+    MainActivity.appPreferences!!.edit().putString(preference.key,newValue).commit()
 }
+gridSizePreference = findPreference<SeekBarPreference>("gridSize")!!
+            gridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
+                preference.sharedPreferences.edit().putInt(preference.key,newValue as Int).apply()
+                MainActivity.appPreferences!!.edit().putInt(preference.key, newValue ).commit()
+            }
+//Record Layout Settings
+            recordLayoutOptions=findPreference<ListPreference>("layoutOption_record")!!
+            recordLayoutOptions.setOnPreferenceChangeListener { preference, newValue ->
+                preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
+                MainActivity.appPreferences!!.edit().putString(preference.key,newValue).commit()
+            }
+            recordGridSizePreference= findPreference<SeekBarPreference>("gridSize_record")!!
+            recordGridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
+                preference.sharedPreferences.edit().putInt(preference.key,newValue as Int).apply()
+                MainActivity.appPreferences!!.edit().putInt(preference.key, newValue ).commit()
+            }
 
-
-
+//Password Settings
     enablePasswordSwitch= findPreference("enablePassword")!!
             enablePasswordSwitch.isChecked = MainActivity.appPreferences.getBoolean("enablePassword",false)
 enablePasswordSwitch.setOnPreferenceChangeListener { preference, newValue ->
