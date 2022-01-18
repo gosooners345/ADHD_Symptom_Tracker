@@ -56,13 +56,18 @@ var reversed=false
         val gridSize = MainActivity.appPreferences.getInt("gridSize_record",3)
         val layoutString = MainActivity.appPreferences.getString("layoutOption_record","linear")
         var layoutMgr : RecyclerView.LayoutManager?
+        val vertical = MainActivity.appPreferences.getString("linear_horizontal_records","vertical")
         if(layoutString == "linear")
-            layoutMgr = LinearLayoutManager(context)
+            layoutMgr = if(vertical == "horizontal")
+                LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            else
+                LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         else if(layoutString=="grid")
             layoutMgr = GridLayoutManager(context, gridSize)
+        if (vertical == "horizontal")
+            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
         else
-            layoutMgr=StaggeredGridLayoutManager(gridSize,StaggeredGridLayoutManager.VERTICAL)
-
+            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)
 
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
@@ -213,7 +218,7 @@ emotionList = EmotionList.importData(recordsList.emotionList)
     }
 
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
-        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        object : ItemTouchHelper.SimpleCallback(2, ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,

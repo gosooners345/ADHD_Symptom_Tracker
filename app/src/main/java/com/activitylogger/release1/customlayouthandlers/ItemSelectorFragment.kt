@@ -61,12 +61,20 @@ itemClassAdapter= ItemClassAdapter(this)
         var itemLayoutPrefs = layoutPrefs.getString("layoutOption","linear")
         var gridSize = layoutPrefs.getInt("gridSize",3)
         var layoutMgr :RecyclerView.LayoutManager?
+        var vertical = layoutPrefs.getString("linear_horizontal_symptoms","vertical")
 if(itemLayoutPrefs=="linear")
-     layoutMgr = LinearLayoutManager(this)
+    if(vertical == "horizontal")
+                layoutMgr=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+     else
+        layoutMgr = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         else if (itemLayoutPrefs=="grid")
             layoutMgr = GridLayoutManager(this,gridSize)
-            else 
-     layoutMgr = StaggeredGridLayoutManager(gridSize,StaggeredGridLayoutManager.VERTICAL)
+            else {
+    if (vertical == "horizontal")
+        layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
+ else
+        layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)
+}
         itemRCV.layoutManager = layoutMgr
         itemRCV.itemAnimator = DefaultItemAnimator()
         val divider = RecyclerViewSpaceExtender(8)

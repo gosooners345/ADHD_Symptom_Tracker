@@ -20,6 +20,14 @@ items</string>
     <string name="enabled">ENABLED</string>
     <string name="welcome_back_log_in_to_view_your_journal">Welcome Back! Log in to view your journal.</string>
     <string name="enter">Enter</string>
+    <string-array name="vertical_linear_labels">
+        <item>Vertical</item>
+        <item>Horizontal</item>
+    </string-array>
+    <string-array name="vertical_linear_values">
+        <item>vertical</item>
+        <item>horizontal</item>
+    </string-array>
     <string-array name="layoutOptionLabels_Array">
         <item>Linear</item>
         <item>Staggered</item>

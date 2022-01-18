@@ -17,9 +17,11 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 //Symptom Custom Layout Options
 lateinit var  customLayoutOptionPrefs : ListPreference
+lateinit var symptomVerticalOptions : ListPreference
     lateinit var gridSizePreference : SeekBarPreference
     //Record Layout Settings
     lateinit var recordLayoutOptions : ListPreference
+    lateinit var recordVerticalOptions : ListPreference
     lateinit var recordGridSizePreference: SeekBarPreference
     //Password Change and Enable
     lateinit var passwordChangeTextEditor: EditTextPreference
@@ -27,19 +29,15 @@ lateinit var  customLayoutOptionPrefs : ListPreference
     //Reset everything
     lateinit var resetPreference : Preference
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-// Look into data store
-
-
             setPreferencesFromResource(R.xml.settings_page, rootKey)
 
 //Reset Everything
 resetPreference=findPreference("firstUse")!!
             resetPreference.setOnPreferenceClickListener {
-             it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")?.putInt("gridSize",3)
-                 ?.putString("layoutOption_record","linear")?.putInt("gridSize_record",3)
+             it.sharedPreferences!!.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")?.putInt("gridSize",3)?.putString("linear_horizontal_records","vertical")?.putString("linear_horizontal_symptoms","vertical")?. putString("layoutOption_record","linear")?.putInt("gridSize_record",3)
                     ?.putBoolean("enablePassword",false)!!.apply()
                 MainActivity.appPreferences.edit().putBoolean(it.key,false).putString("password","")?.putString("layoutOption","linear")?.putInt("gridSize",3)
-                    ?.putString("layoutOption_record","linear")?.putInt("gridSize_record",3)
+                    ?.putString("layoutOption_record","linear")?.putInt("gridSize_record",3)?.putString("linear_horizontal_records","vertical")?.putString("linear_horizontal_symptoms","vertical")
                 ?.putBoolean("enablePassword",false)!!.commit()
             }
             //Symptom List Custom Prefs
@@ -48,6 +46,13 @@ customLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
     preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
     MainActivity.appPreferences!!.edit().putString(preference.key,newValue).commit()
 }
+            symptomVerticalOptions = findPreference("linear_horizontal_symptoms")!!
+            symptomVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
+                preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
+                MainActivity.appPreferences!!.edit().putString(preference.key,newValue).commit()
+
+            }
+
 gridSizePreference = findPreference<SeekBarPreference>("gridSize")!!
             gridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
                 preference.sharedPreferences.edit().putInt(preference.key,newValue as Int).apply()
@@ -63,6 +68,12 @@ gridSizePreference = findPreference<SeekBarPreference>("gridSize")!!
             recordGridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
                 preference.sharedPreferences.edit().putInt(preference.key,newValue as Int).apply()
                 MainActivity.appPreferences!!.edit().putInt(preference.key, newValue ).commit()
+            }
+            recordVerticalOptions = findPreference("linear_horizontal_records")!!
+            recordVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
+                preference.sharedPreferences.edit().putString(preference.key,newValue as String).apply()
+                MainActivity.appPreferences!!.edit().putString(preference.key,newValue).commit()
+
             }
 
 //Password Settings
@@ -107,6 +118,19 @@ fun changePasswordTextBoxVisibility(visible: Boolean){
     {
         passwordChangeTextEditor.text=password!!
     }
+    fun restoreseekbars(int1 : Int, int2:Int)
+    {
+        recordGridSizePreference.value =int1
+        gridSizePreference.value = int2
+
+    }
+    fun restoreGridOptions(string1:String,string2:String)
+    {
+        recordVerticalOptions.value = string1
+        symptomVerticalOptions.value = string2
+
+
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -134,6 +158,8 @@ fun changePasswordTextBoxVisibility(visible: Boolean){
         MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
         changePasswordTextBoxVisibility(MainActivity.appPreferences.getBoolean("enablePassword",false))
         restorePasswordonResume(MainActivity.appPreferences.getString("password",""))
+        restoreGridOptions(MainActivity.appPreferences.getString("linear_horizontal_records","vertical")!!,MainActivity.appPreferences.getString("linear_horizontal_symptoms","vertical")!!)
+        restoreseekbars(MainActivity.appPreferences.getInt("gridSize_record",3),MainActivity.appPreferences.getInt("gridSize",3))
     }
 
     override fun onPause() {
