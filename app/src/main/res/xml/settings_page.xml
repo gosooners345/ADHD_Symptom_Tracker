@@ -98,7 +98,7 @@
     app:title="Contact Me"
     app:icon="@drawable/ic_review_icon"
     app:summary="Tell me about your experience using this app or request new features here.
-    I would love to hear about them!">
+">
 <intent
  android:action="android.intent.action.VIEW"
     android:data="@string/dev_email_uri">
