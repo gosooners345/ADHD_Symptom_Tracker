@@ -32,8 +32,8 @@ class HomeFragment : Fragment() , OnRecordListener {
 
 
     private var _binding: FragmentHomeBinding? = null
-var reversed=false
-    var tripped =false
+    var reversed = false
+    var tripped = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -53,16 +53,17 @@ var reversed=false
         getRecords()
 
 
-        val gridSize = MainActivity.appPreferences.getInt("gridSize_record",3)
-        val layoutString = MainActivity.appPreferences.getString("layoutOption_record","linear")
-        var layoutMgr : RecyclerView.LayoutManager?
-        val vertical = MainActivity.appPreferences.getString("linear_horizontal_records","vertical")
-        if(layoutString == "linear")
-            layoutMgr = if(vertical == "horizontal")
-                LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        val gridSize = MainActivity.appPreferences.getInt("gridSize_record", 3)
+        val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
+        var layoutMgr: RecyclerView.LayoutManager?
+        val vertical =
+            MainActivity.appPreferences.getString("linear_horizontal_records", "vertical")
+        if (layoutString == "linear")
+            layoutMgr = if (vertical == "horizontal")
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             else
-                LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-        else if(layoutString=="grid")
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        else if (layoutString == "grid")
             layoutMgr = GridLayoutManager(context, gridSize)
         if (vertical == "horizontal")
             layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
@@ -72,23 +73,31 @@ var reversed=false
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
 
-        recordsRCV.layoutManager =layoutMgr
+        recordsRCV.layoutManager = layoutMgr
         recordsRCV.itemAnimator = DefaultItemAnimator()
         recordsRCV.adapter = adapter
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
         setHasOptionsMenu(true)
-tripped=true
+        tripped = true
         return root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort_options, menu)
 
-val searchManager : SearchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        ((menu.findItem(R.id.menu_search_widget).actionView) as SearchView).apply{
-            setSearchableInfo(searchManager.getSearchableInfo(ComponentName(context,SearchActivity::class.java)))
+        val searchManager: SearchManager =
+            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        ((menu.findItem(R.id.menu_search_widget).actionView) as SearchView).apply {
+            setSearchableInfo(
+                searchManager.getSearchableInfo(
+                    ComponentName(
+                        context,
+                        SearchActivity::class.java
+                    )
+                )
+            )
         }
 
 
@@ -101,7 +110,7 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
     }
 
     override fun onRecordClick(position: Int) {
-         val recordSend = recordsList[position]
+        val recordSend = recordsList[position]
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
         Log.i("Tag", "${recordSend}")
@@ -113,8 +122,8 @@ val searchManager : SearchManager = requireActivity().getSystemService(Context.S
 
         recordsList.setRecordData()
 
-       symptomsList = SymptomList.importData(recordsList.symptomList)
-emotionList = EmotionList.importData(recordsList.emotionList)
+        symptomsList = SymptomList.importData(recordsList.symptomList)
+        emotionList = EmotionList.importData(recordsList.emotionList)
         adapter.notifyDataSetChanged()
     }
 
@@ -123,15 +132,13 @@ emotionList = EmotionList.importData(recordsList.emotionList)
             R.id.created_date -> {
 
                 Collections.sort(recordsList, Records.compareIds)
-                if(!reversed) {
+                if (!reversed) {
                     recordsList.reverse()
                     refreshAdapter()
                     reversed = true
-                }
-                else
-                {
+                } else {
                     refreshAdapter()
-                reversed=false
+                    reversed = false
                 }
                 true
             }
@@ -149,13 +156,11 @@ emotionList = EmotionList.importData(recordsList.emotionList)
             }
             R.id.success_fail -> {
                 Collections.sort(recordsList, Records.compareSuccessStates)
-                if(!reversed)
-                {
+                if (!reversed) {
                     recordsList.reverse()
                     refreshAdapter()
-                    reversed=true
-                }
-                else {
+                    reversed = true
+                } else {
                     refreshAdapter()
                     reversed = false
                 }
@@ -163,29 +168,25 @@ emotionList = EmotionList.importData(recordsList.emotionList)
             }
             R.id.sort_A_to_Z -> {
                 Collections.sort(recordsList, Records.compareAlphabetized)
-                if(!reversed)
-                {
+                if (!reversed) {
                     recordsList.reverse()
                     refreshAdapter()
-                    reversed=true
-                }
-                else {
+                    reversed = true
+                } else {
                     refreshAdapter()
-                    reversed=false
+                    reversed = false
                 }
                 true
             }
             R.id.sort_by_rating -> {
                 Collections.sort(recordsList, Records.compareRatings)
-                if(!reversed)
-                {
+                if (!reversed) {
                     recordsList.reverse()
                     refreshAdapter()
-                    reversed=true
-                }
-                else {
+                    reversed = true
+                } else {
                     refreshAdapter()
-                    reversed=false
+                    reversed = false
                 }
                 true
             }
@@ -234,7 +235,7 @@ emotionList = EmotionList.importData(recordsList.emotionList)
         }
 
 
-    private fun recordStore(record: Records) : Intent {
+    private fun recordStore(record: Records): Intent {
         val recordIntent = Intent(context, ComposeRecords::class.java)
         recordIntent.putExtra(record_send, "SELECTED")
         recordIntent.putExtra("RECORDID", record.id)
@@ -243,35 +244,36 @@ emotionList = EmotionList.importData(recordsList.emotionList)
         recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
         recordIntent.putExtra(RECORDSOURCES, record.sources)
         recordIntent.putExtra(RECORDRATINGS, record.rating)
-        recordIntent.putExtra(RECORDSUCCESS,record.successState)
-        if(record.symptoms!="")
-            recordIntent.putExtra("RECORDSYMPTOMS",record.symptoms)
+        recordIntent.putExtra(RECORDSUCCESS, record.successState)
+        if (record.symptoms != "")
+            recordIntent.putExtra("RECORDSYMPTOMS", record.symptoms)
         else
-            recordIntent.putExtra("RECORDSYMPTOMS","")
+            recordIntent.putExtra("RECORDSYMPTOMS", "")
 
         recordIntent.putExtra("TIMECREATED", record.timeCreated)
         return recordIntent
     }
 
     @SuppressLint("StaticFieldLeak")
-    companion object{
+    companion object {
         var recordsList = RecordsList()
         const val ACTIVITY_ID = 75
-         lateinit var homeViewModel: HomeViewModel
-        lateinit var adapter : RecordsAdapter
+        lateinit var homeViewModel: HomeViewModel
+        lateinit var adapter: RecordsAdapter
         lateinit var recordsRCV: RecyclerView
-        fun newRecord(context : Context?,activityID:Int)
-        {
+        fun newRecord(context: Context?, activityID: Int) {
             val intent = Intent(context, ComposeRecords::class.java)
-        intent.putExtra("activityID",activityID)
-            intent.putExtra("new_record","NewRecord")
+            intent.putExtra("activityID", activityID)
+            intent.putExtra("new_record", "NewRecord")
             context!!.startActivity(intent)
         }
-        fun refreshData(){
+
+        fun refreshData() {
             recordsList.setRecordData()
             adapter.notifyDataSetChanged()
 
         }
+
         const val record_send = "record_selected"
         const val RECORDTITLE = "RECORDTITLE"
         const val RECORDEMOTIONS = "RECORDEMOTIONS"
@@ -281,8 +283,6 @@ emotionList = EmotionList.importData(recordsList.emotionList)
         const val RECORDSUCCESS = "RECORDSUCCESS"
         var symptomsList = SymptomList()
         var emotionList = EmotionList()
-
-
 
 
     }

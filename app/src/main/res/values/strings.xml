@@ -40,6 +40,7 @@ items</string>
     </string-array>
     <string name="dev_email_uri">mailto:Boomersooner12345@gmail.com</string>
     <string name="success">Success</string>
+    <string name="avg_rating">Average Rating:</string>
     <string-array name="symptom_array">
     <item>Impulsiveness</item>
     <item>Impatience</item>

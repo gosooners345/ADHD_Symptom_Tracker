@@ -81,6 +81,8 @@
                     app:key="enablePassword" />
                 <EditTextPreference
                     android:defaultValue=""
+                    android:dialogTitle="New Password"
+                    app:dialogMessage="Enter New Password"
                     app:key="password"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"

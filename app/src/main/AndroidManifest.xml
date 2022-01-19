@@ -4,6 +4,8 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupOnly="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -22,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".customlayouthandlers.ItemSelectorFragment"></activity>
+        <activity android:name=".customlayouthandlers.ItemSelectorFragment" />
 <activity android:name=".searchhandlers.SearchActivity"
     android:exported="false"
     android:parentActivityName=".MainActivity"

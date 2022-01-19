@@ -1,34 +1,22 @@
 
 package com.activitylogger.release1.customlayouthandlers
 
-import android.app.AlertDialog
-import android.app.AppComponentFactory
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AlertDialogLayout
-import androidx.fragment.app.DialogFragment
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.activitylogger.release1.BuildConfig
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
-import com.activitylogger.release1.ui.home.HomeFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ItemSelectorFragment :AppCompatActivity(),onItemSelected
+class ItemSelectorFragment :AppCompatActivity(),OnItemSelected
 {
  var resourceSymptoms = ArrayList<String>()
      var symptomList : String?=""

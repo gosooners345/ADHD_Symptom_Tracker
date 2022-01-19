@@ -1,47 +1,33 @@
 package com.activitylogger.release1
 
-import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
-import androidx.datastore.preferences.*
-import androidx.preference.PreferenceDataStore
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.ramotion.paperonboarding.PaperOnboardingFragment
-import com.ramotion.paperonboarding.PaperOnboardingPage
 import androidx.navigation.ui.setupWithNavController
-import com.activitylogger.release1.databinding.ActivityMainBinding
-import com.activitylogger.release1.ui.home.HomeFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import android.content.SharedPreferences
-import android.opengl.Visibility
-import android.os.Build
-import android.text.Editable
-import android.text.InputType
-import android.text.TextUtils
-import android.text.TextWatcher
-import android.util.Log
-import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.fragment.app.FragmentManager
-import androidx.preference.EditTextPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.activitylogger.release1.settings.AppSettingsFragment
-import com.activitylogger.release1.settings.AppSettingsStorage
+import com.activitylogger.release1.databinding.ActivityMainBinding
+import com.activitylogger.release1.ui.home.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import com.ramotion.paperonboarding.PaperOnboardingFragment
+import com.ramotion.paperonboarding.PaperOnboardingPage
 
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -113,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     fun firstUser() {
         fragmentManager = supportFragmentManager
         val paperOnboardingFragment = PaperOnboardingFragment.newInstance(onBoarding())
-        var fragmentTransaction = fragmentManager.beginTransaction()
+        val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.frameLayout, paperOnboardingFragment)
         fragmentTransaction.commit()
         skipButton = findViewById<Button>(R.id.skipButton)
