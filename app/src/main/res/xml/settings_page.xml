@@ -17,7 +17,7 @@
             <ListPreference
                 app:key="linear_horizontal_symptoms"
                 app:title="Layout Direction"
-                app:summary="Customize how you want your layout to look. Horizontal or Vertical"
+                app:summary="Choose how you want to scroll through the layout. Horizontal or Vertical"
                 android:defaultValue="vertical"
                 app:entryValues="@array/vertical_linear_values"
                 app:entries="@array/vertical_linear_labels"/>
@@ -45,7 +45,7 @@
         <ListPreference
             app:key="layoutOption_record"
             app:title="Choose Layout Option"
-            app:summary="@string/layout_option_summary"
+            app:summary="@string/layout_records_summary"
             android:defaultValue="linear"
             app:entries="@array/layoutOptionLabels_Array"
             app:entryValues="@array/layoutOptionValues_Array"

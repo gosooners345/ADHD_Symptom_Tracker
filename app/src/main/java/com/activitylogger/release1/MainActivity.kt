@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.activitylogger.release1.databinding.ActivityMainBinding
+import com.activitylogger.release1.settings.AppSettingsFragment
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -95,7 +97,6 @@ class MainActivity : AppCompatActivity() {
             loadApp()
     }
 
-
     fun firstUser() {
         fragmentManager = supportFragmentManager
         val paperOnboardingFragment = PaperOnboardingFragment.newInstance(onBoarding())
@@ -147,8 +148,6 @@ class MainActivity : AppCompatActivity() {
 
     var skipButtonClickListener = View.OnClickListener {
         loginScreen()
-
-
     }
 
     fun loadApp() {
@@ -168,6 +167,7 @@ class MainActivity : AppCompatActivity() {
 
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
+           // navController.addOnDestinationChangedListener(navControllerEvent)
             mainActionButton = findViewById(R.id.record_button)
             mainActionButton.setOnClickListener(mainButtonClick)
         } catch (ex: Exception) {
@@ -180,7 +180,6 @@ class MainActivity : AppCompatActivity() {
     var mainButtonClick = View.OnClickListener {
         HomeFragment.newRecord(this, 75)
     }
-
 
     fun onBoarding(): ArrayList<PaperOnboardingPage> {
         val introList = ArrayList<PaperOnboardingPage>()

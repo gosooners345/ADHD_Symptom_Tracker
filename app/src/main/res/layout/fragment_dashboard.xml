@@ -142,83 +142,6 @@
     android:layout_marginStart="@dimen/dimen_8"
     android:layout_marginEnd="@dimen/dimen_8"
     />
-
-<!--                <org.eazegraph.lib.charts.PieChart
-                    android:id="@+id/piechart"
-                    android:layout_width="0dp"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:padding="6dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/successfailTitle" />
-
-                <TextView
-                    android:id="@+id/legendtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:padding="5dp"
-                    android:text="Key"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/piechart" />
-
-                <View
-                    android:id="@+id/colorSuccessView"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/object1"
-                    android:padding="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/legendtitle" />
-
-                <TextView
-                    android:id="@+id/successLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp"
-                    android:padding="5dp"
-                    android:text="Success"
-                    app:layout_constraintStart_toEndOf="@id/colorSuccessView"
-
-                    app:layout_constraintTop_toBottomOf="@id/legendtitle" />
-
-                <View
-                    android:id="@+id/colorFailView"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="@dimen/dimen_16"
-                    android:background="@color/object2"
-                    android:padding="5dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/colorSuccessView" />
-
-                <TextView
-                    android:id="@+id/failLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="@dimen/dimen_16"
-                    android:padding="5dp"
-                    android:text="Fail"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/colorFailView"
-
-                    app:layout_constraintTop_toBottomOf="@id/successLabel" />-->
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -245,8 +168,20 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/notes_outline">
 
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/emotionBarChart"
+                    android:layout_width="0dp"
+                    android:layout_height="600dp"
 
-                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+               <!-- <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/emotionBarChart"
                     android:layout_width="wrap_content"
                     android:layout_height="900dp"
@@ -258,17 +193,8 @@
                     app:layout_constraintBottom_toTopOf="@id/spacer"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent" />
+                    app:layout_constraintTop_toBottomOf="parent" />-->
 
-                <View
-                    android:id="@+id/spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:minHeight="32dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/emotionBarChart" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

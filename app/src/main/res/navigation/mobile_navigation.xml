@@ -24,7 +24,7 @@
   <fragment
         android:id="@+id/navigation_settings"
         android:name="com.activitylogger.release1.settings.AppSettingsFragment"
-        tools:layout="@layout/blank_settings"
+
         android:label="Settings"/>
 
 
