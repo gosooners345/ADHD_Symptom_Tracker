@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="display_settings">display_settings</string>
+    <string name="gridSize">gridSize</string>
+    <string name="layoutOption">layoutOption</string>
+<string name="linear_horizontal_symptoms">linear_horizontal_symptoms</string>
+    <string name="layoutOption_record">layoutOption_record</string>
+    <string name="linear_horizontal_records">linear_horizontal_records</string>
+    <string name="gridSize_record">gridSize_record</string>
+    <string name="enablePassword">enablePassword</string>
+    <string name="password_prefs">password</string>
+    <string name="feedback">feedback</string>
+    <string name="rating">rating</string>
+    <string name="firstUse">firstUse</string>
+
+
+</resources>

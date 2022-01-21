@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".customlayouthandlers.ItemSelectorFragment" />
+        <activity android:name=".settings.AppSettingsActivity"
+            android:label="Settings"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"/>
 <activity android:name=".searchhandlers.SearchActivity"
     android:exported="false"
     android:parentActivityName=".MainActivity"

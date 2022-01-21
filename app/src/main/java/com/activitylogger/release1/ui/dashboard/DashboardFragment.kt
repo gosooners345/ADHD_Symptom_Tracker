@@ -1,13 +1,12 @@
 package com.activitylogger.release1.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -16,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
+import com.activitylogger.release1.settings.AppSettingsActivity
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.github.mikephil.charting.charts.LineChart
@@ -84,6 +84,10 @@ class DashboardFragment : Fragment() {
         graphBarGraph()
 // Symptoms Bar graph Call
         graphSymptoms(recordsList)
+
+        setHasOptionsMenu(true)
+
+
         return root
     }
 
@@ -185,18 +189,6 @@ class DashboardFragment : Fragment() {
             successPieChart.data = pieData
             successPieChart.description.isEnabled = false
             successPieChart.invalidate()
-//binding.successfailPiechart.data(pieData)
-            /*successPieChart.addPieSlice(
-                PieModel("Success", recordList.successCt.toFloat(), Color.parseColor("#29B6F6"))
-            )
-            successPieChart.addPieSlice(
-                PieModel("Fail", recordList.failCt.toFloat(), Color.parseColor("#EF5350"))
-            )
-            successTV.text =
-                String.format("Success : ${((successCTNum.toDouble() / totalCtNum.toDouble()) * 100).roundToInt()} percent")
-            failTV.text =
-                String.format("Fail : ${((failCTNum.toDouble() / totalCtNum.toDouble()) * 100).roundToInt()} percent")
-            successPieChart.startAnimation()*/
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -246,29 +238,7 @@ class DashboardFragment : Fragment() {
             emotionYAxisLabel.rotation = 270f
             emotionXAxisLabel.text = "Emotions"
 
-/*            val emotionSeries = ArrayList<AASeriesElement>()
-            val emotionArray = ArrayList<Any>()
-            val emotionLabels = ArrayList<String>()
-            for (emotion in emotionList)
-            {
-                emotionArray.add(arrayOf(emotion.emotion,emotion.emotionCount))
-                emotionLabels.add(emotion.emotion)
-            }
-            val emotionElement = AASeriesElement().name("Emotions").data(emotionArray.toTypedArray())
-            emotionSeries.add(emotionElement)
-            val emotionSeriesArray = emotionSeries.toTypedArray()
-            val emotionChartModel = AAChartModel()
-                .chartType(AAChartType.Bar)
-                .title("Emotion Data from Logs")
-                .categories(emotionLabels.toTypedArray())
-                .zoomType(AAChartZoomType.XY)
-                .dataLabelsEnabled(true)
-                .legendEnabled(true)
-                .xAxisLabelsEnabled(true)
-                .scrollablePlotArea(AAScrollablePlotArea().scrollPositionY(24f))
-                .series(emotionSeriesArray)
-            barGraphView.aa_drawChartWithChartModel(emotionChartModel)*/
-
+barGraphView.invalidate()
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -329,6 +299,22 @@ class DashboardFragment : Fragment() {
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.stats_options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId)
+        {
+R.id.navigation_settings ->{
+    val settingsIntent = Intent(requireContext(), AppSettingsActivity::class.java)
+    requireContext().startActivity(settingsIntent)
+    return true
+}
+            else -> {false}
         }
     }
 

@@ -25,6 +25,7 @@ import com.activitylogger.release1.databinding.FragmentHomeBinding
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.searchhandlers.SearchActivity
+import com.activitylogger.release1.settings.AppSettingsActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import java.util.*
 
@@ -63,12 +64,13 @@ class HomeFragment : Fragment() , OnRecordListener {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             else
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        else if (layoutString == "grid")
-            layoutMgr = GridLayoutManager(context, gridSize)
-        if (vertical == "horizontal")
+        else if (layoutString == "staggered")
+        {        if (vertical == "horizontal")
             layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
         else
-            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)
+            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)}
+else
+            layoutMgr = GridLayoutManager(context, gridSize)
 
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV = root.findViewById(R.id.tracker_view)
@@ -129,6 +131,11 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+           R.id.navigation_settings -> {
+               val settingsIntent = Intent(requireContext(),AppSettingsActivity::class.java)
+               requireContext().startActivity(settingsIntent)
+               return true
+           }
             R.id.created_date -> {
 
                 Collections.sort(recordsList, Records.compareIds)
