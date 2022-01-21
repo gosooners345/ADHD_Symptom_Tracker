@@ -105,37 +105,13 @@ else
 
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onRecordClick(position: Int) {
-        val recordSend = recordsList[position]
-        val intent = recordStore(recordSend)
-        intent.putExtra("record_selected_id", recordSend.id)
-        Log.i("Tag", "${recordSend}")
-        intent.putExtra("activityID", ACTIVITY_ID)
-        startActivity(intent)
-    }
-
-    fun refreshAdapter() {
-
-        recordsList.setRecordData()
-
-        symptomsList = SymptomList.importData(recordsList.symptomList)
-        emotionList = EmotionList.importData(recordsList.emotionList)
-        adapter.notifyDataSetChanged()
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-           R.id.navigation_settings -> {
-               val settingsIntent = Intent(requireContext(),AppSettingsActivity::class.java)
-               requireContext().startActivity(settingsIntent)
-               return true
-           }
+            R.id.navigation_settings -> {
+                val settingsIntent = Intent(requireContext(),AppSettingsActivity::class.java)
+                requireContext().startActivity(settingsIntent)
+                return true
+            }
             R.id.created_date -> {
 
                 Collections.sort(recordsList, Records.compareIds)
@@ -203,7 +179,51 @@ else
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
+    //This is a simpler accessor method for retrieving records for ComposeRecords Class
+    private fun recordStore(record: Records): Intent {
+        val recordIntent = Intent(context, ComposeRecords::class.java)
+        recordIntent.putExtra(record_send, "SELECTED")
+        recordIntent.putExtra("RECORDID", record.id)
+        recordIntent.putExtra(RECORDTITLE, record.title)
+        recordIntent.putExtra(RECORDDETAILS, record.content)
+        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
+        recordIntent.putExtra(RECORDSOURCES, record.sources)
+        recordIntent.putExtra(RECORDRATINGS, record.rating)
+        recordIntent.putExtra(RECORDSUCCESS, record.successState)
+        if (record.symptoms != "")
+            recordIntent.putExtra("RECORDSYMPTOMS", record.symptoms)
+        else
+            recordIntent.putExtra("RECORDSYMPTOMS", "")
+
+        recordIntent.putExtra("TIMECREATED", record.timeCreated)
+        return recordIntent
+    }
+// This handles record selection basically a read for the record.
+    override fun onRecordClick(position: Int) {
+        val recordSend = recordsList[position]
+        val intent = recordStore(recordSend)
+        intent.putExtra("record_selected_id", recordSend.id)
+        Log.i("Tag", "${recordSend}")
+        intent.putExtra("activityID", ACTIVITY_ID)
+        startActivity(intent)
+    }
+
+    //Refreshes the adapter after a record is submitted to the DB
+    fun refreshAdapter() {
+
+        recordsList.setRecordData()
+
+        symptomsList = SymptomList.importData(recordsList.symptomList)
+        emotionList = EmotionList.importData(recordsList.emotionList)
+        adapter.notifyDataSetChanged()
+    }
+
+    //Retrieves records from the DB
     private fun getRecords() {
         try {
 
@@ -225,6 +245,7 @@ else
         }
     }
 
+//This is the implementation for the delete method to take place.
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(2, ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -240,26 +261,6 @@ else
                 refreshAdapter()
             }
         }
-
-
-    private fun recordStore(record: Records): Intent {
-        val recordIntent = Intent(context, ComposeRecords::class.java)
-        recordIntent.putExtra(record_send, "SELECTED")
-        recordIntent.putExtra("RECORDID", record.id)
-        recordIntent.putExtra(RECORDTITLE, record.title)
-        recordIntent.putExtra(RECORDDETAILS, record.content)
-        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
-        recordIntent.putExtra(RECORDSOURCES, record.sources)
-        recordIntent.putExtra(RECORDRATINGS, record.rating)
-        recordIntent.putExtra(RECORDSUCCESS, record.successState)
-        if (record.symptoms != "")
-            recordIntent.putExtra("RECORDSYMPTOMS", record.symptoms)
-        else
-            recordIntent.putExtra("RECORDSYMPTOMS", "")
-
-        recordIntent.putExtra("TIMECREATED", record.timeCreated)
-        return recordIntent
-    }
 
     @SuppressLint("StaticFieldLeak")
     companion object {

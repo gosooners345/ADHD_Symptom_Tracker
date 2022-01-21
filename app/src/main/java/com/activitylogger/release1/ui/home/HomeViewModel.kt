@@ -16,18 +16,15 @@ import kotlin.collections.ArrayList
 
 class HomeViewModel() : ViewModel() {
 var recordsRepo: RecordsRepository? =null
-
+//Handles deleting records
     fun deleteRecord(record: Records){
         recordsRepo!!.deleteRecord(record)
 
     }
-
-    private fun sanitizeSearchQuery(query: String?): String {
-        if (query == null) {
-            return "";
-        }
-        val queryWithEscapedQuotes = query.replace(Regex.fromLiteral("\""), "\"\"")
-        return "*\"$queryWithEscapedQuotes\"*"
-    }
+    //There is likely going to be more code added to this portion of the application as I get further along in development.
+    //My goal is to implement coroutines into this application so that the application can load faster. It will take me some time due to learning about
+    // asynchronous  programming.
+    //suspend fun deleteRecord(record: Records){}
+    //suspend fun addRecord(record: Records){}
 }
 

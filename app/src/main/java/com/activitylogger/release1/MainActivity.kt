@@ -161,13 +161,12 @@ class MainActivity : AppCompatActivity() {
             // menu should be considered as top level destinations.
             val appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.navigation_home, R.id.navigation_dashboard/*, R.id.navigation_settings*/
+                    R.id.navigation_home, R.id.navigation_dashboard
                 )
             )
 
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
-           // navController.addOnDestinationChangedListener(navControllerEvent)
             mainActionButton = findViewById(R.id.record_button)
             mainActionButton.setOnClickListener(mainButtonClick)
         } catch (ex: Exception) {
@@ -187,9 +186,9 @@ class MainActivity : AppCompatActivity() {
             "Welcome!",
             String.format(
                 "Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
-                        "\nThis can help you in therapy and so much more!\n  Swipe right to continue."
+                        "\nThis can help you in therapy and so much more!\n  Swipe left to continue."
             ),
-            resources.getColor(R.color.red),
+            resources.getColor(R.color.white),
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_next_arrow
         )
@@ -198,7 +197,7 @@ class MainActivity : AppCompatActivity() {
                 "This is your personal journal. \n" +
                         "    It would be wise to protect it with a passcode or password so other people do not go prying into your private matters without your permission. \n" +
                         "    Make sure you remember it or else you may have trouble accessing your info."
-            ), resources.getColor(R.color.red), R.drawable.ic_security_lock,
+            ), resources.getColor(R.color.white), R.drawable.ic_security_lock,
             R.drawable.ic_next_arrow
         )
         val thirdPage = PaperOnboardingPage(
@@ -210,25 +209,24 @@ class MainActivity : AppCompatActivity() {
                         " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
                         "        Hit save and its logged."
             ),
-            resources.getColor(R.color.red),
+            resources.getColor(R.color.white),
             R.drawable.ic_baseline_edit_24,
             R.drawable.ic_next_arrow
         )
         val fourthPage = PaperOnboardingPage(
             "Statistics",
-            String.format("Track your statistics here. You can see how you are doing on rating, success/fail percentage, and emotional statistics."),
-            resources.getColor(R.color.red),
+            String.format("Track your statistics here. You can see how you are doing on rating, success/fail percentage, symptoms, and emotional statistics."),
+            resources.getColor(R.color.white),
             R.drawable.ic_dashboard_black_24dp,
             R.drawable.ic_next_arrow
         )
         val fifthPage = PaperOnboardingPage(
             "Finally",
             String.format(
-                "I hope you were able to follow me through this tutorial long enough to get to this point.  Next up, you will need to create a password to save for your diary. (Do not worry, your secrets are safe in here)\n" +
-                        "         Hit the skip button below to create your password.  If you want to change it, head to the settings page and you can type a new password in without a problem! You can also disable password protection in the settings page.\n" +
-                        "        Let us make mental health discussions a more pleasant experience for everyone!"
+                "You can customize how you want the layout formatting to selecting relevant symptoms and viewing records to look in the settings. While you're there you can find links to rate this app and contact me directly. " +
+                        "\r\nAlso, you can change your password there and enable/disable it as you please. "
             ),
-            resources.getColor(R.color.red),
+            resources.getColor(R.color.white),
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_home_black_24dp
         )
