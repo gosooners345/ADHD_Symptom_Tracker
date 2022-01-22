@@ -1,5 +1,6 @@
 package com.activitylogger.release1
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
@@ -13,7 +14,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -21,7 +21,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.activitylogger.release1.databinding.ActivityMainBinding
-import com.activitylogger.release1.settings.AppSettingsFragment
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,22 +35,22 @@ import com.ramotion.paperonboarding.PaperOnboardingPage
 class MainActivity : AppCompatActivity() {
 
 
-    var correctPassword = false
-    lateinit var fragmentManager: FragmentManager
-    lateinit var passWordPreferences: SharedPreferences
-    lateinit var enterButton: Button
+    private var correctPassword = false
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var passWordPreferences: SharedPreferences
+    private lateinit var enterButton: Button
     lateinit var appPassword: String
-    lateinit var skipButton: Button
-    lateinit var oldPrefs: SharedPreferences
-    var passwordEnabled = true
+    private lateinit var skipButton: Button
+    private lateinit var oldPrefs: SharedPreferences
+    private var passwordEnabled = true
     lateinit var title: TextView
-    lateinit var firstUse: Any
-    lateinit var passwordTextBox: TextInputLayout
+    private lateinit var firstUse: Any
+    private lateinit var passwordTextBox: TextInputLayout
 
     var userPassword = ""
-    lateinit var enablePasswordSwitch: SwitchMaterial
+    private lateinit var enablePasswordSwitch: SwitchMaterial
     private lateinit var binding: ActivityMainBinding
-    lateinit var mainActionButton: ExtendedFloatingActionButton
+    private lateinit var mainActionButton: ExtendedFloatingActionButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,11 +81,11 @@ class MainActivity : AppCompatActivity() {
         appPreferences = passWordPreferences
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
-        try {
-            firstUse = passWordPreferences.getBoolean("firstUse", false)
+        firstUse = try {
+            passWordPreferences.getBoolean("firstUse", false)
         } catch (ex: Exception) {
             ex.printStackTrace()
-            firstUse = false
+            false
         }
         passwordEnabled = passWordPreferences.getBoolean("enablePassword", true)
         if (firstUse == false)
@@ -97,11 +96,11 @@ class MainActivity : AppCompatActivity() {
             loadApp()
     }
 
-    fun firstUser() {
+    private fun firstUser() {
         fragmentManager = supportFragmentManager
-        val paperOnboardingFragment = PaperOnboardingFragment.newInstance(onBoarding())
+        val paperOnboardFragment = PaperOnboardingFragment.newInstance(onBoarding())
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.frameLayout, paperOnboardingFragment)
+        fragmentTransaction.add(R.id.frameLayout, paperOnboardFragment)
         fragmentTransaction.commit()
         skipButton = findViewById<Button>(R.id.skipButton)
         skipButton.setOnClickListener(skipButtonClickListener)
@@ -109,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     fun loginScreen() {
         setContentView(R.layout.login_screen)
         enablePasswordSwitch = findViewById(R.id.enablePasswordSwitch)
@@ -130,9 +130,13 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
                 userPassword = s.toString()
+             if(userPassword.length == appPassword.length)
+                 if(logIn(userPassword))
+                     loadApp()
             }
 
             override fun afterTextChanged(editable: Editable) {
+
             }
         })
         if (appPassword == "") {
@@ -250,12 +254,12 @@ class MainActivity : AppCompatActivity() {
 
     var loginButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
-        correctPassword = LogIn(userPassword)
+        correctPassword = logIn(userPassword)
         if (correctPassword || !passwordEnabled)
             loadApp()
     }
 
-    fun LogIn(password: String): Boolean {
+    private fun logIn(password: String): Boolean {
         if (password != appPassword) {
 
             MaterialAlertDialogBuilder(this)
@@ -276,7 +280,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun storePassword(password: String) {
+    private fun storePassword(password: String) {
         val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
         passWordEditor.putString("password", password)
         passwordEnabled = enablePasswordSwitch.isChecked
