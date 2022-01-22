@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -30,7 +31,6 @@ import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import java.util.*
 
 class HomeFragment : Fragment() , OnRecordListener {
-
 
     private var _binding: FragmentHomeBinding? = null
     var reversed = false
@@ -72,7 +72,8 @@ class HomeFragment : Fragment() , OnRecordListener {
 else
             layoutMgr = GridLayoutManager(context, gridSize)
 
-        adapter = RecordsAdapter(recordsList, this)
+        adapter = RecordsAdapter(recordsList,this)
+
         recordsRCV = root.findViewById(R.id.tracker_view)
 
         recordsRCV.layoutManager = layoutMgr
@@ -217,7 +218,6 @@ else
     fun refreshAdapter() {
 
         recordsList.setRecordData()
-
         symptomsList = SymptomList.importData(recordsList.symptomList)
         emotionList = EmotionList.importData(recordsList.emotionList)
         adapter.notifyDataSetChanged()
@@ -236,6 +236,7 @@ else
                     refreshAdapter()
                 }
                 refreshAdapter()
+
             })
         } catch (ex: Exception) {
             Toast.makeText(requireContext(), "This failed", Toast.LENGTH_LONG).show()

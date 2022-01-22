@@ -6,9 +6,8 @@ import java.util.*
 import java.util.function.Consumer
 import kotlin.collections.ArrayList
 
-open class T() : Any(), Comparable<T>,Indexer {
-    var id = 0
-    var item = ""
+open class TCounts() : T(), Comparable<T>,Indexer {
+
     var counts = 0
 
     constructor(id: Int, item: String, counts: Int) : this() {
@@ -50,12 +49,12 @@ open class T() : Any(), Comparable<T>,Indexer {
                 t1.compareTo(t2)
             t1.item.lowercase().compareTo(t2.item.lowercase())
         }
-        var compareCounts = java.util.Comparator<T> { t1, t2 ->
+        var compareCounts = java.util.Comparator<TCounts> { t1, t2 ->
             if (t1.counts.compareTo(t2.counts) == 0)
                 t1.compareTo(t2)
             t1.counts.compareTo(t2.counts)
         }
-        var compareIds= java.util.Comparator<T>{t1,t2->
+        var compareIds= java.util.Comparator<TCounts>{t1,t2->
             t1.compareTo(t2)
         }
     }
@@ -63,7 +62,7 @@ open class T() : Any(), Comparable<T>,Indexer {
 
 
 
-class TList : ArrayList<T>(){
+class TCountsList : ArrayList<TCounts>(){
 
     fun getItems() : ArrayList<String>{
         val itemList = ArrayList<String>()
@@ -85,10 +84,10 @@ return idList
 
     companion object
     {
-        fun importData(sourceData : ArrayList<String>) : ArrayList<T>{
-            val classList = ArrayList<T>()
+        fun importData(sourceData : ArrayList<String>) : ArrayList<TCounts>{
+            val classList = ArrayList<TCounts>()
             for (i in 0..sourceData.size-1)
-                classList.add(T(i,sourceData[i],0))
+                classList.add(TCounts(i,sourceData[i],0))
             return classList
         }
         fun importGroupedData(sourceData : ArrayList<String>) : ArrayList<T>{
@@ -97,23 +96,51 @@ return idList
             val itemKeys = groupedList.keys.toList()
             val itemValues = groupedList.values.toList()
             for (i in 0..groupedList.size-1)
-                classList.add(T(i,itemKeys[i],itemValues[i]))
+                classList.add(TCounts(i,itemKeys[i],itemValues[i]))
             return classList
             }
 
-        fun importSortedData(sourceData: ArrayList<String>,sortID :String):ArrayList<T>{
-            val classList = ArrayList<T>()
+        fun importSortedData(sourceData: ArrayList<String>,sortID :String):ArrayList<TCounts>{
+            val classList = ArrayList<TCounts>()
             val sortedList = sourceData.groupingBy { it.trimStart().trimEnd() }.eachCount()
             val itemKeys = sortedList.keys.toList()
             val itemValues = sortedList.values.toList()
             for (i in 0..sortedList.size-1)
-                classList.add(T(i,itemKeys[i],itemValues[i]))
+                classList.add(TCounts(i,itemKeys[i],itemValues[i]))
             when(sortID.lowercase()) {
-                "","id"->Collections.sort(classList, T.compareIds)
-                "counts"->Collections.sort(classList,T.compareCounts)
-                "items"->Collections.sort(classList,T.compareItems)
+                "","id"->Collections.sort(classList, TCounts.compareIds)
+                "counts"->Collections.sort(classList,TCounts.compareCounts)
+                "items"->Collections.sort(classList,TCounts.compareItems)
             }
             return classList
         }
+    }
+}
+open class T : Any(), Comparable<T>,Indexer
+{
+    var id = 0
+    var item = ""
+    override fun get(propertyIndex: Int) :Any {
+        var item: Any
+        when(propertyIndex){
+            1 -> item =this.id
+            2-> item =this.item
+            else -> throw Exception("Invalid Index")
+        }
+        return  item
+    }
+
+    override fun get(propertyName: String): Any {
+        var item = Any()
+        when(propertyName.lowercase())
+        {
+            "","id"->item = id
+            "item" ->item=this.item
+        }
+        return  item
+    }
+
+    override fun compareTo(other: T): Int {
+       return id.compareTo(other.id)
     }
 }

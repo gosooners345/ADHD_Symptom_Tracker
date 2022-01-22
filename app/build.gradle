@@ -8,6 +8,7 @@ plugins {
 android {
     compileSdk 31
 
+
     defaultConfig {
         applicationId "com.activitylogger.release1"
         minSdk 21
@@ -39,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 }
 
@@ -50,6 +52,8 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //expandable RecyclerView for collapsing multiple items
+    implementation 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
     //Everything else
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -60,6 +64,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
     testImplementation 'junit:junit:4.+'
     kapt 'androidx.room:room-compiler:2.4.1'
     implementation 'com.ramotion.paperonboarding:paper-onboarding:1.1.3'
