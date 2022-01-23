@@ -147,6 +147,8 @@
             android:text="@string/timestamp"
             android:textSize="10sp"
             android:textStyle="italic"
+            android:layout_marginEnd="@dimen/dimen_8"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/time_created"
             app:layout_constraintTop_toBottomOf="@+id/success_state_label"
