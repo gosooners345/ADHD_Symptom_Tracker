@@ -45,7 +45,7 @@ val record = recordList[position]
         val symptomHolder = holder.symptomsTV
         //Assign values to variable references
         recordTitle.text=record.title
-        ratingHolder.text=record.rating.toString()
+        ratingHolder.text="Rating: "+record.rating.toString()
         contentHolder.text=record.content
     emotionHolder.text = "I felt: "+ record.emotions
         sourcesHolder.text = "Sources behind this/My plans are : "+record.sources
