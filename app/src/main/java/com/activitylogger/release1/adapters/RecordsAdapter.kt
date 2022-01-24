@@ -105,6 +105,17 @@ class RecordsAdapter(
     override fun getItemCount(): Int {
         return  recordList.size
     }
+    fun collapseAll() {
+        for (i in 0..recordList.size-1)
+            if (recordList[i].recordState == Records.RecordState.EXPANDED)
+                collapseItem(i)
+
+    }
+    fun expandAll(){
+        for(i in 0..recordList.size-1)
+    if(recordList[i].recordState==Records.RecordState.COLLAPSED)
+        expandItem(i)
+    }
 
     private fun collapseItem(position: Int){
         val item = recordList[position]
@@ -120,6 +131,7 @@ class RecordsAdapter(
             }
             Records.RecordState.EXPANDED->
             {item.recordState=Records.RecordState.COLLAPSED
+
                 recordList[position]=item
                 notifyDataSetChanged()
             }
@@ -129,8 +141,10 @@ class RecordsAdapter(
 
     private fun expandItem(position : Int){
         val item =recordList[position]
+        val nextPos = position+1
         when (item.recordState){
             Records.RecordState.COLLAPSED->{
+
                 item.recordState=Records.RecordState.EXPANDED
                 recordList[position] = item
 notifyDataSetChanged()
