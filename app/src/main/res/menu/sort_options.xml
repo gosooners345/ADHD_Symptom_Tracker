@@ -45,4 +45,15 @@
         android:title="Settings"
         android:icon="@drawable/ic_settings_drawable"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/collapse_records"
+        android:title="Collapse All"
+        android:icon="@drawable/shrink_icon"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/expand_records"
+        android:title="Expand All"
+        android:icon="@drawable/expand_icon"
+        app:showAsAction="ifRoom"/>
 </menu>

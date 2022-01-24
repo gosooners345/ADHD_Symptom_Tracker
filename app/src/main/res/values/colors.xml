@@ -77,6 +77,7 @@
     <color name="md_theme_dark_primaryInverse">#C00011</color>
     <color name="seed">#DE031B</color>
     <color name="error">#BA1B1B</color>
+    <color name="transparent">#00F44336</color>
     <!--//Green-->
     <!--  <color name="md_theme_light_primary">#016E07</color>
       <color name="md_theme_light_onPrimary">#FFFFFF</color>

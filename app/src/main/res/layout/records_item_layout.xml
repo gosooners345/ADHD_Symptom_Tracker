@@ -38,6 +38,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/ratingDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Rating: 0.0"
+            app:layout_constraintEnd_toStartOf="@+id/expand_collapse_button"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
             android:id="@+id/content_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -57,6 +68,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content_Title" />
 
+        <ImageButton
+            android:id="@+id/expand_collapse_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Collapse"
+            android:rotation="180"
+            app:layout_constraintBottom_toTopOf="@+id/content_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/expand_collapse_arrow" />
         <TextView
             android:id="@+id/emotions_text"
             android:layout_width="0dp"
@@ -132,7 +157,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/symptoms_text" />
 
-
+        <TextView
+            android:id="@+id/time_created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:text="@string/timestamp"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/success_state_label" />
         <TextView
             android:id="@+id/timeStamp"
             android:layout_width="wrap_content"
@@ -154,36 +195,10 @@
             app:layout_constraintTop_toBottomOf="@+id/success_state_label"
             app:layout_constraintVertical_bias="1.0" />
 
-        <TextView
-            android:id="@+id/time_created"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="5dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="2dp"
-            android:text="@string/timestamp"
-            android:textSize="10sp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/success_state_label" />
 
 
-        <TextView
-            android:id="@+id/ratingDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/dimen_24"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Rating: 0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

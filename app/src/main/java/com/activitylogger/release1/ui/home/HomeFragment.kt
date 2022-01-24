@@ -113,6 +113,14 @@ else
                 requireContext().startActivity(settingsIntent)
                 return true
             }
+            R.id.expand_records->{
+                adapter.expandAll()
+                return true
+            }
+            R.id.collapse_records->{
+                adapter.collapseAll()
+                return true
+            }
             R.id.created_date -> {
 
                 Collections.sort(recordsList, Records.compareIds)
