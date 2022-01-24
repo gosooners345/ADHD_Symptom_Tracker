@@ -1,6 +1,5 @@
 package com.activitylogger.release1.data
 
-import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -14,6 +13,7 @@ var recordIDs = ArrayList<Int>()
     var emotionList = ArrayList<String>()
     var symptomList = ArrayList<String>()
 var dateRatingList = ArrayList<DatesandRatings>()
+    var recordStateList = ArrayList<Records.RecordState>()
 
 
 
@@ -51,8 +51,10 @@ var dateRatingList = ArrayList<DatesandRatings>()
         if(symptomList.size>0)
             symptomList.clear()
         for(record in this) {
+            record.recordState=Records.RecordState.COLLAPSED
             recordStats.add(record.rating)
             recordDates.add(record.timeCreated)
+            recordStateList.add(Records.RecordState.COLLAPSED)
             recordIDs.add(record.id)
             if (record.successState == true)
                 successCt++

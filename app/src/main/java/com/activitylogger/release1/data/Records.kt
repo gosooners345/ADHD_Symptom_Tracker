@@ -42,6 +42,14 @@ var successState :Boolean?=null
     @ColumnInfo(name="symptoms", defaultValue = "")
     var symptoms  = ""
 
+    @Ignore
+    lateinit var recordState : RecordState
+
+    enum class RecordState {
+        COLLAPSED,EXPANDED
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(
         title: String?,
@@ -65,6 +73,8 @@ symptoms : String
         this.successState = success!!
         this.sources = sources!!
         this.timeCreated = dateValue
+
+recordState=RecordState.COLLAPSED
     }
     private fun sanitizeSearchQuery(query: String?): String {
         if (query == null) {
@@ -83,11 +93,16 @@ this.symptoms=""
     this.timeUpdated=System.currentTimeMillis()
        this.timeCreated = timeCreatedValue
     this.successState=false
-
+this.recordState=RecordState.COLLAPSED
 
 }
+
 constructor()
 
+    fun changeRecordState(state : RecordState)
+    {
+        this.recordState=state
+    }
 
 
 
