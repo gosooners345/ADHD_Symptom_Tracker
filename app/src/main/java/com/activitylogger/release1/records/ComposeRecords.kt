@@ -97,7 +97,7 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
             if(record!!.symptoms!="")
             symptomselectorCB.text = record!!.symptoms
             else
-            { symptomselectorCB.text = "Impulsiveness"
+            { symptomselectorCB.text = ""
             recordSymptoms=symptomselectorCB.text.toString()
             }
 
@@ -112,7 +112,7 @@ Log.i(TAG,"Accessing Record for Editing")
             recordSources.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
-            symptomselectorCB.text = "Impulsiveness"
+            symptomselectorCB.text = ""
 ///            recordSymptoms = recordSymptomCB.selectedItem
             recordSymptoms=symptomselectorCB.text.toString()
 

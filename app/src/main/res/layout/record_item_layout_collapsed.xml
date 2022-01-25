@@ -117,9 +117,10 @@
         android:background="@android:color/transparent"
         android:contentDescription="Expand"
 
+        android:src="@drawable/expand_collapse_arrow"
         app:layout_constraintBottom_toTopOf="@+id/symptoms_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/expand_collapse_arrow" />
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

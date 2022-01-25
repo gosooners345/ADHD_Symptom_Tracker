@@ -8,13 +8,13 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 
-class ItemClassAdapter constructor(val OnItemSelected: OnItemSelected):RecyclerView.Adapter<ItemClassAdapter.ViewHolder>() {
+class ItemClassAdapter constructor(val itemList : ItemClassList,var OnItemSelected: OnItemSelected):RecyclerView.Adapter<ItemClassAdapter.ViewHolder>() {
     init {
         notifyDataSetChanged()
 
     }
 
-val itemList = ItemSelectorFragment.itemClassList
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
@@ -43,8 +43,6 @@ class ViewHolder(itemView: View,var OnItemSelected: OnItemSelected): RecyclerVie
     var itemCheckBox : CheckBox = itemView.findViewById(R.id.itemSelectedCB)
 
 init {
-
-
     itemCheckBox.setOnClickListener(this)
 }
 
@@ -52,7 +50,9 @@ init {
     override fun onClick(v: View?) {
 
        OnItemSelected.onItemChecked(bindingAdapterPosition,this.itemCheckBox.isChecked)
-        Log.i("tag",itemCheckBox.text.toString()+"= ${itemCheckBox.isChecked}")
+        Log.i("tag",itemCheckBox.text.toString()+"= ${itemCheckBox.isChecked}"
+        )
+
     }
 
 }
