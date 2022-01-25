@@ -13,7 +13,7 @@ fun getSelectedItems(){
 }
 
     override fun toString(): String {
-        var itemListPrinted : String = ""
+        var itemListPrinted  = ""
         for(item in selectedItems)
 
         itemListPrinted+= String.format("$item,")

@@ -105,6 +105,7 @@ class RecordsAdapter(
     override fun getItemCount(): Int {
         return  recordList.size
     }
+    //Collapses and expands all records at once
     fun collapseAll() {
         for (i in 0..recordList.size-1)
             if (recordList[i].recordState == Records.RecordState.EXPANDED)
@@ -116,7 +117,7 @@ class RecordsAdapter(
     if(recordList[i].recordState==Records.RecordState.COLLAPSED)
         expandItem(i)
     }
-
+//Methods that expand and collapse the functions
     private fun collapseItem(position: Int){
         val item = recordList[position]
         val nextPosition = position+1
@@ -155,6 +156,7 @@ notifyDataSetChanged()
         }
 
     }
+    //Collapsed and Expanded View holder classes
     class CollapsedRecordsViewHolder(itemView: View,var onRecordListener: OnRecordListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
         var expandButton : ImageButton = itemView.findViewById(R.id.expand_collapse_button)
         var titleTV :TextView = itemView.findViewById(R.id.content_Title)

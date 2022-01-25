@@ -99,12 +99,6 @@ this.recordState=RecordState.COLLAPSED
 
 constructor()
 
-    fun changeRecordState(state : RecordState)
-    {
-        this.recordState=state
-    }
-
-
 
     companion object {
         var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
