@@ -1,6 +1,7 @@
 package com.activitylogger.release1.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
@@ -51,39 +52,11 @@ class HomeFragment : Fragment() , OnRecordListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         homeViewModel.recordsRepo = RecordsRepository(requireContext())
-        getRecords()
-
-
-        val gridSize = MainActivity.appPreferences.getInt("gridSize_record", 3)
-        val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
-        var layoutMgr: RecyclerView.LayoutManager?
-        val vertical =
-            MainActivity.appPreferences.getString("linear_horizontal_records", "vertical")
-        if (layoutString == "linear")
-            layoutMgr = if (vertical == "horizontal")
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            else
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        else if (layoutString == "staggered")
-        {        if (vertical == "horizontal")
-            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
-        else
-            layoutMgr = StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)}
-else
-            layoutMgr = GridLayoutManager(context, gridSize)
-
-        adapter = RecordsAdapter(recordsList,this)
-
         recordsRCV = root.findViewById(R.id.tracker_view)
-
-        recordsRCV.layoutManager = layoutMgr
-        recordsRCV.itemAnimator = DefaultItemAnimator()
+        getRecords()
+        adapter = RecordsAdapter(recordsList, this)
         recordsRCV.adapter = adapter
-        val divider = RecyclerViewSpaceExtender(8)
-        recordsRCV.addItemDecoration(divider)
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
-        setHasOptionsMenu(true)
-        tripped = true
+        setupRecordCards()
         return root
     }
 
@@ -110,7 +83,7 @@ else
         return when (item.itemId) {
             R.id.navigation_settings -> {
                 val settingsIntent = Intent(requireContext(),AppSettingsActivity::class.java)
-                requireContext().startActivity(settingsIntent)
+                startActivityForResult(settingsIntent, SETTINGS_CODE)
                 return true
             }
             R.id.expand_records->{
@@ -186,6 +159,51 @@ else
             else -> false
         }
 
+    }
+
+    fun setupRecordCards() {
+        val gridSize = MainActivity.appPreferences.getInt("gridSize_record", 3)
+        val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
+        var layoutMgr: RecyclerView.LayoutManager?
+        val vertical =
+            MainActivity.appPreferences.getString("linear_horizontal_records", "vertical")
+        if (layoutString == "linear")
+            layoutMgr = if (vertical == "horizontal")
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            else
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        else if (layoutString == "staggered") {
+            if (vertical == "horizontal")
+                layoutMgr =
+                    StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
+            else
+                layoutMgr =
+                    StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)
+        } else
+            layoutMgr = GridLayoutManager(context, gridSize)
+        //This is the adapter that controls the data
+
+        //This is about to change soon
+        recordsRCV.layoutManager = layoutMgr
+        recordsRCV.itemAnimator = DefaultItemAnimator()
+
+        val divider = RecyclerViewSpaceExtender(8)
+        recordsRCV.addItemDecoration(divider)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
+        setHasOptionsMenu(true)
+        tripped = true
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode== SETTINGS_CODE){
+            if(resultCode==RESULT_OK)
+            {
+setupRecordCards()
+
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -273,8 +291,10 @@ else
 
     @SuppressLint("StaticFieldLeak")
     companion object {
+
         var recordsList = RecordsList()
         const val ACTIVITY_ID = 75
+        const val SETTINGS_CODE = 55
         lateinit var homeViewModel: HomeViewModel
         lateinit var adapter: RecordsAdapter
         lateinit var recordsRCV: RecyclerView

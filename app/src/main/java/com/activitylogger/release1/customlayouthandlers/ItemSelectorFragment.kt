@@ -24,19 +24,18 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     var symptoms = ArrayList<String>()
     private lateinit var itemClassAdapter: ItemClassAdapter
     lateinit var itemRCV: RecyclerView
+// This code doesn't work because it resets the selected items list every time you go to open the screen
+    //var itemClassList = ItemClassList
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.itemclassview)
-        saveButton = findViewById(R.id.saveButton)
-        saveButton.setOnClickListener(saveButtonClickListener)
-        symptomList = intent.getStringExtra("symptom")
-        symptoms.addAll(symptomList!!.split(","))
+        //Making this an actual ArrayList prior to entering this activity may actually work.
+        //Just gotta make sure to return the list in the end so that the values don't get erased
+       // symptomList =
+        //Likely to be deprecated if making an arraylist prior to entry will pass through both intents.
+        symptoms= intent.getStringArrayListExtra("symptom")!!  //.addAll(symptomList!!.split(","))
         resourceSymptoms.addAll(resources.getStringArray(R.array.symptom_array))
-        val layoutPrefs = MainActivity.appPreferences
-
-
         for (i in 0..resourceSymptoms.size - 1) {
             itemClassList.add(
                 ItemClass(
@@ -45,6 +44,14 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
                 )
             )
         }
+        setContentView(R.layout.itemclassview)
+        saveButton = findViewById(R.id.saveButton)
+        saveButton.setOnClickListener(saveButtonClickListener)
+
+        val layoutPrefs = MainActivity.appPreferences
+
+
+
         itemRCV = findViewById(R.id.itemListDropDown)
         itemClassAdapter = ItemClassAdapter(itemClassList, this)
         val itemLayoutPrefs = layoutPrefs.getString("layoutOption", "linear")
@@ -76,14 +83,8 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
 
     private fun closeSymptomBox() {
         val returnIntent = Intent()
-        var symptomString = ""
-
-        /*for(i in 0..itemList.size-1)
-        symptomString+=itemList[i] + ","*/
-        symptomString = itemClassList.toString()
-        symptomString = symptomString.trimEnd(',')
-        returnIntent.putExtra("symptoms", symptomString)
-        Log.i("TAG", "Symptoms are $symptomString")
+        //1/26/22 ArrayList was used to store the strings to ensure that the parent class to this one would have control over how to display the data
+        returnIntent.putStringArrayListExtra("symptom", symptoms)
         setResult(RESULT_OK, returnIntent)
         finish()
     }
@@ -103,13 +104,17 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
         if (item.selected) {
             itemClassList.selectedItems.add(item.item)
             itemClassList.selectedCount++
+
         } else {
             itemClassList.selectedItems.remove(item.item)
             itemClassList.selectedCount--
         }
+        symptoms = itemClassList.selectedItems
     }
 
     companion object {
-        var itemClassList = ItemClassList()
+        //Current Version Code
+        var itemClassList =ItemClassList()
+
     }
 }

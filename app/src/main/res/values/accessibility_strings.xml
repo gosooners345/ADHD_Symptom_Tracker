@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_record_button">Record a new journal entry.</string>
+    <string name="accessibility_save_record_button">Save your journal entry.</string>
+</resources>
