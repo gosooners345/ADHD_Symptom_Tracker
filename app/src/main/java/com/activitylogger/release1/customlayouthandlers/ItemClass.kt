@@ -10,14 +10,6 @@ class ItemClass() : Comparable<ItemClass>{
         selected=selectedState
     }
 
-    fun changeSelectedStatus(isSelected : Boolean){
-        if(isSelected==true)
-            selected=true
-        else
-            selected=false
-    }
-
-
 
     override fun compareTo(other: ItemClass): Int {
 return if(this.selected.compareTo(other.selected)==0) this.item.compareTo(other.item) else this.selected.compareTo(other.selected)

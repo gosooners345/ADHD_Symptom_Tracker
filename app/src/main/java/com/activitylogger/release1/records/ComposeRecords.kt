@@ -13,12 +13,15 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.activitylogger.release1.MainActivity
+import com.activitylogger.release1.MainActivity.Companion.buildType
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
 import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+import com.google.android.material.card.MaterialCardView
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList as recordsList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel as homeViewModel
 
@@ -35,14 +38,13 @@ class ComposeRecords : AppCompatActivity(){
 
     lateinit var title : String
     lateinit var  content : String
- @RequiresApi(Build.VERSION_CODES.N)
- var timeUpdated = Calendar.getInstance().timeInMillis
-lateinit var timeCreated : Any
+    lateinit var timeCreated : Any
 lateinit var record : Records
     var  mode =0
     var recordsRepo : RecordsRepository? = null
 lateinit var saveButton : Button
     lateinit    var editButton : Button
+    lateinit var symptomSelectorCardView : MaterialCardView
     var recordTitleString=""
     var recordContentString=""
     var recordSymptomString = ""
@@ -56,7 +58,7 @@ var recordSymptoms = ""
     lateinit var recordContent : TextInputLayout
     lateinit var recordEmotion : TextInputLayout
     lateinit var recordSources : TextInputLayout
-    //lateinit var recordSymptomCB : SmartMaterialSpinner<String>
+    lateinit var enterArrow : ImageView
     lateinit var symptomselectorCB : TextView
     lateinit var ratingSeekbar : SeekBar
     lateinit var successChip : Chip
@@ -73,15 +75,17 @@ var recordSymptoms = ""
         recordSources = findViewById(R.id.sourcesContainer)
         ratingSeekbar = findViewById(R.id.ratingSeekbar)
         successChip = findViewById(R.id.successchip)
+        symptomSelectorCardView = findViewById(R.id.symptomSelectorCBLayout)
+        enterArrow = findViewById(R.id.enterArrow)
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
         successChip.setOnCheckedChangeListener(successChanged)
         symptomArray=ArrayList()
         symptomArray.addAll(resources.getStringArray(R.array.symptom_array))
         recordsRepo = RecordsRepository(this)
-//recordSymptomCB = findViewById(R.id.symptomsCB)
         symptomselectorCB = findViewById(R.id.symptomSelectorCB)
-
+symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
 symptomselectorCB.setOnClickListener(symptomSelectedListener)
+        enterArrow.setOnClickListener(symptomSelectedListener)
         //recordSymptomCB.item = symptomArray
         //recordSymptomCB.onItemSelectedListener=symptomCBListener
         if (!intentInfo) {
@@ -95,7 +99,9 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
             else
                 recordSources.editText!!.setText(emptyString)
             if(record!!.symptoms!="")
-            symptomselectorCB.text = record!!.symptoms
+            {            symptomselectorCB.text = record!!.symptoms
+                recordSymptoms=symptomselectorCB.text.toString()
+            }
             else
             { symptomselectorCB.text = ""
             recordSymptoms=symptomselectorCB.text.toString()
@@ -180,7 +186,10 @@ get(){
 }
 var symptomSelectedListener = View.OnClickListener{
 val sendIntent = Intent(this,ItemSelectorFragment::class.java)
-    sendIntent.putExtra("symptom",recordSymptoms)
+    // 1/26/22 Transformed String into ArrayList for transportation purposes
+    val listofSymptoms = ArrayList<String>()
+    listofSymptoms.addAll(recordSymptoms.split(','))
+    sendIntent.putStringArrayListExtra("symptom",listofSymptoms)
 startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 }
 
@@ -222,11 +231,16 @@ fun getRecordData():Records
         super.onActivityResult(requestCode, resultCode, data)
         recordSymptoms=""
         symptomselectorCB.text=""
-        if(requestCode == REQ_CODE_SYMPTOM)
-        {
-            if(resultCode== RESULT_OK)
-   recordSymptoms =data!!.getStringExtra("symptoms")!!.trimEnd(',')
-            symptomselectorCB.text =recordSymptoms
+
+        if(requestCode == REQ_CODE_SYMPTOM) {
+            if (resultCode == RESULT_OK) {
+                val symptomList = data!!.getStringArrayListExtra("symptom")!!
+                for (item in symptomList)
+                    recordSymptoms += String.format("$item, ")
+                recordSymptoms = recordSymptoms.trimEnd(',',' ')
+            }
+
+            symptomselectorCB.text =recordSymptoms.trimEnd(',',' ')
 
         }
     }

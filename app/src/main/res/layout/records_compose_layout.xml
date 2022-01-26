@@ -21,8 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/notes_screen_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-           >
+            android:layout_height="wrap_content">
 
 
             <TextView
@@ -170,28 +169,10 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/symptomSelectorCB" />
+                app:layout_constraintTop_toBottomOf="@+id/symptomSelectorCBLayout" />
 
-            <!--<com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-                android:id="@+id/symptomsCB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dimen_8"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/spinner_outline"
-                android:paddingLeft="5dp"
-                android:spinnerMode="dialog"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sourcesContainer"
-                app:smsp_arrowColor="?attr/colorOnBackground"
-                app:smsp_floatingLabelColor="?attr/colorPrimary"
-                app:smsp_itemColor="?attr/colorOnBackground"
-                app:smsp_itemListColor="?attr/colorOnBackground" />-->
-            <TextView
+
+           <!-- <TextView
                 android:id="@+id/symptomSelectorCB"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -209,7 +190,56 @@
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/symptomTH" />
+                app:layout_constraintTop_toBottomOf="@id/symptomTH" />-->
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/symptomSelectorCBLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                app:cardCornerRadius="2dp"
+                app:layout_constraintBottom_toTopOf="@+id/divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/symptomTH"
+                app:strokeColor="@color/m3_textfield_stroke_color"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:id="@+id/symptomSelectorCB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dimen_8"
+                    android:layout_marginTop="@dimen/dimen_8"
+                    android:layout_marginEnd="@dimen/dimen_16"
+                    android:layout_marginBottom="@dimen/dimen_8"
+                    android:breakStrategy="high_quality"
+                    android:layoutDirection="locale"
+                    android:padding="@dimen/dimen_padding_5"
+                    android:text="test"
+                    android:textColor="@color/itemselected"
+                    app:autoSizeTextType="uniform" />
+
+                <ImageView
+                    android:id="@+id/enterArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:minWidth="@dimen/dimen_24"
+                    android:minHeight="@dimen/dimen_24"
+                    android:padding="@dimen/dimen_padding_5"
+                    android:src="@drawable/ic_next_arrow"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <View
                 android:id="@+id/divider2"
@@ -273,7 +303,6 @@
                 app:checkedIconVisible="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/successTV" />
-
 
 
             <TextView

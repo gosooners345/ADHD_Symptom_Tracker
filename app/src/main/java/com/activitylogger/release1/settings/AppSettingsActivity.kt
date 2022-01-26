@@ -1,5 +1,6 @@
 package com.activitylogger.release1.settings
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -26,6 +27,11 @@ class AppSettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPref
 
     }
 
+    override fun onBackPressed() {
+        //
+setResult(RESULT_OK)
+        finish()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.blank_settings)
