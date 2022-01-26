@@ -20,10 +20,11 @@
         <TextView
             android:id="@+id/content_Title"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
@@ -33,6 +34,8 @@
             android:text="@string/subject"
             android:textDirection="locale"
             android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@+id/content_text"
             app:layout_constraintEnd_toStartOf="@+id/ratingDisplay"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -174,12 +177,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/success_state_label" />
+
         <TextView
             android:id="@+id/timeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="72dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:paddingStart="5dp"
             android:paddingTop="2dp"
@@ -188,9 +193,8 @@
             android:text="@string/timestamp"
             android:textSize="10sp"
             android:textStyle="italic"
-            android:layout_marginEnd="@dimen/dimen_8"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/time_created"
             app:layout_constraintTop_toBottomOf="@+id/success_state_label"
             app:layout_constraintVertical_bias="1.0" />

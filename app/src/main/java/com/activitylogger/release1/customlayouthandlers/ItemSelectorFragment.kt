@@ -18,24 +18,18 @@ import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 
 @Suppress("LiftReturnOrAssignment", "ReplaceRangeToWithUntil")
 class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
-    private var resourceSymptoms = ArrayList<String>()
-    private var symptomList: String? = ""
+
     private lateinit var saveButton: Button
     var symptoms = ArrayList<String>()
     private lateinit var itemClassAdapter: ItemClassAdapter
     lateinit var itemRCV: RecyclerView
-// This code doesn't work because it resets the selected items list every time you go to open the screen
-    //var itemClassList = ItemClassList
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Making this an actual ArrayList prior to entering this activity may actually work.
-        //Just gotta make sure to return the list in the end so that the values don't get erased
-       // symptomList =
-        //Likely to be deprecated if making an arraylist prior to entry will pass through both intents.
-        symptoms= intent.getStringArrayListExtra("symptom")!!  //.addAll(symptomList!!.split(","))
-        resourceSymptoms.addAll(resources.getStringArray(R.array.symptom_array))
+        val resourceSymptoms = resources.getStringArray(R.array.symptom_array)
+        symptoms= intent.getStringArrayListExtra("symptom")!!
+
+        if(itemClassList.size==0)
         for (i in 0..resourceSymptoms.size - 1) {
             itemClassList.add(
                 ItemClass(
@@ -55,7 +49,7 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
         itemRCV = findViewById(R.id.itemListDropDown)
         itemClassAdapter = ItemClassAdapter(itemClassList, this)
         val itemLayoutPrefs = layoutPrefs.getString("layoutOption", "linear")
-        val gridSize = layoutPrefs.getInt("gridSize", 3)
+        val gridSize = layoutPrefs.getInt("gridSize", 2)
         @Suppress("CanBeVal") var layoutMgr: RecyclerView.LayoutManager?
         val vertical = layoutPrefs.getString("linear_horizontal_symptoms", "vertical")
         if (itemLayoutPrefs == "linear")
@@ -109,6 +103,7 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
             itemClassList.selectedItems.remove(item.item)
             itemClassList.selectedCount--
         }
+
         symptoms = itemClassList.selectedItems
     }
 
