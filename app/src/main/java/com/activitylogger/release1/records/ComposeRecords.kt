@@ -17,6 +17,8 @@ import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.MainActivity.Companion.buildType
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
+import com.activitylogger.release1.customlayouthandlers.ItemClass
+import com.activitylogger.release1.customlayouthandlers.ItemClassList
 import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
@@ -79,15 +81,12 @@ var recordSymptoms = ""
         enterArrow = findViewById(R.id.enterArrow)
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
         successChip.setOnCheckedChangeListener(successChanged)
-        symptomArray=ArrayList()
-        symptomArray.addAll(resources.getStringArray(R.array.symptom_array))
         recordsRepo = RecordsRepository(this)
         symptomselectorCB = findViewById(R.id.symptomSelectorCB)
 symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
 symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
-        //recordSymptomCB.item = symptomArray
-        //recordSymptomCB.onItemSelectedListener=symptomCBListener
+
         if (!intentInfo) {
             recordTitle.editText!!.setText(record!!.title)
             recordContent.editText!!.setText(record!!.content)
@@ -98,13 +97,13 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            if(record!!.symptoms!="")
-            {            symptomselectorCB.text = record!!.symptoms
-                recordSymptoms=symptomselectorCB.text.toString()
+            if(record!!.symptoms!="") {
+                symptomselectorCB.text = record!!.symptoms
+                recordSymptoms = symptomselectorCB.text.toString()
             }
-            else
-            { symptomselectorCB.text = ""
-            recordSymptoms=symptomselectorCB.text.toString()
+            else {
+                symptomselectorCB.text = ""
+                recordSymptoms = symptomselectorCB.text.toString()
             }
 
 
@@ -119,7 +118,7 @@ Log.i(TAG,"Accessing Record for Editing")
             successChip.isChecked = false
             ratingSeekbar.progress = 0
             symptomselectorCB.text = ""
-///            recordSymptoms = recordSymptomCB.selectedItem
+
             recordSymptoms=symptomselectorCB.text.toString()
 
             Log.i(TAG,"Logging New Event")
@@ -166,7 +165,7 @@ Log.i(TAG,"Accessing Record for Editing")
         editButton.setOnClickListener(editRecord)
 
     }
-    //This
+
 private val intentInfo : Boolean
 @RequiresApi(Build.VERSION_CODES.O)
 get(){
@@ -186,7 +185,7 @@ get(){
 }
 var symptomSelectedListener = View.OnClickListener{
 val sendIntent = Intent(this,ItemSelectorFragment::class.java)
-    // 1/26/22 Transformed String into ArrayList for transportation purposes
+
     val listofSymptoms = ArrayList<String>()
     listofSymptoms.addAll(recordSymptoms.split(','))
     sendIntent.putStringArrayListExtra("symptom",listofSymptoms)
@@ -200,7 +199,7 @@ fun getRecordData():Records
     val recordtitle= intent.getStringExtra(HomeFragment.RECORDTITLE)
     val recordContent = intent.getStringExtra(HomeFragment.RECORDDETAILS)
     val recordEmotions = intent.getStringExtra(HomeFragment.RECORDEMOTIONS)
-    var recordRating = intent.getDoubleExtra(HomeFragment.RECORDRATINGS,0.0)
+    val recordRating = intent.getDoubleExtra(HomeFragment.RECORDRATINGS,0.0)
     val recordTimeCreated=intent.getSerializableExtra("TIMECREATED")
     val recordSources = intent.getStringExtra(HomeFragment.RECORDSOURCES)
     val recordSymptoms = intent.getStringExtra("RECORDSYMPTOMS")!!
@@ -236,10 +235,9 @@ fun getRecordData():Records
             if (resultCode == RESULT_OK) {
                 val symptomList = data!!.getStringArrayListExtra("symptom")!!
                 for (item in symptomList)
-                    recordSymptoms += String.format("$item, ")
+                    recordSymptoms += String.format("$item,")
                 recordSymptoms = recordSymptoms.trimEnd(',',' ')
             }
-
             symptomselectorCB.text =recordSymptoms.trimEnd(',',' ')
 
         }
@@ -260,7 +258,7 @@ fun getRecordData():Records
         }
 
     }
-//This
+
     private var saveRecord =View.OnClickListener{
 
 recordContentString=recordContent.editText!!.text.toString()
@@ -292,7 +290,7 @@ recordContentString=recordContent.editText!!.text.toString()
         }
         finish()
     }
-//This
+
     private var editRecord = View.OnClickListener {
     when (mode){
         EDIT_OFF -> enableEdit()
@@ -353,6 +351,7 @@ recordContentString=recordContent.editText!!.text.toString()
         const val EDIT_OFF = 0
         const val TAG = "ComposeRecords"
         const val REQ_CODE_SYMPTOM = 45
+
 
     }
 }

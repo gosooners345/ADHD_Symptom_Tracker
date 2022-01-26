@@ -21,6 +21,9 @@ var recordsRepo: RecordsRepository? =null
         recordsRepo!!.deleteRecord(record)
 
     }
+    fun getRecord(recordID : Int):Records {
+    return    recordsRepo!!.getRecordData(recordID)!!
+    }
     //There is likely going to be more code added to this portion of the application as I get further along in development.
     //My goal is to implement coroutines into this application so that the application can load faster. It will take me some time due to learning about
     // asynchronous  programming.

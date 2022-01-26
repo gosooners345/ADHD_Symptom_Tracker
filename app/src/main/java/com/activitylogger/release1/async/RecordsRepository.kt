@@ -20,6 +20,9 @@ class RecordsRepository(context: Context) {
 fun getRecords(): LiveData<List<Records>>{
     return recordsDB!!.recordDao!!.getRecords()
 }
+    fun getRecordData(int:Int):Records{
+        return recordsDB!!.recordDao!!.getRecordData(int)
+    }
 
     fun getRecord(searchID : Int):LiveData<Records?>{
         return  recordsDB!!.recordDao!!.getRecord(searchID)

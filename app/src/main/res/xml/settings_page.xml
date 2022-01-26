@@ -24,7 +24,7 @@
             app:title="Layout Direction" />
 
         <SeekBarPreference
-            android:max="5"
+            android:max="2"
             app:adjustable="true"
             app:defaultValue="2"
             app:key="@string/gridSize"
@@ -52,7 +52,7 @@ app:icon="@drawable/ic_chip_linear_option"
             app:summary="Customize how you want to scroll thorugh your records. Horizontal or Vertical"
             app:title="Record Layout Direction" />
 
-        <SeekBarPreference
+        <!--<SeekBarPreference
             android:max="5"
             app:adjustable="true"
             app:defaultValue="1"
@@ -63,7 +63,7 @@ app:icon="@drawable/ic_chip_linear_option"
             app:showSeekBarValue="true"
             app:summary="Choose how many rows/columns you want to see your records in on screen. Be warned, the records may cut some info off."
             app:title="Record Layout Row/Column Size"
-            app:updatesContinuously="true" />
+            app:updatesContinuously="true" />-->
     </PreferenceCategory>
     <PreferenceCategory
         app:icon="@drawable/ic_security_lock"

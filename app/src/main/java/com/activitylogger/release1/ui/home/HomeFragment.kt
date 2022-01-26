@@ -7,7 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -162,34 +161,73 @@ class HomeFragment : Fragment() , OnRecordListener {
     }
 
     fun setupRecordCards() {
-        val gridSize = MainActivity.appPreferences.getInt("gridSize_record", 3)
         val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
-        var layoutMgr: RecyclerView.LayoutManager?
+
         val vertical =
-            MainActivity.appPreferences.getString("linear_horizontal_records", "vertical")
-        if (layoutString == "linear")
-            layoutMgr = if (vertical == "horizontal")
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            else
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        else if (layoutString == "staggered") {
-            if (vertical == "horizontal")
-                layoutMgr =
-                    StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.HORIZONTAL)
-            else
-                layoutMgr =
-                    StaggeredGridLayoutManager(gridSize, StaggeredGridLayoutManager.VERTICAL)
-        } else
-            layoutMgr = GridLayoutManager(context, gridSize)
-        //This is the adapter that controls the data
-
-        //This is about to change soon
-        recordsRCV.layoutManager = layoutMgr
+            if(layoutString=="linear")MainActivity.appPreferences.getString("linear_horizontal_records", "vertical") else
+                "horizontal"
         recordsRCV.itemAnimator = DefaultItemAnimator()
-
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
+       //This is about to change soon
+        var gridHorizontal = false
+        var staggeredHorizontal = false
+        var lineHorizontal = false
+
+
+//var layoutMgr : RecyclerView.LayoutManager?
+        //This will determine if the swipe direction is up or right and it will make the screen look
+        // nicer when the cards load
+        when (layoutString) {
+            "linear" -> {
+                when (vertical) {
+                    "horizontal" -> {
+                        lineHorizontal = true
+                         gridHorizontal = false
+                         staggeredHorizontal = false
+                    }
+                    "vertical"->{
+                        gridHorizontal = false
+                         staggeredHorizontal = false
+                         lineHorizontal = false
+
+                    }
+                }
+            }
+            "grid" -> when (vertical) {
+                "horizontal" -> {
+                    gridHorizontal = true
+                     staggeredHorizontal = false
+                    lineHorizontal = false
+
+                }
+            }
+            "staggered" ->
+                when (vertical) {
+                    "horizontal" -> {
+                        staggeredHorizontal = true
+
+                        gridHorizontal = false
+                        lineHorizontal = false
+                    }
+                }
+        }
+        var layoutMgr = if(lineHorizontal)  LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        else if (gridHorizontal)
+            GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+        else if(staggeredHorizontal)
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
+            else
+                LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        recordsRCV.layoutManager = layoutMgr
+        if (lineHorizontal || staggeredHorizontal || gridHorizontal)
+            ItemTouchHelper(deleteUpTouchHandler).attachToRecyclerView(recordsRCV)
+        else
+            ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recordsRCV)
         setHasOptionsMenu(true)
         tripped = true
 
@@ -274,7 +312,22 @@ setupRecordCards()
 
 //This is the implementation for the delete method to take place.
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
-        object : ItemTouchHelper.SimpleCallback(2, ItemTouchHelper.RIGHT) {
+        object : ItemTouchHelper.SimpleCallback(1, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
+                refreshAdapter()
+            }
+        }
+    private var deleteUpTouchHandler : ItemTouchHelper.SimpleCallback=
+        object :ItemTouchHelper.SimpleCallback(1,ItemTouchHelper.UP){
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,

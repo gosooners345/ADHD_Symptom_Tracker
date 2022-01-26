@@ -19,6 +19,7 @@ import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import com.activitylogger.release1.ui.home.HomeFragment
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import java.util.*
 import kotlin.collections.ArrayList
@@ -71,7 +72,7 @@ lateinit var homeTV : TextView
                 resultList.add(record)
 
         }
-        resultList.setRecordData()
+        //resultList.setRecordData()
 
     }
 
@@ -90,7 +91,9 @@ lateinit var homeTV : TextView
     }
 
     override fun onRecordClick(position: Int) {
-        val recordSend = resultList[position]
+        val record = resultList[position]
+
+        val recordSend =record
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
         Log.i("Tag", "$recordSend")
