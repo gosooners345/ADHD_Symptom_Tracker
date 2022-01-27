@@ -174,10 +174,6 @@ class HomeFragment : Fragment() , OnRecordListener {
         var staggeredHorizontal = false
         var lineHorizontal = false
 
-
-//var layoutMgr : RecyclerView.LayoutManager?
-        //This will determine if the swipe direction is up or right and it will make the screen look
-        // nicer when the cards load
         when (layoutString) {
             "linear" -> {
                 when (vertical) {

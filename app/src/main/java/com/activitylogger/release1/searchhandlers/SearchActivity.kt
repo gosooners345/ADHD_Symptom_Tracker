@@ -24,7 +24,7 @@ import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchActivity : AppCompatActivity(),OnRecordListener {
+class SearchActivity : AppCompatActivity(),OnRecordListener{
 
     lateinit var cancelButton: Button
 lateinit var homeTV : TextView
@@ -91,14 +91,14 @@ lateinit var homeTV : TextView
     }
 
     override fun onRecordClick(position: Int) {
-        val record = resultList[position]
+        /*val record = resultList[position]
 
         val recordSend =record
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
         Log.i("Tag", "$recordSend")
         intent.putExtra("activityID", HomeFragment.ACTIVITY_ID)
-        startActivity(intent)
+        startActivity(intent)*/
     }
 
     private fun recordStore(record: Records): Intent {
