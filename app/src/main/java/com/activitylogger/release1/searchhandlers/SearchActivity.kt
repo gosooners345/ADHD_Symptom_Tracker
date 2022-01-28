@@ -24,11 +24,11 @@ import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchActivity : AppCompatActivity(),OnRecordListener {
+class SearchActivity : AppCompatActivity(),OnRecordListener{
 
     lateinit var cancelButton: Button
 lateinit var homeTV : TextView
-    var resultList = RecordsList()
+    var resultList =HomeFragment.recordsList
     lateinit var recordsRCV: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ lateinit var homeTV : TextView
             }
         }
         Collections.sort(resultList, Records.compareAlphabetized)
-        recordsRCV.adapter = RecordsAdapter(resultList, this)
+        recordsRCV.adapter = RecordsAdapter(resultList as RecordsList, this)
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
         cancelButton = findViewById(R.id.clearButton)
@@ -53,27 +53,29 @@ lateinit var homeTV : TextView
     }
 
     fun searchDB(query: String) {
-
-        for (record in recordsList) {
+var i =resultList.size-1
+        while (i >-1) {
 
             val searchArray = ArrayList<String>()
             var counter = 0
-            searchArray.add(record.title)
-            searchArray.add(record.content)
-            searchArray.add(record.emotions)
-            searchArray.add(record.sources)
-            searchArray.add(record.symptoms)
+            searchArray.add(resultList[i].title)
+            searchArray.add(resultList[i].content)
+            searchArray.add(resultList[i].emotions)
+            searchArray.add(resultList[i].sources)
+            searchArray.add(resultList[i].symptoms)
             for (i in 0..searchArray.size - 1) {
                 if (searchArray[i].contains(query)) {
                     counter++
                 }
             }
-            if (counter > 0)
-                resultList.add(record)
+            Log.i("Size","${resultList.size} entries")
+            if (counter == 0)
+                resultList.removeAt(i)
+
+            i--
 
         }
-        //resultList.setRecordData()
-
+Collections.sort(resultList,Records.compareAlphabetized)
     }
 
 
@@ -111,6 +113,7 @@ lateinit var homeTV : TextView
         recordIntent.putExtra(HomeFragment.RECORDSOURCES, record.sources)
         recordIntent.putExtra(HomeFragment.RECORDRATINGS, record.rating)
         recordIntent.putExtra(HomeFragment.RECORDSUCCESS,record.successState)
+        recordIntent.putExtra("RECORDSYMPTOMS",record.symptoms)
         recordIntent.putExtra("TIMECREATED", record.timeCreated)
 
         return recordIntent

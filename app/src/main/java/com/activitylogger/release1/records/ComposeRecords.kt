@@ -97,7 +97,7 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            if(record!!.symptoms!="") {
+            if(record!!.symptoms!=""||record!!.symptoms!=null) {
                 symptomselectorCB.text = record!!.symptoms
                 recordSymptoms = symptomselectorCB.text.toString()
             }
