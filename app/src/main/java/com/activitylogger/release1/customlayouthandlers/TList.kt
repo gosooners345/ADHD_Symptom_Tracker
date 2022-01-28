@@ -1,9 +1,11 @@
+@file:Suppress("unused", "ReplaceRangeToWithUntil", "ReplaceManualRangeWithIndicesCalls",
+    "LiftReturnOrAssignment"
+)
+
 package com.activitylogger.release1.customlayouthandlers
 
 import com.activitylogger.release1.interfaces.Indexer
-import java.lang.Exception
 import java.util.*
-import java.util.function.Consumer
 import kotlin.collections.ArrayList
 
 open class TCounts() : T(), Comparable<T>,Indexer {
@@ -17,7 +19,7 @@ open class TCounts() : T(), Comparable<T>,Indexer {
     }
 
     override fun get(propertyIndex: Int) :Any {
-        var item: Any
+        val item: Any
         when(propertyIndex){
             1 -> item =this.id
             2-> item =this.item
@@ -121,7 +123,7 @@ open class T : Any(), Comparable<T>,Indexer
     var id = 0
     var item = ""
     override fun get(propertyIndex: Int) :Any {
-        var item: Any
+        val item: Any
         when(propertyIndex){
             1 -> item =this.id
             2-> item =this.item

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.activitylogger.release1
 
 import android.annotation.SuppressLint
@@ -31,6 +33,7 @@ import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 
 
+@Suppress("SimplifyBooleanWithConstants", "CascadeIf")
 @RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : AppCompatActivity() {
 
@@ -102,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.frameLayout, paperOnboardFragment)
         fragmentTransaction.commit()
-        skipButton = findViewById<Button>(R.id.skipButton)
+        skipButton = findViewById(R.id.skipButton)
         skipButton.setOnClickListener(skipButtonClickListener)
 
 
@@ -112,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     fun loginScreen() {
         setContentView(R.layout.login_screen)
         enablePasswordSwitch = findViewById(R.id.enablePasswordSwitch)
-        title = findViewById<TextView>(R.id.Login_TitleHdr)
+        title = findViewById(R.id.Login_TitleHdr)
         val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
         if (firstUse == false) {
             firstUse = true
@@ -150,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    var skipButtonClickListener = View.OnClickListener {
+    private var skipButtonClickListener = View.OnClickListener {
         loginScreen()
     }
 
@@ -180,11 +183,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    var mainButtonClick = View.OnClickListener {
+    private var mainButtonClick = View.OnClickListener {
         HomeFragment.newRecord(this, 75)
     }
 
-    fun onBoarding(): ArrayList<PaperOnboardingPage> {
+    private fun onBoarding(): ArrayList<PaperOnboardingPage> {
         val introList = ArrayList<PaperOnboardingPage>()
         val firstPage = PaperOnboardingPage(
             "Welcome!",
@@ -243,7 +246,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Store Password
-    var saveButtonClickListener = View.OnClickListener {
+    private var saveButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
         val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
         passWordEditor.putBoolean("enablePassword", passwordEnabled)
@@ -252,7 +255,7 @@ class MainActivity : AppCompatActivity() {
         loadApp()
     }
 
-    var loginButtonClickListener = View.OnClickListener {
+    private var loginButtonClickListener = View.OnClickListener {
         userPassword = passwordTextBox.editText!!.text.toString()
         correctPassword = logIn(userPassword)
         if (correctPassword || !passwordEnabled)
@@ -306,7 +309,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val versionName = BuildConfig.VERSION_NAME
-        const val appName = BuildConfig.APPLICATION_ID
+        private const val appName = BuildConfig.APPLICATION_ID
         const val PREFNAME = appName + "_preferences"
         const val buildType = BuildConfig.BUILD_TYPE
         lateinit var appPreferences: SharedPreferences

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.activitylogger.release1.customlayouthandlers
 
 class ItemClass() : Comparable<ItemClass>{

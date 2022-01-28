@@ -1,3 +1,5 @@
+@file:Suppress("unused", "SpellCheckingInspection")
+
 package com.activitylogger.release1.data
 
 import java.util.*
@@ -5,44 +7,25 @@ import kotlin.collections.ArrayList
 
 class RecordsList : ArrayList<Records>() {
 
-    var recordStats = ArrayList<Double>()
-    var recordDates = ArrayList<Date>()
-var recordIDs = ArrayList<Int>()
+    private var recordStats = ArrayList<Double>()
+    private var recordDates = ArrayList<Date>()
+private var recordIDs = ArrayList<Int>()
     var successCt = 0
     var failCt = 0
     var emotionList = ArrayList<String>()
     var symptomList = ArrayList<String>()
 var dateRatingList = ArrayList<DatesandRatings>()
-    var recordStateList = ArrayList<Records.RecordState>()
+    private var recordStateList = ArrayList<Records.RecordState>()
 
 
 
 
     private fun sanitizeSearchQuery(query: String?): String {
         if (query == null) {
-            return "";
+            return ""
         }
         val queryWithEscapedQuotes = query.replace(Regex.fromLiteral("\""), "\"\"")
         return "*\"$queryWithEscapedQuotes\"*"
-    }
-
-    fun sortDatesAndRatings(){
-        var date = Date()
-        var ratingsList=ArrayList<Double>()
-        date = this.recordDates[0]
-        for(i in 0..this.size-1)
-        {
-            if(date.month ==recordDates[i].month && date.day==recordDates[i].day)
-                    ratingsList.add(recordStats[i])
-            else
-                {
-                    val dateItem = DatesandRatings(date,ratingsList)
-                    date=this.recordDates[i]
-                    ratingsList.clear()
-                    dateRatingList.add(dateItem)
-                }
-
-        }
     }
 
     fun setRecordData(){
@@ -69,7 +52,7 @@ var dateRatingList = ArrayList<DatesandRatings>()
                     '\n',
                     '\r',
                     '\b'
-                ).trimStart().split(",", "and", "|", ":", ";", ".",)
+                ).trimStart().split(",", "and", "|", ":", ";", ".")
             )
             if (record.symptoms != "") {
                 symptomList.addAll(record.symptoms.trim().split(","))

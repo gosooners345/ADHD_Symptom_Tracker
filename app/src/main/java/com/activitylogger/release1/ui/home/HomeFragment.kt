@@ -28,13 +28,15 @@ import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.searchhandlers.SearchActivity
 import com.activitylogger.release1.settings.AppSettingsActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
-
+@DelicateCoroutinesApi
+@Suppress("LiftReturnOrAssignment", "CascadeIf", "SpellCheckingInspection")
 class HomeFragment : Fragment() , OnRecordListener {
 
     private var _binding: FragmentHomeBinding? = null
-    var reversed = false
-    var tripped = false
+    private var reversed = false
+    private var tripped = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,9 +46,9 @@ class HomeFragment : Fragment() , OnRecordListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -160,7 +162,7 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     }
 
-    fun setupRecordCards() {
+    private fun setupRecordCards() {
         val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
 
         val vertical =
@@ -169,7 +171,7 @@ class HomeFragment : Fragment() , OnRecordListener {
         recordsRCV.itemAnimator = DefaultItemAnimator()
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
-       //This is about to change soon
+
         var gridHorizontal = false
         var staggeredHorizontal = false
         var lineHorizontal = false
@@ -208,7 +210,7 @@ class HomeFragment : Fragment() , OnRecordListener {
                     }
                 }
         }
-        var layoutMgr = if(lineHorizontal)  LinearLayoutManager(
+        val layoutMgr = if(lineHorizontal)  LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
@@ -246,6 +248,7 @@ setupRecordCards()
     }
 
     //This is a simpler accessor method for retrieving records for ComposeRecords Class
+    @DelicateCoroutinesApi
     private fun recordStore(record: Records): Intent {
         val recordIntent = Intent(context, ComposeRecords::class.java)
         recordIntent.putExtra(record_send, "SELECTED")
@@ -269,12 +272,13 @@ setupRecordCards()
         val recordSend = recordsList[position]
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
-        Log.i("Tag", "${recordSend}")
+        Log.i("Tag", "$recordSend")
         intent.putExtra("activityID", ACTIVITY_ID)
         startActivity(intent)
     }
 
     //Refreshes the adapter after a record is submitted to the DB
+    @SuppressLint("NotifyDataSetChanged")
     fun refreshAdapter() {
 
         recordsList.setRecordData()
@@ -287,7 +291,7 @@ setupRecordCards()
     private fun getRecords() {
         try {
 
-            homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, { it ->
+            homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, {
                 if (recordsList.size > 0) recordsList.clear()
                 if (it != null) {
                     recordsList.addAll(it)
@@ -307,6 +311,7 @@ setupRecordCards()
     }
 
 //This is the implementation for the delete method to take place.
+    @DelicateCoroutinesApi
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(1, ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -354,6 +359,7 @@ setupRecordCards()
             context!!.startActivity(intent)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun refreshData() {
             recordsList.setRecordData()
             adapter.notifyDataSetChanged()

@@ -4,12 +4,12 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewSpaceExtender : RecyclerView.ItemDecoration {
+@Suppress("SpellCheckingInspection")
+class RecyclerViewSpaceExtender(spacing: Int?) : RecyclerView.ItemDecoration() {
 
-    var space = 0
-    val VERTICAL = 1
+    private var space = 0
 
-    constructor(spacing: Int?) {
+    init {
         this.space = spacing!!
     }
 
@@ -19,20 +19,17 @@ class RecyclerViewSpaceExtender : RecyclerView.ItemDecoration {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        var position = parent.getChildViewHolder(view).bindingAdapterPosition
-        var itemCount = state.itemCount
-        val layoutManager = parent.layoutManager
-        setSpacingforDirection(outRect, layoutManager!!, position, itemCount)
+        parent.getChildViewHolder(view).bindingAdapterPosition
+        state.itemCount
+        parent.layoutManager
+        setSpacingforDirection(outRect)
 
 
         //super.getItemOffsets(outRect, view, parent, state)
     }
 
-    fun setSpacingforDirection(
-        outRect: Rect,
-        layoutMgr: RecyclerView.LayoutManager,
-        position: Int,
-        itemCt: Int
+    private fun setSpacingforDirection(
+        outRect: Rect
     ) {
         outRect.top = space
         outRect.bottom = space

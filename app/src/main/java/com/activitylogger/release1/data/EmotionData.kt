@@ -1,8 +1,11 @@
+@file:Suppress("ReplaceRangeToWithUntil")
+
 package com.activitylogger.release1.data
 
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("unused", "CovariantEquals")
 class EmotionData()  : Comparable<EmotionData>{
 
     var emotionCount : Int? =0
@@ -11,13 +14,12 @@ constructor(emotionString:String,count :Int?):this(){
     this.emotion=emotionString
     emotionCount=count!!
 }
-fun getEmotions() :String
-{    return emotion
-}
-override fun compareTo(emotion:EmotionData):Int{
-    return this.emotionCount!!.compareTo(emotion.emotionCount!!)
+
+    override fun compareTo(other:EmotionData):Int{
+    return this.emotionCount!!.compareTo(other.emotionCount!!)
 }
 
+    @Suppress("unused")
     fun equals(other: EmotionData): Boolean {
         return this.emotion==other.emotion
     }
@@ -32,6 +34,7 @@ companion object
     }
 }
 }
+@Suppress("ReplaceManualRangeWithIndicesCalls","unused", "CovariantEquals")
 class EmotionList : ArrayList<EmotionData>()
 {
     fun getEmotions() : ArrayList<String> {
@@ -57,10 +60,5 @@ class EmotionList : ArrayList<EmotionData>()
        }
    }
 
-
-    fun toStringCount(): String
-    {
-        return this.count().toString()
-    }
 
 }

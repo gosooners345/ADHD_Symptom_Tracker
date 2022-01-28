@@ -49,7 +49,8 @@
         android:paddingRight="5dp"
         android:text="Rating: 0.0"
         app:layout_constraintEnd_toStartOf="@+id/expand_collapse_button"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/symptoms_text"
@@ -86,7 +87,8 @@
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/symptoms_text" />
+        app:layout_constraintTop_toBottomOf="@+id/symptoms_text"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/timeStamp"
@@ -107,7 +109,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/time_created"
         app:layout_constraintTop_toBottomOf="@+id/symptoms_text"
-        app:layout_constraintVertical_bias="0.52" />
+        app:layout_constraintVertical_bias="0.52"
+        tools:ignore="SmallSp" />
 
     <ImageButton
         android:id="@+id/expand_collapse_button"
@@ -117,7 +120,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
-        android:contentDescription="Expand"
+        android:contentDescription="@string/accessibility_expand"
 
         android:src="@drawable/expand_collapse_arrow"
         app:layout_constraintBottom_toTopOf="@+id/symptoms_text"

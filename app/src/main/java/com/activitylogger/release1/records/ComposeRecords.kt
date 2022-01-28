@@ -1,8 +1,7 @@
 package com.activitylogger.release1.records
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -10,62 +9,54 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.activitylogger.release1.MainActivity
-import com.activitylogger.release1.MainActivity.Companion.buildType
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
-import com.activitylogger.release1.customlayouthandlers.ItemClass
-import com.activitylogger.release1.customlayouthandlers.ItemClassList
 import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
+import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.google.android.material.card.MaterialCardView
-import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList as recordsList
-import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel as homeViewModel
-
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import java.text.DateFormat
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
+@DelicateCoroutinesApi
+@Suppress("SpellCheckingInspection", "LiftReturnOrAssignment")
 class ComposeRecords : AppCompatActivity(){
 
     lateinit var title : String
     lateinit var  content : String
     lateinit var timeCreated : Any
 lateinit var record : Records
-    var  mode =0
-    var recordsRepo : RecordsRepository? = null
-lateinit var saveButton : Button
-    lateinit    var editButton : Button
-    lateinit var symptomSelectorCardView : MaterialCardView
+    private var  mode =0
+    private var recordsRepo : RecordsRepository? = null
+private lateinit var saveButton : Button
+    private lateinit    var editButton : Button
+    private lateinit var symptomSelectorCardView : MaterialCardView
     var recordTitleString=""
     var recordContentString=""
-    var recordSymptomString = ""
     var recordEmotionString=""
     var recordSourcesString=""
-    val emptyString = ""
+    private val emptyString = ""
     var ratingsInfo =0.0
-var recordSymptoms = ""
-    var isnewRecord = false
-    lateinit var recordTitle : TextInputLayout
-    lateinit var recordContent : TextInputLayout
-    lateinit var recordEmotion : TextInputLayout
-    lateinit var recordSources : TextInputLayout
-    lateinit var enterArrow : ImageView
-    lateinit var symptomselectorCB : TextView
-    lateinit var ratingSeekbar : SeekBar
-    lateinit var successChip : Chip
+private var recordSymptoms = ""
+    private var isnewRecord = false
+    private lateinit var recordTitle : TextInputLayout
+    private lateinit var recordContent : TextInputLayout
+    private lateinit var recordEmotion : TextInputLayout
+    private lateinit var recordSources : TextInputLayout
+    private lateinit var enterArrow : ImageView
+    private lateinit var symptomselectorCB : TextView
+    private lateinit var ratingSeekbar : SeekBar
+    private lateinit var successChip : Chip
      var success =false
-    lateinit var symptomArray : ArrayList<String>
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,17 +79,17 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
 
         if (!intentInfo) {
-            recordTitle.editText!!.setText(record!!.title)
-            recordContent.editText!!.setText(record!!.content)
-            recordEmotion.editText!!.setText(record!!.emotions)
-            successChip.isChecked = record!!.successState!!
-            ratingSeekbar.progress = record!!.rating.toInt()
-            if(record.sources!="" || record.sources ==null)
+            recordTitle.editText!!.setText(record.title)
+            recordContent.editText!!.setText(record.content)
+            recordEmotion.editText!!.setText(record.emotions)
+            successChip.isChecked = record.successState!!
+            ratingSeekbar.progress = record.rating.toInt()
+            if(record.sources!="")
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            if(record!!.symptoms!=""||record!!.symptoms!=null) {
-                symptomselectorCB.text = record!!.symptoms
+            if(record.symptoms!="") {
+                symptomselectorCB.text = record.symptoms
                 recordSymptoms = symptomselectorCB.text.toString()
             }
             else {
@@ -183,7 +174,7 @@ get(){
         }
 
 }
-var symptomSelectedListener = View.OnClickListener{
+private var symptomSelectedListener = View.OnClickListener{
 val sendIntent = Intent(this,ItemSelectorFragment::class.java)
 
     val listofSymptoms = ArrayList<String>()
@@ -259,6 +250,7 @@ fun getRecordData():Records
 
     }
 
+    @DelicateCoroutinesApi
     private var saveRecord =View.OnClickListener{
 
 recordContentString=recordContent.editText!!.text.toString()
@@ -320,6 +312,7 @@ recordContentString=recordContent.editText!!.text.toString()
         Snackbar.make(anchorView,"Record Editing Disabled",Snackbar.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("SetTextI18n")
     private var successChanged =CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
         if (compoundButton.isChecked) {
             success = true

@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
@@ -28,11 +27,13 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 
+@Suppress("SpellCheckingInspection")
 class DashboardFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+
     private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
@@ -41,15 +42,15 @@ class DashboardFragment : Fragment() {
 
     // MP Android Chart Library and surrounding labels
     private lateinit var ratingGraphTest: LineChart
-    lateinit var lineGraphTitle: TextView
-    lateinit var xAxisTitleLabel: TextView
-    lateinit var yAxisTitleLabel: TextView
-    lateinit var avgRatingLabel: TextView
+    private lateinit var lineGraphTitle: TextView
+    private lateinit var xAxisTitleLabel: TextView
+    private lateinit var yAxisTitleLabel: TextView
+    private lateinit var avgRatingLabel: TextView
     private lateinit var successPieChart: com.github.mikephil.charting.charts.PieChart
     private lateinit var barGraphView: com.github.mikephil.charting.charts.BarChart
-    lateinit var emotionXAxisLabel: TextView
-    lateinit var emotionYAxisLabel: TextView
-    lateinit var emotionBarGraphTitle: TextView
+    private lateinit var emotionXAxisLabel: TextView
+    private lateinit var emotionYAxisLabel: TextView
+    private lateinit var emotionBarGraphTitle: TextView
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -58,8 +59,7 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dashboardViewModel =
-            ViewModelProvider(this)[DashboardViewModel::class.java]
+
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -119,7 +119,7 @@ class DashboardFragment : Fragment() {
 
             val data = LineData(recordDataSet)
 
-            var totavgRating = Math.round(avgRating / recordDateList.size.toDouble()).toDouble()
+            val totavgRating = (avgRating / recordDateList.size.toDouble()).roundToInt().toDouble()
             val formatter: ValueFormatter = object : ValueFormatter() {
                 val recordLabels = recordDateList.toTypedArray()
 
@@ -146,12 +146,12 @@ class DashboardFragment : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.valueFormatter = formatter
             ratingGraphTest.isAutoScaleMinMaxEnabled = true
-            ratingGraphTest.invalidate()
+
             lineGraphTitle.text = "Ratings from Records"
             yAxisTitleLabel.text = "Ratings"
             yAxisTitleLabel.rotation = 270f
             xAxisTitleLabel.text = "Dates"
-
+            ratingGraphTest.invalidate()
 
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -202,13 +202,11 @@ class DashboardFragment : Fragment() {
     private fun graphBarGraph() {
         try {
             Collections.sort(emotionList, EmotionData.compareCounts)
-            var emotionArray = ArrayList<BarEntry>()
-            var emotionLabels = ArrayList<String>()
-            var i = 0
-            for (emotion in emotionList) {
+            val emotionArray = ArrayList<BarEntry>()
+            val emotionLabels = ArrayList<String>()
+            for ((i, emotion) in emotionList.withIndex()) {
                 emotionArray.add(BarEntry(i.toFloat(), emotion.emotionCount!!.toFloat()))
                 emotionLabels.add(emotion.emotion)
-                i++
             }
             val emotionDataSet = BarDataSet(emotionArray, "Emotions")
             emotionDataSet.axisDependency = YAxis.AxisDependency.LEFT
@@ -256,12 +254,10 @@ barGraphView.invalidate()
             //Collections.sort(symptomList, Symptoms.compareCounts)
             val symptomArray = ArrayList<BarEntry>()
             val symptomListLabels = ArrayList<String>()
-            var i = 0
-            for (symptom in symptomLists) {
+            for ((i, symptom) in symptomLists.withIndex()) {
 
                 symptomArray.add(BarEntry(i.toFloat(), symptom.count.toFloat()))
                 symptomListLabels.add(symptom.symptom)
-                i++
 
             }
             val symptomDataSet = BarDataSet(symptomArray, "Symptoms")
@@ -291,7 +287,6 @@ barGraphView.invalidate()
             binding.symptomGraphTest.isScaleXEnabled = true
             xAxis.valueFormatter = formatter
             binding.xSymptomAxisLabel.text = "Symptoms"
-            //binding.symptomGraphTest.isAutoScaleMinMaxEnabled=true
             binding.ySymptomAxisLabel.text = "Quantity"
             binding.ySymptomAxisLabel.rotation = 270f
             binding.symptomGraphLabel.text = "ADHD Symptoms/Benefits from Records"

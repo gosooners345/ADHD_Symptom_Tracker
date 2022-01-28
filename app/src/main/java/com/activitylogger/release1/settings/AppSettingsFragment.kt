@@ -1,6 +1,5 @@
 package com.activitylogger.release1.settings
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -9,29 +8,29 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.preference.*
-import androidx.security.crypto.EncryptedSharedPreferences
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 
+@Suppress("SpellCheckingInspection")
 class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //Symptom Custom Layout Options
-    lateinit var symptomLayoutOptionPrefs: ListPreference
-    lateinit var symptomVerticalOptions: ListPreference
-    lateinit var gridSizePreference: SeekBarPreference
+    private lateinit var symptomLayoutOptionPrefs: ListPreference
+    private lateinit var symptomVerticalOptions: ListPreference
+    private lateinit var gridSizePreference: SeekBarPreference
 
     //Record Layout Settings
-    lateinit var recordLayoutOptions: ListPreference
-    lateinit var recordVerticalOptions: ListPreference
+    private lateinit var recordLayoutOptions: ListPreference
+    private lateinit var recordVerticalOptions: ListPreference
 
     //Password Change and Enable
-    lateinit var passwordChangeTextEditor: EditTextPreference
-    lateinit var enablePasswordSwitch: SwitchPreferenceCompat
+    private lateinit var passwordChangeTextEditor: EditTextPreference
+    private lateinit var enablePasswordSwitch: SwitchPreferenceCompat
 
     //Reset everything
-    lateinit var resetPreference: Preference
+    private lateinit var resetPreference: Preference
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_page, rootKey)
 
@@ -41,20 +40,20 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
         symptomLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
             preference.sharedPreferences.edit().putString(preference.key, newValue as String)
                 .apply()
-            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
         }
         symptomVerticalOptions = findPreference("linear_horizontal_symptoms")!!
         symptomVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
             preference.sharedPreferences.edit().putString(preference.key, newValue as String)
                 .apply()
-            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
 
         }
 
-        gridSizePreference = findPreference<SeekBarPreference>("gridSize")!!
+        gridSizePreference = findPreference("gridSize")!!
         gridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
             preference.sharedPreferences.edit().putInt(preference.key, newValue as Int).apply()
-            MainActivity.appPreferences!!.edit().putInt(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putInt(preference.key, newValue).commit()
         }
 //Record Layout Settings
         recordLayoutOptions = findPreference("layoutOption_record")!!
@@ -71,7 +70,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
                 recordVerticalOptions.isVisible=false
                 recordVerticalOptions.isEnabled=false
             }
-            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
         }
        if(recordLayoutOptions.value=="linear")
        {
@@ -80,7 +79,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
            recordVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
             preference.sharedPreferences.edit().putString(preference.key, newValue as String)
                 .apply()
-            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
 
         }
        }
@@ -122,7 +121,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
             }
             changePasswordTextBoxVisibility(newValue)
-            MainActivity.appPreferences.edit().putBoolean(preference.key, newValue as Boolean)
+            MainActivity.appPreferences.edit().putBoolean(preference.key, newValue)
                 .commit()
         }
 
@@ -146,23 +145,23 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
 
 
-    fun changePasswordTextBoxVisibility(visible: Boolean) {
+    private fun changePasswordTextBoxVisibility(visible: Boolean) {
         passwordChangeTextEditor.isVisible = visible
 
     }
 
 
     //Restore Methods upon loading
-    fun restoreseekbars(int1: Int,) {
+    private fun restoreseekbars(int1: Int) {
         gridSizePreference.value = int1
     }
 
-    fun restoreGridOptions(string1: String, string2: String) {
+    private fun restoreGridOptions(string1: String, string2: String) {
         recordVerticalOptions.value = string1
         symptomVerticalOptions.value = string2
     }
 
-    fun restorePasswordonResume(password: String?) {
+    private fun restorePasswordonResume(password: String?) {
         passwordChangeTextEditor.text = password!!
     }
 

@@ -1,26 +1,22 @@
+@file:Suppress("ReplaceRangeToWithUntil", "SpellCheckingInspection", "LocalVariableName","unused")
+
 package com.activitylogger.release1.adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.interfaces.OnRecordListener
-import org.w3c.dom.Text
-
 import java.text.DateFormat
-import kotlin.collections.ArrayList
 
-
-
-
+@SuppressLint("NotifyDataSetChanged")
+@Suppress("ReplaceManualRangeWithIndicesCalls","unused", "CovariantEquals")
 class RecordsAdapter(
     private val recordList: RecordsList,
     private val onRecordListener: OnRecordListener
@@ -118,6 +114,7 @@ class RecordsAdapter(
         expandItem(i)
     }
 //Methods that expand and collapse the functions
+    @SuppressLint("NotifyDataSetChanged")
     private fun collapseItem(position: Int){
         val item = recordList[position]
         val nextPosition = position+1
@@ -140,9 +137,10 @@ class RecordsAdapter(
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun expandItem(position : Int){
         val item =recordList[position]
-        val nextPos = position+1
+
         when (item.recordState){
             Records.RecordState.COLLAPSED->{
 
@@ -157,7 +155,7 @@ notifyDataSetChanged()
 
     }
     //Collapsed and Expanded View holder classes
-    class CollapsedRecordsViewHolder(itemView: View,var onRecordListener: OnRecordListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
+    class CollapsedRecordsViewHolder(itemView: View, private var onRecordListener: OnRecordListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
         var expandButton : ImageButton = itemView.findViewById(R.id.expand_collapse_button)
         var titleTV :TextView = itemView.findViewById(R.id.content_Title)
         var ratingTV : TextView = itemView.findViewById(R.id.ratingDisplay)
@@ -172,7 +170,7 @@ notifyDataSetChanged()
             itemView.setOnClickListener(this)
         }
     }
-    class ExpandedViewHolder(itemView: View, var onRecordListener: OnRecordListener):
+    class ExpandedViewHolder(itemView: View, private var onRecordListener: OnRecordListener):
             RecyclerView.ViewHolder(itemView),View.OnClickListener
     {
         var collapseButton : ImageButton = itemView.findViewById(R.id.expand_collapse_button)

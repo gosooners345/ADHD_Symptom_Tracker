@@ -1,3 +1,7 @@
+@file:Suppress("LiftReturnOrAssignment", "unused", "ReplaceRangeToWithUntil",
+    "ReplaceManualRangeWithIndicesCalls"
+)
+
 package com.activitylogger.release1.data
 
 import com.activitylogger.release1.interfaces.Indexer

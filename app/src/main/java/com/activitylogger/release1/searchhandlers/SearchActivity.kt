@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.activitylogger.release1.searchhandlers
 
 import android.app.SearchManager
@@ -14,22 +16,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import com.activitylogger.release1.ui.home.HomeFragment
-import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
-import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 import kotlin.collections.ArrayList
-
+@DelicateCoroutinesApi
+@Suppress("ReplaceRangeToWithUntil")
 class SearchActivity : AppCompatActivity(),OnRecordListener{
 
-    lateinit var cancelButton: Button
-lateinit var homeTV : TextView
-    var resultList =HomeFragment.recordsList
-    lateinit var recordsRCV: RecyclerView
+    private lateinit var cancelButton: Button
+private lateinit var homeTV : TextView
+    private var resultList =HomeFragment.recordsList
+    private lateinit var recordsRCV: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search_results)
@@ -44,7 +45,7 @@ lateinit var homeTV : TextView
             }
         }
         Collections.sort(resultList, Records.compareAlphabetized)
-        recordsRCV.adapter = RecordsAdapter(resultList as RecordsList, this)
+        recordsRCV.adapter = RecordsAdapter(resultList, this)
         val divider = RecyclerViewSpaceExtender(8)
         recordsRCV.addItemDecoration(divider)
         cancelButton = findViewById(R.id.clearButton)
@@ -52,7 +53,7 @@ lateinit var homeTV : TextView
 
     }
 
-    fun searchDB(query: String) {
+    private fun searchDB(query: String) {
 var i =resultList.size-1
         while (i >-1) {
 
@@ -63,8 +64,8 @@ var i =resultList.size-1
             searchArray.add(resultList[i].emotions)
             searchArray.add(resultList[i].sources)
             searchArray.add(resultList[i].symptoms)
-            for (i in 0..searchArray.size - 1) {
-                if (searchArray[i].contains(query)) {
+            for (x in 0..searchArray.size - 1) {
+                if (searchArray[x].contains(query)) {
                     counter++
                 }
             }
@@ -84,7 +85,7 @@ Collections.sort(resultList,Records.compareAlphabetized)
         cancelButton()
     }
 
-    var cancelButtonClickListener = View.OnClickListener {
+    private var cancelButtonClickListener = View.OnClickListener {
         cancelButton()
     }
 
@@ -93,9 +94,8 @@ Collections.sort(resultList,Records.compareAlphabetized)
     }
 
     override fun onRecordClick(position: Int) {
-        val record = resultList[position]
 
-        val recordSend =record
+        val recordSend = resultList[position]
         val intent = recordStore(recordSend)
         intent.putExtra("record_selected_id", recordSend.id)
         Log.i("Tag", "$recordSend")
@@ -103,18 +103,19 @@ Collections.sort(resultList,Records.compareAlphabetized)
         startActivity(intent)
     }
 
+    @DelicateCoroutinesApi
     private fun recordStore(record: Records): Intent {
         val recordIntent = Intent(this, ComposeRecords::class.java)
-        recordIntent.putExtra(HomeFragment.record_send, "SELECTED")
-        recordIntent.putExtra("RECORDID", record.id)
-        recordIntent.putExtra(HomeFragment.RECORDTITLE, record.title)
-        recordIntent.putExtra(HomeFragment.RECORDDETAILS, record.content)
-        recordIntent.putExtra(HomeFragment.RECORDEMOTIONS, record.emotions)
-        recordIntent.putExtra(HomeFragment.RECORDSOURCES, record.sources)
-        recordIntent.putExtra(HomeFragment.RECORDRATINGS, record.rating)
-        recordIntent.putExtra(HomeFragment.RECORDSUCCESS,record.successState)
-        recordIntent.putExtra("RECORDSYMPTOMS",record.symptoms)
-        recordIntent.putExtra("TIMECREATED", record.timeCreated)
+        recordIntent.putExtra(record_send, "SELECTED")
+        recordIntent.putExtra(RECORDID, record.id)
+        recordIntent.putExtra(RECORDTITLE, record.title)
+        recordIntent.putExtra(RECORDDETAILS, record.content)
+        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
+        recordIntent.putExtra(RECORDSOURCES, record.sources)
+        recordIntent.putExtra(RECORDRATINGS, record.rating)
+        recordIntent.putExtra(RECORDSUCCESS,record.successState)
+        recordIntent.putExtra(RECORDSYPMTOMS,record.symptoms)
+        recordIntent.putExtra(TIME_CREATED, record.timeCreated)
 
         return recordIntent
     }
@@ -127,6 +128,9 @@ Collections.sort(resultList,Records.compareAlphabetized)
         const val RECORDSOURCES = "RECORDSOURCES"
         const val RECORDRATINGS = "RECORDRATINGS"
         const val RECORDSUCCESS = "RECORDSUCCESS"
+        const val RECORDID = "RECORDID"
+        const val RECORDSYPMTOMS = "RECORDSYMPTOMS"
+        const val TIME_CREATED = "TIMECREATED"
     }
 
 }

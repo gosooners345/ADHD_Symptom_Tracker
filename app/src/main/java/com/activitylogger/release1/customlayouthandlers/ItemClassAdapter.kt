@@ -1,5 +1,6 @@
 package com.activitylogger.release1.customlayouthandlers
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,8 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 
-class ItemClassAdapter constructor(val itemList : ItemClassList,var OnItemSelected: OnItemSelected):RecyclerView.Adapter<ItemClassAdapter.ViewHolder>() {
+@SuppressLint("NotifyDataSetChanged")
+class ItemClassAdapter constructor(private val itemList : ItemClassList, private var OnItemSelected: OnItemSelected):RecyclerView.Adapter<ItemClassAdapter.ViewHolder>() {
     init {
         notifyDataSetChanged()
 
@@ -38,7 +40,7 @@ class ItemClassAdapter constructor(val itemList : ItemClassList,var OnItemSelect
 
 
 
-class ViewHolder(itemView: View,var OnItemSelected: OnItemSelected): RecyclerView.ViewHolder(itemView),View.OnClickListener
+class ViewHolder(itemView: View, private var OnItemSelected: OnItemSelected): RecyclerView.ViewHolder(itemView),View.OnClickListener
 {
     var itemCheckBox : CheckBox = itemView.findViewById(R.id.itemSelectedCB)
 

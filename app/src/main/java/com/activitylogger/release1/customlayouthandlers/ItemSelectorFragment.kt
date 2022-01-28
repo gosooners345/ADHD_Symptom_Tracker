@@ -1,17 +1,13 @@
+@file:Suppress("ReplaceManualRangeWithIndicesCalls")
 
 package com.activitylogger.release1.customlayouthandlers
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
@@ -22,7 +18,7 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     private lateinit var saveButton: Button
     var symptoms = ArrayList<String>()
     private lateinit var itemClassAdapter: ItemClassAdapter
-    lateinit var itemRCV: RecyclerView
+    private lateinit var itemRCV: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

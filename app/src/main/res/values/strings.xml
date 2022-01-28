@@ -23,4 +23,17 @@
     <string name="dev_email_uri">mailto:Boomersooner12345@gmail.com</string>
     <string name="success">Success</string>
     <string name="avg_rating">Average Rating:</string>
+    <string name="accessibility_collapse">Collapse</string>
+    <string name="skip">Skip</string>
+    <string name="accessibility_skip">Skip</string>
+    <string name="success_fail_rate">Success/Fail Rate</string>
+    <string name="itemplace">itemPlace</string>
+    <string name="select_symptoms">Select Symptoms</string>
+    <string name="save_choices">Save Choices</string>
+    <string name="clear_results">Clear Results</string>
+    <string name="stats">Stats</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort By</string>
+    <string name="date_created">Date Created</string>
+    <string name="recently_updated">Recently Updated</string>
 </resources>

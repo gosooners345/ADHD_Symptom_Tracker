@@ -1,20 +1,10 @@
 package com.activitylogger.release1.data
 
 import android.os.Build
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import androidx.room.*
-import androidx.room.ColumnInfo.VALUE_UNSPECIFIED
-import com.activitylogger.release1.customlayouthandlers.T
-import com.bignerdranch.expandablerecyclerview.Model.ParentObject
-import org.jetbrains.annotations.NotNull
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
-import java.util.Date.parse
-import java.util.logging.Level.parse
 
 @Entity(tableName = "records")
 class Records: Cloneable,Comparable<Records>
@@ -67,23 +57,17 @@ symptoms : String
         this.title = title!!
         content = details!!
         this.emotions = emotions!!
-        this.symptoms=symptoms!!
+        this.symptoms= symptoms
         this.rating = ratings
         this.timeUpdated = timeValue
-        this.successState = success!!
+        this.successState = success
         this.sources = sources!!
         this.timeCreated = dateValue
 
 recordState=RecordState.COLLAPSED
     }
-    private fun sanitizeSearchQuery(query: String?): String {
-        if (query == null) {
-            return "";
-        }
-        val queryWithEscapedQuotes = query.replace(Regex.fromLiteral("\""), "\"\"")
-        return "*\"$queryWithEscapedQuotes\"*"
-    }
-constructor(timeCreatedValue:Date){
+
+    constructor(timeCreatedValue:Date){
     this.title=""
     this.content=""
     this.sources=""
@@ -118,17 +102,11 @@ constructor()
                 record1.rating.toInt().compareTo(record2.rating.toInt())
         }
         var compareSuccessStates = java.util.Comparator<Records> { record1, record2 ->
-            if (record1.successState!!.equals(record2.successState!!))
+            if (record1.successState!! == record2.successState!!)
                 record1.compareTo(record2)
             else
                 (record1.successState!!.compareTo(record2.successState!!))
 
-        }
-        var compareSymptoms = java.util.Comparator<Records>{record1,record2 ->
-            if(record1.symptoms!!.compareTo(record2.symptoms!!)==0)
-                record1.compareTo(record2)
-            else
-                record1.symptoms!!.compareTo(record2.symptoms!!)
         }
         var compareAlphabetized = java.util.Comparator<Records> { record1, record2 ->
             if (record1.title.lowercase(Locale.getDefault()).compareTo(
@@ -158,7 +136,7 @@ constructor()
     override fun toString(): String {
         return String.format("Event title: $title,\r\n" +
                 "Event: $content\r\n" +
-                "Rating: ${rating.toString()}\r\n" +
+                "Rating: $rating\r\n" +
                 "Time Occurred: ${DateFormat.getInstance().format(timeCreated)}\r\n" +
                 "Emotions: $emotions \r\n " +
                 "Sources: $sources \r\n"+

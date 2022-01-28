@@ -1,10 +1,10 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.activitylogger.release1.databasehelpers
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.DeleteTable.*
 import androidx.room.migration.AutoMigrationSpec
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.activitylogger.release1.data.Records
 
 @Database(
@@ -19,7 +19,7 @@ exportSchema = true,
 abstract class RecordsDB : RoomDatabase() {
     abstract val recordDao: RecordsDao?
 @DeleteTable.Entries(DeleteTable(tableName = "recordsfts"))
-    class RecordsAutoMigration : AutoMigrationSpec{}
+    class RecordsAutoMigration : AutoMigrationSpec
 
 
     companion object {

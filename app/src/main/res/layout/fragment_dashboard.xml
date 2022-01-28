@@ -20,7 +20,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_8"
-            android:background="@drawable/notes_outline"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="2dp"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +31,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/notes_outline">
+               >
 
                 <TextView
                     android:id="@+id/lineChartTitleLabel"
@@ -87,6 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avg_rating"
+                    android:contentDescription="@string/avg_rating"
                     tools:layout_editor_absoluteY="30dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -102,6 +104,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/pieChartCard"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -117,14 +121,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/notes_outline">
+                >
 
                 <TextView
                     android:id="@+id/successfailTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_16"
-                    android:text="Success/Fail Rate"
+                    android:text="@string/success_fail_rate"
+                    android:contentDescription="@string/success_fail_rate"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -134,6 +139,7 @@
 <com.github.mikephil.charting.charts.PieChart
     android:layout_width="match_parent"
     android:layout_height="300dp"
+    android:contentDescription="@string/success_fail_rate"
     android:id="@+id/successfail_piechart"
     app:layout_constraintTop_toBottomOf="@id/successfailTitle"
     app:layout_constraintStart_toStartOf="parent"
@@ -152,21 +158,21 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_8"
-            android:layout_marginBottom="@dimen/dimen_16"
-            android:background="@drawable/notes_outline"
             android:elevation="10dp"
-            app:cardCornerRadius="10dp"
             android:isScrollContainer="true"
-
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pieChartCard">
+            app:layout_constraintTop_toBottomOf="@id/pieChartCard"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/notes_outline">
+                android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/emotionBarGraphLabel"
                     android:layout_width="wrap_content"
@@ -178,6 +184,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/emotionBarChart"
                     android:layout_width="0dp"
@@ -212,7 +219,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/emotionBarChart" />
-               <!-- <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                <!-- <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/emotionBarChart"
                     android:layout_width="wrap_content"
                     android:layout_height="900dp"
@@ -236,7 +243,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_8"
-            android:background="@drawable/notes_outline"
+            app:strokeColor="?attr/colorPrimary"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"

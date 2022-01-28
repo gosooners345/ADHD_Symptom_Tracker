@@ -1,3 +1,5 @@
+@file:Suppress("HasPlatformType", "MemberVisibilityCanBePrivate")
+
 package com.activitylogger.release1.async
 
 import com.activitylogger.release1.async.StatusState.Status
@@ -7,6 +9,8 @@ import java.util.concurrent.Executors
 
 
 
+@Suppress("unused", "PropertyName")
+@DelicateCoroutinesApi
 abstract class CoroutinesAsyncTask<Params,Progress,Result>(taskNames : String) {
 
     val TAG by lazy {
