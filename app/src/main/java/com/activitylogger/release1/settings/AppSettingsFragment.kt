@@ -1,6 +1,8 @@
 package com.activitylogger.release1.settings
 
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -15,6 +17,10 @@ import com.activitylogger.release1.R
 class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
+    //Email Developer Item
+    private lateinit var emailPreference : Preference
+    //Version Info Preference
+    private lateinit var versionInfoPreference: Preference
 
     //Symptom Custom Layout Options
     private lateinit var symptomLayoutOptionPrefs: ListPreference
@@ -34,17 +40,26 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_page, rootKey)
 
+        versionInfoPreference = findPreference("versionInfo")!!
+
+        emailPreference = findPreference("feedback")!!
+        emailPreference.setOnPreferenceClickListener {
+    clickAway()
+        }
+
+        versionInfoPreference.title = "Version #: ${MainActivity.versionName}"
+
         recordVerticalOptions = findPreference("linear_horizontal_records")!!
 
         symptomLayoutOptionPrefs = findPreference("layoutOption")!!
         symptomLayoutOptionPrefs.setOnPreferenceChangeListener { preference, newValue ->
-            preference.sharedPreferences.edit().putString(preference.key, newValue as String)
+            preference.sharedPreferences!!.edit().putString(preference.key, newValue as String)
                 .apply()
             MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
         }
         symptomVerticalOptions = findPreference("linear_horizontal_symptoms")!!
         symptomVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
-            preference.sharedPreferences.edit().putString(preference.key, newValue as String)
+            preference.sharedPreferences!!.edit().putString(preference.key, newValue as String)
                 .apply()
             MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
 
@@ -52,14 +67,14 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
         gridSizePreference = findPreference("gridSize")!!
         gridSizePreference.setOnPreferenceChangeListener { preference, newValue ->
-            preference.sharedPreferences.edit().putInt(preference.key, newValue as Int).apply()
+            preference.sharedPreferences!!.edit().putInt(preference.key, newValue as Int).apply()
             MainActivity.appPreferences.edit().putInt(preference.key, newValue).commit()
         }
 //Record Layout Settings
         recordLayoutOptions = findPreference("layoutOption_record")!!
         recordLayoutOptions.setOnPreferenceChangeListener { preference, newValue ->
 
-            preference.sharedPreferences.edit().putString(preference.key, newValue as String)
+            preference.sharedPreferences!!.edit().putString(preference.key, newValue as String)
                 .apply()
             if(newValue=="linear")
             {
@@ -77,9 +92,9 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
            recordVerticalOptions.isVisible=true
            recordVerticalOptions.isEnabled=true
            recordVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
-            preference.sharedPreferences.edit().putString(preference.key, newValue as String)
+            preference.sharedPreferences!!.edit().putString(preference.key, newValue as String)
                 .apply()
-            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
 
         }
        }
@@ -145,12 +160,11 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
 
 
+
     private fun changePasswordTextBoxVisibility(visible: Boolean) {
         passwordChangeTextEditor.isVisible = visible
 
     }
-
-
     //Restore Methods upon loading
     private fun restoreseekbars(int1: Int) {
         gridSizePreference.value = int1
@@ -230,6 +244,18 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
     }
 
+    fun composeEmail(addresses : Array<String>,subject: String){
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data=Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL,addresses)
+            putExtra(Intent.EXTRA_SUBJECT,subject)
+        }
+        startActivity(intent)
+            }
 
+    fun clickAway() : Boolean{
+        composeEmail(resources.getStringArray(R.array.addresses),"Feedback about ADHD Journal Version #${MainActivity.versionName}")
+        return true
+    }
 }
 

@@ -4,6 +4,9 @@
         <item>Vertical</item>
         <item>Horizontal</item>
     </string-array>
+    <string-array name="addresses">
+        <item>boomersooner12345@gmail.com</item>
+    </string-array>
     <string-array name="vertical_linear_values">
         <item>vertical</item>
         <item>horizontal</item>

@@ -247,32 +247,12 @@ setupRecordCards()
         _binding = null
     }
 
-    //This is a simpler accessor method for retrieving records for ComposeRecords Class
-    @DelicateCoroutinesApi
-    private fun recordStore(record: Records): Intent {
-        val recordIntent = Intent(context, ComposeRecords::class.java)
-        recordIntent.putExtra(record_send, "SELECTED")
-        recordIntent.putExtra("RECORDID", record.id)
-        recordIntent.putExtra(RECORDTITLE, record.title)
-        recordIntent.putExtra(RECORDDETAILS, record.content)
-        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
-        recordIntent.putExtra(RECORDSOURCES, record.sources)
-        recordIntent.putExtra(RECORDRATINGS, record.rating)
-        recordIntent.putExtra(RECORDSUCCESS, record.successState)
-        if (record.symptoms != "")
-            recordIntent.putExtra("RECORDSYMPTOMS", record.symptoms)
-        else
-            recordIntent.putExtra("RECORDSYMPTOMS", "")
 
-        recordIntent.putExtra("TIMECREATED", record.timeCreated)
-        return recordIntent
-    }
-// This handles record selection basically a read for the record.
+    // Opens an exisiting record for editing
     override fun onRecordClick(position: Int) {
-        val recordSend = recordsList[position]
-        val intent = recordStore(recordSend)
-        intent.putExtra("record_selected_id", recordSend.id)
-        Log.i("Tag", "$recordSend")
+    val recordSend = recordsList[position]
+       val intent = Intent(context, ComposeRecords::class.java)
+        intent.putExtra("RECORDSENT", recordSend)
         intent.putExtra("activityID", ACTIVITY_ID)
         startActivity(intent)
     }
@@ -323,6 +303,7 @@ setupRecordCards()
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Log.i("DELETERECORD","Deleted Record Info: ${recordsList[viewHolder.bindingAdapterPosition]}")
                 homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
                 refreshAdapter()
             }

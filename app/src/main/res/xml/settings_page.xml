@@ -52,18 +52,6 @@ app:icon="@drawable/ic_chip_linear_option"
             app:summary="Customize how you want to scroll thorugh your records. Horizontal or Vertical"
             app:title="Record Layout Direction" />
 
-        <!--<SeekBarPreference
-            android:max="5"
-            app:adjustable="true"
-            app:defaultValue="1"
-            app:key="@string/gridSize_record"
-            app:min="1"
-            app:icon="@drawable/ic_chip_grid_option"
-            app:seekBarIncrement="1"
-            app:showSeekBarValue="true"
-            app:summary="Choose how many rows/columns you want to see your records in on screen. Be warned, the records may cut some info off."
-            app:title="Record Layout Row/Column Size"
-            app:updatesContinuously="true" />-->
     </PreferenceCategory>
     <PreferenceCategory
         app:icon="@drawable/ic_security_lock"
@@ -83,27 +71,32 @@ app:icon="@drawable/ic_chip_linear_option"
             app:key="@string/password_prefs" />
     </PreferenceCategory>
     <PreferenceCategory
+    android:icon="@drawable/info_ic"
+    app:key="aboutapp"
+    app:title="App Information">
+
+    <Preference
+        app:key="versionInfo"/>
+    <Preference
+        app:title="Privacy Policy"
+        app:key="@string/privacy"
+        android:summary="Click Here to read the privacy policy">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/gosooners345/ADHD_Symptom_Tracker/wiki/Privacy-Policy"/>
+    </Preference>
+
+
+</PreferenceCategory>
+    <PreferenceCategory
         app:icon="@drawable/help_icon"
         app:key="help_category"
         app:title="Help">
         <Preference
             app:icon="@drawable/ic_review_icon"
             app:key="@string/feedback"
-            app:summary="Tell me about your experience using this app or request new features here.
-"
-            app:title="Contact Me">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/dev_email_uri">
-                <extra
-                    android:name="android.intent.extra.TEXT"
-                    android:value="What can I help you with?" />
-                <extra
-                    android:name="android.intent.extra.SUBJECT"
-                    android:value="Feedback about ADHD Journal" />
-                />
-            </intent>
-        </Preference>
+            app:summary="Tell me about your experience using this app or request new features here."
+            app:title="Contact Me"/>
         <Preference
             app:icon="@drawable/ic_star"
             app:key="@string/rating"
@@ -113,14 +106,16 @@ app:icon="@drawable/ic_chip_linear_option"
                 android:action="android.intent.action.VIEW"
                 android:data="https://play.google.com/store/apps/details?id=com.activitylogger.release1" />
         </Preference>
+        <Preference
+        app:key="@string/firstUse"
+        app:icon="@drawable/reset_ic"
+        app:summary="Click here to reset your password, layout options and view the tutorial again."
+        app:title="Reset Everything" />
         />
 
-        <Preference
-            app:key="@string/firstUse"
-            app:icon="@drawable/reset_ic"
-            app:summary="Click here to reset your password, layout options and view the tutorial again."
-            app:title="Reset Everything" />
+
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

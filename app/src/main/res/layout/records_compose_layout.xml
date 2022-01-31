@@ -65,7 +65,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="What happened"
+                android:hint="What happened?"
                 android:layoutDirection="locale"
                 android:padding="5dp"
 

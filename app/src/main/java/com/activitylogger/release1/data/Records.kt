@@ -1,13 +1,16 @@
 package com.activitylogger.release1.data
 
 import android.os.Build
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.*
 import java.text.DateFormat
 import java.util.*
 
 @Entity(tableName = "records")
-class Records: Cloneable,Comparable<Records>
+class Records() : Cloneable,Comparable<Records>,Parcelable
 {
     @JvmField
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +38,19 @@ var successState :Boolean?=null
     @Ignore
     lateinit var recordState : RecordState
 
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readInt()
+        title = parcel.readString()!!
+        content = parcel.readString()!!
+        rating = parcel.readDouble()
+        timeUpdated = parcel.readLong()
+        successState = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        timeCreated =parcel.readSerializable() as Date
+        emotions = parcel.readString()!!
+        sources = parcel.readString()!!
+        symptoms = parcel.readString()!!
+    }
+
     enum class RecordState {
         COLLAPSED,EXPANDED
     }
@@ -52,7 +68,7 @@ var successState :Boolean?=null
         success: Boolean,
         sources: String?,
 symptoms : String
-    ) {
+    ) : this() {
         this.id = id!!
         this.title = title!!
         content = details!!
@@ -63,11 +79,10 @@ symptoms : String
         this.successState = success
         this.sources = sources!!
         this.timeCreated = dateValue
-
 recordState=RecordState.COLLAPSED
     }
 
-    constructor(timeCreatedValue:Date){
+    constructor(timeCreatedValue:Date) : this() {
     this.title=""
     this.content=""
     this.sources=""
@@ -78,13 +93,49 @@ this.symptoms=""
        this.timeCreated = timeCreatedValue
     this.successState=false
 this.recordState=RecordState.COLLAPSED
-
 }
+    override fun compareTo(other: Records): Int {
+     return this.id.compareTo(other.id)
+    }
 
-constructor()
+    override fun toString(): String {
+        return String.format("Entry title: $title \r\n" +
+                "Event: $content\r\n" +
+                "Rating: $rating\r\n" +
+                "Time Occurred: ${DateFormat.getInstance().format(timeCreated)}\r\n" +
+                "Emotions: $emotions \r\n " +
+                "Sources: $sources \r\n"+
+                "ADHD Symptoms or Benefits: $symptoms \r\n"+
+                "Success or Fail: ${ if(successState!!)"success" else "fail"}"                 )
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(title)
+        parcel.writeString(content)
+        parcel.writeDouble(rating)
+        parcel.writeLong(timeUpdated)
+        parcel.writeValue(successState)
+        parcel.writeSerializable(timeCreated)
+        parcel.writeString(emotions)
+        parcel.writeString(sources)
+        parcel.writeString(symptoms)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Records> {
+        override fun createFromParcel(parcel: Parcel): Records {
+            return Records(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Records?> {
+            return arrayOfNulls(size)
+        }
 
 
-    companion object {
         var compareCreatedTimes = java.util.Comparator<Records> { record1, record2 ->
             record1.timeCreated.compareTo(record2.timeCreated)
         }
@@ -127,20 +178,6 @@ constructor()
         var compareIds = java.util.Comparator<Records> { record1, record2 ->
             record1.compareTo(record2)
         }
-    }
-
-    override fun compareTo(other: Records): Int {
-     return this.id.compareTo(other.id)
-    }
-
-    override fun toString(): String {
-        return String.format("Event title: $title,\r\n" +
-                "Event: $content\r\n" +
-                "Rating: $rating\r\n" +
-                "Time Occurred: ${DateFormat.getInstance().format(timeCreated)}\r\n" +
-                "Emotions: $emotions \r\n " +
-                "Sources: $sources \r\n"+
-                "Success or Fail: ${ if(successState!!)"success" else "fail"}"                 )
     }
 
 }

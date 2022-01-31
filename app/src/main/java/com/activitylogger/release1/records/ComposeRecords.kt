@@ -48,6 +48,7 @@ private lateinit var saveButton : Button
     var ratingsInfo =0.0
 private var recordSymptoms = ""
     private var isnewRecord = false
+    private lateinit var titleHdr : TextView
     private lateinit var recordTitle : TextInputLayout
     private lateinit var recordContent : TextInputLayout
     private lateinit var recordEmotion : TextInputLayout
@@ -62,6 +63,7 @@ private var recordSymptoms = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.records_compose_layout)
+        titleHdr = findViewById(R.id.Login_TitleHdr)
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
         recordEmotion = findViewById(R.id.emotionsContainer)
@@ -77,8 +79,9 @@ private var recordSymptoms = ""
 symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
 symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
-
+        @RequiresApi(Build.VERSION_CODES.O)
         if (!intentInfo) {
+            titleHdr.text="Edit Record"
             recordTitle.editText!!.setText(record.title)
             recordContent.editText!!.setText(record.content)
             recordEmotion.editText!!.setText(record.emotions)
@@ -101,6 +104,7 @@ symptomselectorCB.setOnClickListener(symptomSelectedListener)
 Log.i(TAG,"Accessing Record for Editing")
 
         } else {
+            titleHdr.text = "New Record"
             record= Records(Date())
             recordTitle.editText!!.setText(emptyString)
             recordContent.editText!!.setText(emptyString)
@@ -157,24 +161,24 @@ Log.i(TAG,"Accessing Record for Editing")
 
     }
 
-private val intentInfo : Boolean
-@RequiresApi(Build.VERSION_CODES.O)
-get(){
-        if (intent.hasExtra("record_selected")) {
+    private val intentInfo : Boolean
+        @RequiresApi(Build.VERSION_CODES.O)
+        get(){
+            if (intent.hasExtra("record_selected")||intent.hasExtra("RECORDSENT")) {
 
-            record=getRecordData()
-            Log.d(TAG, record.toString())
-            mode= EDIT_ON
-            isnewRecord=false
-        return false
-    }
-        else{
-            isnewRecord = true
-            return true
+                record= intent.getParcelableExtra("RECORDSENT")!!
+                Log.d(TAG, record.toString())
+                mode= EDIT_ON
+                isnewRecord=false
+                return false
+            }
+            else{
+                isnewRecord = true
+                return true
+            }
+
         }
-
-}
-private var symptomSelectedListener = View.OnClickListener{
+    private var symptomSelectedListener = View.OnClickListener{
 val sendIntent = Intent(this,ItemSelectorFragment::class.java)
 
     val listofSymptoms = ArrayList<String>()
@@ -182,25 +186,6 @@ val sendIntent = Intent(this,ItemSelectorFragment::class.java)
     sendIntent.putStringArrayListExtra("symptom",listofSymptoms)
 startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun getRecordData():Records
-{
-    val recordID = intent.getIntExtra("RECORDID",0)
-    val recordtitle= intent.getStringExtra(HomeFragment.RECORDTITLE)
-    val recordContent = intent.getStringExtra(HomeFragment.RECORDDETAILS)
-    val recordEmotions = intent.getStringExtra(HomeFragment.RECORDEMOTIONS)
-    val recordRating = intent.getDoubleExtra(HomeFragment.RECORDRATINGS,0.0)
-    val recordTimeCreated=intent.getSerializableExtra("TIMECREATED")
-    val recordSources = intent.getStringExtra(HomeFragment.RECORDSOURCES)
-    val recordSymptoms = intent.getStringExtra("RECORDSYMPTOMS")!!
-    val recordSuccess = intent.getBooleanExtra(HomeFragment.RECORDSUCCESS,false)
-    return Records(recordtitle,recordID,
-        recordTimeCreated as Date,recordEmotions,recordContent,recordRating,System.currentTimeMillis(),recordSuccess,recordSources,recordSymptoms)
-
-}
-
-
 
     override fun onBackPressed() {
         val messageString = if (!isnewRecord) "Save your edits?" else "Save new record?"
@@ -215,7 +200,6 @@ fun getRecordData():Records
             .setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -250,6 +234,13 @@ fun getRecordData():Records
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        ItemSelectorFragment.itemClassList.clear()
+        ItemSelectorFragment.itemClassList.selectedItems.clear()
+        Log.i("Destroyed","${ItemSelectorFragment.itemClassList.selectedItems.count()}")
+    }
+
     @DelicateCoroutinesApi
     private var saveRecord =View.OnClickListener{
 
@@ -257,7 +248,6 @@ recordContentString=recordContent.editText!!.text.toString()
         recordTitleString=recordTitle.editText!!.text.toString()
         recordEmotionString=recordEmotion.editText!!.text.toString()
         recordSourcesString=recordSources.editText!!.text.toString()
-        //recordSymptomString  = symptomselectorCB.text.toString()
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
         record.title= recordTitleString
@@ -295,8 +285,12 @@ recordContentString=recordContent.editText!!.text.toString()
         recordContent.isEnabled=true
         recordTitle.isEnabled=true
         recordEmotion.isEnabled=true
+        symptomselectorCB.isEnabled = true
+        symptomSelectorCardView.isEnabled=true
         ratingSeekbar.isEnabled=true
+        enterArrow.isEnabled=true
         successChip.isEnabled=true
+        recordSources.isEnabled=true
         val anchorView = findViewById<View>(R.id.masterLayout)
         Snackbar.make(anchorView,"Record Editing Enabled",Snackbar.LENGTH_SHORT).show()
     }
@@ -305,7 +299,12 @@ recordContentString=recordContent.editText!!.text.toString()
         mode = EDIT_OFF
         recordContent.isEnabled=false
         recordTitle.isEnabled=false
+        enterArrow.isEnabled=false
+        symptomSelectorCardView.isEnabled=false
+
         recordEmotion.isEnabled=false
+        recordSources.isEnabled=false
+        symptomselectorCB.isEnabled=false
         ratingSeekbar.isEnabled=false
         successChip.isEnabled=false
         val anchorView = findViewById<View>(R.id.masterLayout)

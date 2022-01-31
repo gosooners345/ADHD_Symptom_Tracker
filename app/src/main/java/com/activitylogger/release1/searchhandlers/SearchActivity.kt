@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,8 +55,8 @@ private lateinit var homeTV : TextView
     }
 
     private fun searchDB(query: String) {
-var i =resultList.size-1
-        while (i >-1) {
+        var i = resultList.size - 1
+        while (i > -1) {
 
             val searchArray = ArrayList<String>()
             var counter = 0
@@ -69,16 +70,13 @@ var i =resultList.size-1
                     counter++
                 }
             }
-            Log.i("Size","${resultList.size} entries")
+            Log.i("Size", "${resultList.size} entries")
             if (counter == 0)
                 resultList.removeAt(i)
-
             i--
-
         }
-Collections.sort(resultList,Records.compareAlphabetized)
+        Collections.sort(resultList, Records.compareUpdatedTimes)
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -94,43 +92,15 @@ Collections.sort(resultList,Records.compareAlphabetized)
     }
 
     override fun onRecordClick(position: Int) {
-
         val recordSend = resultList[position]
-        val intent = recordStore(recordSend)
-        intent.putExtra("record_selected_id", recordSend.id)
-        Log.i("Tag", "$recordSend")
+        val intent = Intent(applicationContext, ComposeRecords::class.java)
+        intent.putExtra("RECORDSENT", recordSend)
         intent.putExtra("activityID", HomeFragment.ACTIVITY_ID)
         startActivity(intent)
     }
 
-    @DelicateCoroutinesApi
-    private fun recordStore(record: Records): Intent {
-        val recordIntent = Intent(this, ComposeRecords::class.java)
-        recordIntent.putExtra(record_send, "SELECTED")
-        recordIntent.putExtra(RECORDID, record.id)
-        recordIntent.putExtra(RECORDTITLE, record.title)
-        recordIntent.putExtra(RECORDDETAILS, record.content)
-        recordIntent.putExtra(RECORDEMOTIONS, record.emotions)
-        recordIntent.putExtra(RECORDSOURCES, record.sources)
-        recordIntent.putExtra(RECORDRATINGS, record.rating)
-        recordIntent.putExtra(RECORDSUCCESS,record.successState)
-        recordIntent.putExtra(RECORDSYPMTOMS,record.symptoms)
-        recordIntent.putExtra(TIME_CREATED, record.timeCreated)
-
-        return recordIntent
-    }
-
     companion object {
-        const val record_send = "record_selected"
-        const val RECORDTITLE = "RECORDTITLE"
-        const val RECORDEMOTIONS = "RECORDEMOTIONS"
-        const val RECORDDETAILS = "RECORDDETAILS"
-        const val RECORDSOURCES = "RECORDSOURCES"
-        const val RECORDRATINGS = "RECORDRATINGS"
-        const val RECORDSUCCESS = "RECORDSUCCESS"
-        const val RECORDID = "RECORDID"
-        const val RECORDSYPMTOMS = "RECORDSYMPTOMS"
-        const val TIME_CREATED = "TIMECREATED"
+
     }
 
 }

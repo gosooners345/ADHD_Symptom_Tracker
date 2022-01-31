@@ -12,6 +12,8 @@
     <string name="feedback">feedback</string>
     <string name="rating">rating</string>
     <string name="firstUse">firstUse</string>
+    <string name="privacy">privacy</string>
+    <string name="versionInfo">versionInfo</string>
 
 
 </resources>
