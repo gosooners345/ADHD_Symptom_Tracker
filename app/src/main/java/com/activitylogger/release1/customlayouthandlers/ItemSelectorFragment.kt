@@ -19,7 +19,7 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     var symptoms = ArrayList<String>()
     private lateinit var itemClassAdapter: ItemClassAdapter
     private lateinit var itemRCV: RecyclerView
-
+    var itemClassList =ItemClassList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val resourceSymptoms = resources.getStringArray(R.array.symptom_array)
@@ -105,7 +105,7 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
 
     companion object {
         //Current Version Code
-        var itemClassList =ItemClassList()
+
 
     }
 }

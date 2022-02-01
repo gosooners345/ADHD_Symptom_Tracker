@@ -33,8 +33,7 @@ class ComposeRecords : AppCompatActivity(){
 
     lateinit var title : String
     lateinit var  content : String
-    lateinit var timeCreated : Any
-lateinit var record : Records
+    lateinit var record : Records
     private var  mode =0
     private var recordsRepo : RecordsRepository? = null
 private lateinit var saveButton : Button
@@ -59,6 +58,7 @@ private var recordSymptoms = ""
     private lateinit var successChip : Chip
      var success =false
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,7 +164,7 @@ Log.i(TAG,"Accessing Record for Editing")
     private val intentInfo : Boolean
         @RequiresApi(Build.VERSION_CODES.O)
         get(){
-            if (intent.hasExtra("record_selected")||intent.hasExtra("RECORDSENT")) {
+            if (intent.hasExtra("RECORDSENT")) {
 
                 record= intent.getParcelableExtra("RECORDSENT")!!
                 Log.d(TAG, record.toString())
@@ -234,12 +234,6 @@ startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        ItemSelectorFragment.itemClassList.clear()
-        ItemSelectorFragment.itemClassList.selectedItems.clear()
-        Log.i("Destroyed","${ItemSelectorFragment.itemClassList.selectedItems.count()}")
-    }
 
     @DelicateCoroutinesApi
     private var saveRecord =View.OnClickListener{
