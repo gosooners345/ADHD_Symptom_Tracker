@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -23,14 +24,27 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.activitylogger.release1.databinding.ActivityMainBinding
+import com.activitylogger.release1.security.Secure
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
+import java.security.AlgorithmParameters
+import java.security.SecureRandom
+import java.security.spec.KeySpec
+import javax.crypto.Cipher
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.PBEKeySpec
+import javax.crypto.spec.SecretKeySpec
 
 
 @Suppress("SimplifyBooleanWithConstants", "CascadeIf")
@@ -54,8 +68,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var enablePasswordSwitch: SwitchMaterial
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainActionButton: ExtendedFloatingActionButton
-
-
+    var trusted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,8 +80,28 @@ class MainActivity : AppCompatActivity() {
 
         var transferred = passWordPreferences.getBoolean("transferred", false)
 
+
+        appPreferences = passWordPreferences
+
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+       *//*     trusted=passWordPreferences.getBoolean("trusted",false)
+            if( trusted==false) {
+                generateEncryptedKeysForDB()
+                trusted = true
+                passWordPreferences.edit().putBoolean("trusted", true).apply()
+                persistRawKey(HEX_CHARS)
+            }
+            else
+            {
+                dbCharKeys=getCharKey(HEX_CHARS,this)
+            }
+initKey(HEX_CHARS,this)
+        }*/
+
         if (transferred == false) {
             transferred = true
+           //For after ConfessionSearchAppTest is successfully completed
+
             passWordPreferences.edit()
                 .putBoolean("firstUse", oldPrefs.getBoolean("firstUse", false))
                 .putString("password", oldPrefs.getString("password", ""))
@@ -81,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             oldPrefs.edit().clear().apply()
         }
 
-        appPreferences = passWordPreferences
+
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
         firstUse = try {
@@ -97,6 +130,41 @@ class MainActivity : AppCompatActivity() {
             loginScreen()
         else
             loadApp()
+    }
+
+    companion object {
+        const val versionName = BuildConfig.VERSION_NAME
+        private const val appName = BuildConfig.APPLICATION_ID
+        const val PREFNAME = appName + "_preferences"
+        const val buildType = BuildConfig.BUILD_TYPE
+        lateinit var appPreferences: SharedPreferences
+        private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
+        lateinit var encryptionKey: ByteArray
+        lateinit var dbCharKeys: CharArray
+        fun generateEncryptedKeysForDB() {
+            encryptionKey = generateRandomKey()
+            dbCharKeys = encryptionKey.toHex().toCharArray()
+        }
+        fun generateRandomKey(): ByteArray =
+            ByteArray(32).apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    SecureRandom.getInstanceStrong().nextBytes(this)
+                } else {
+                    SecureRandom().nextBytes(this)
+                }
+            }
+
+        fun ByteArray.toHex(): String {
+            val result = StringBuilder()
+            forEach {
+                val octet = it.toInt()
+                val firstIndex = (octet and 0xF0).ushr(4)
+                val secondIndex = octet and 0x0F
+                result.append(HEX_CHARS[firstIndex])
+                result.append(HEX_CHARS[secondIndex])
+            }
+            return result.toString()
+        }
     }
 
     private fun firstUser() {
@@ -133,9 +201,9 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
                 userPassword = s.toString()
-             if(userPassword.length == appPassword.length)
-                 if(logIn(userPassword))
-                     loadApp()
+                if (userPassword.length == appPassword.length)
+                    if (logIn(userPassword))
+                        loadApp()
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -262,6 +330,7 @@ class MainActivity : AppCompatActivity() {
             loadApp()
     }
 
+    // Log in Methods
     private fun logIn(password: String): Boolean {
         if (password != appPassword) {
 
@@ -306,13 +375,96 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    //Encryption Key Methods for the DB
 
-    companion object {
-        const val versionName = BuildConfig.VERSION_NAME
-        private const val appName = BuildConfig.APPLICATION_ID
-        const val PREFNAME = appName + "_preferences"
-        const val buildType = BuildConfig.BUILD_TYPE
-        lateinit var appPreferences: SharedPreferences
+
+
+
+    //Store the encrypted key in Preferences
+    fun persistRawKey(userPasscode: CharArray) {
+        val storable = toSecure(encryptionKey, userPasscode)
+        // Implementation explained in next step
+        saveToPrefs(this, storable)
+    }
+
+    //Generate and Store the encrypted Keys
+    fun toSecure(rawDbKey: ByteArray, userPasscode: CharArray): Secure {
+        // Generate a random 8 byte salt
+        val salt = ByteArray(8).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                SecureRandom.getInstanceStrong().nextBytes(this)
+            } else {
+                SecureRandom().nextBytes(this)
+            }
+        }
+        val secret: SecretKey = generateSecretKey(userPasscode, salt)
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, secret)
+        val params: AlgorithmParameters = cipher.parameters
+        val iv: ByteArray = params.getParameterSpec(IvParameterSpec::class.java).iv
+        val ciphertext: ByteArray = cipher.doFinal(rawDbKey)
+        return Secure(
+            Base64.encodeToString(iv, Base64.DEFAULT),
+            Base64.encodeToString(ciphertext, Base64.DEFAULT),
+            Base64.encodeToString(salt, Base64.DEFAULT)
+        )
+    }
+
+    private fun generateSecretKey(passcode: CharArray, salt: ByteArray): SecretKey {
+        // Initialize PBE with password
+        val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        val spec: KeySpec = PBEKeySpec(passcode, salt, 65536, 256)
+        val tmp: SecretKey = factory.generateSecret(spec)
+        return SecretKeySpec(tmp.encoded, "AES")
+    }
+
+    fun saveToPrefs(context: Context, secure: Secure) {
+        val serialized = Gson().toJson(secure)
+        appPreferences.edit()
+            .putString(resources.getString(R.string.encryptedKeyStorage), serialized).apply()
 
     }
+
+    //Loading the Encryped Key requires these methods
+    private fun getSecurable(context:Context):Secure? {
+        val prefs = appPreferences
+        val serialized = prefs.getString(resources.getString(R.string.encryptedKeyStorage), null)
+        if (serialized.isNullOrBlank())
+            return null
+        return try {
+            Gson().fromJson(serialized, object : TypeToken<Secure>() {}.type)
+        } catch (ex: JsonSyntaxException) {
+            null
+        }
+    }
+
+    private fun getRawByteKey(passcode: CharArray, storable: Secure):ByteArray{
+        val aesWrappedKey = Base64.decode(storable.key, Base64.DEFAULT)
+        val iv = Base64.decode(storable.iv, Base64.DEFAULT)
+        val salt = Base64.decode(storable.salt, Base64.DEFAULT)
+        val secret: SecretKey = generateSecretKey(passcode, salt)
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(Cipher.DECRYPT_MODE, secret, IvParameterSpec(iv))
+        return cipher.doFinal(aesWrappedKey)
+    }
+    fun getCharKey(passcode: CharArray, context: Context): CharArray {
+        if (dbCharKeys == null) {
+            initKey(passcode, context)
+        }
+        return dbCharKeys
+    }
+    private fun initKey(passcode: CharArray, context: Context) {
+        val storable = getSecurable(context)
+        if (storable == null) {
+           generateEncryptedKeysForDB()
+            persistRawKey(passcode)
+        } else {
+            encryptionKey = getRawByteKey(passcode, storable)
+            dbCharKeys = encryptionKey.toHex().toCharArray()
+        }
+    }
+
+
+
+
 }

@@ -14,8 +14,8 @@ android {
         applicationId "com.activitylogger.release1"
         minSdk 23
         targetSdk 31
-        versionCode 16
-        versionName "1.7.4"
+        versionCode 17
+        versionName "1.7.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
@@ -79,8 +79,10 @@ dependencies {
     //Encryption Libraries
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation "androidx.security:security-crypto:1.1.0-alpha03"
+    implementation "net.zetetic:android-database-sqlcipher:4.4.0"
+    implementation "androidx.sqlite:sqlite:2.2.0"
 // Co-Routines Implementation
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
-
+    implementation 'com.google.code.gson:gson:2.8.7'
 }

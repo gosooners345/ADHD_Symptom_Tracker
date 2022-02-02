@@ -9,11 +9,12 @@ import androidx.room.*
 import java.text.DateFormat
 import java.util.*
 
-@Entity(tableName = "records")
+@Entity(tableName = "records",indices = [Index(value=["id"],unique=true)])
 class Records() : Cloneable,Comparable<Records>,Parcelable
 {
     @JvmField
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="id")
     var id : Int =0
    @ColumnInfo(name="title")
     var title: String=""
