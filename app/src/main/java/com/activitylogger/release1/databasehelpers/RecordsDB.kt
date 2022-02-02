@@ -4,6 +4,7 @@ package com.activitylogger.release1.databasehelpers
 
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.*
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -13,6 +14,8 @@ import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SQLiteDatabaseHook
 import net.sqlcipher.database.SupportFactory
 import java.io.File
+import java.nio.file.Files.exists
+import java.nio.file.Files.notExists
 
 @Database(
     entities = [Records::class],
@@ -34,9 +37,9 @@ abstract class RecordsDB : RoomDatabase() {
         private const val newDB = "activitylogger_db.db"
         private var instance: RecordsDB? = null
         private var instance2: RecordsDB? = null
-       //private val dbKeys = MainActivity.dbCharKeys
-      //private val passphrase = SQLiteDatabase.getBytes(dbKeys)
-       // private val factory =SupportFactory(passphrase,null,false)
+       private val dbKeys = MainActivity.appPreferences.getString("dbPassword","").toString()
+      private val passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
+        private val factory =SupportFactory(passphrase)
         //passwordTranslation.toCharArray())
         @JvmStatic
         fun getInstance(context: Context, dbName: String): RecordsDB? {
@@ -51,17 +54,26 @@ abstract class RecordsDB : RoomDatabase() {
             return instance2
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         @JvmStatic
         fun getInstance(context: Context): RecordsDB? {
             if (instance == null) {
-            /*   try {
+               try {
+
+                   var oldDBFile =(context.getDatabasePath(DATABASE_NAME))
+                                    File(oldDBFile.path).copyTo((context.getDatabasePath(newDB)))
+var file1 = (context.getDatabasePath(DATABASE_NAME+"-shm"))
+                   File(file1.path).copyTo((context.getDatabasePath(newDB+"-shm")))
+var file2 =(context.getDatabasePath(DATABASE_NAME+"-wal"))
+File(file2.path).copyTo((context.getDatabasePath(newDB+"-wal")))
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         instance = Room.databaseBuilder(
                             context.applicationContext,
                             RecordsDB::class.java,
                             newDB
                         )
-                            .createFromFile((context.getDatabasePath(DATABASE_NAME)))
+                            .createFromFile((context.getDatabasePath(newDB)))
                             .openHelperFactory(factory)
                             .build()
                         return instance
@@ -77,7 +89,7 @@ abstract class RecordsDB : RoomDatabase() {
                     }
                 }
                 catch (ex: Exception) {
-                    ex.printStackTrace()*/
+                    ex.printStackTrace()
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         RecordsDB::class.java,
@@ -90,5 +102,6 @@ abstract class RecordsDB : RoomDatabase() {
             }
             return instance
         }
+            return instance
     }
-}
+}}

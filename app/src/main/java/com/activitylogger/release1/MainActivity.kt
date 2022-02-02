@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var title: TextView
     private lateinit var firstUse: Any
     private lateinit var passwordTextBox: TextInputLayout
-
+var dbPassword = ""
     var userPassword = ""
     private lateinit var enablePasswordSwitch: SwitchMaterial
     private lateinit var binding: ActivityMainBinding
@@ -83,20 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         appPreferences = passWordPreferences
 
-      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-       *//*     trusted=passWordPreferences.getBoolean("trusted",false)
-            if( trusted==false) {
-                generateEncryptedKeysForDB()
-                trusted = true
-                passWordPreferences.edit().putBoolean("trusted", true).apply()
-                persistRawKey(HEX_CHARS)
-            }
-            else
-            {
-                dbCharKeys=getCharKey(HEX_CHARS,this)
-            }
-initKey(HEX_CHARS,this)
-        }*/
+        appPassword = passWordPreferences.getString("password", "").toString()
 
         if (transferred == false) {
             transferred = true
@@ -107,14 +94,27 @@ initKey(HEX_CHARS,this)
                 .putString("password", oldPrefs.getString("password", ""))
                 .putString("layoutOption", oldPrefs.getString("layoutOption", "linear"))
                 .putBoolean("enablePassword", oldPrefs.getBoolean("enablePassword", true))
+
                 .putBoolean("transferred", transferred).apply()
 
         }
         if (transferred) {
             oldPrefs.edit().clear().apply()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            trusted = passWordPreferences.getBoolean("trusted", false)
+            if (trusted == false) {
+                dbPassword = appPassword
+                trusted = true
+                passWordPreferences.edit().putBoolean("trusted", true)
+                    .putString("dbPassword", dbPassword).apply()
+                //initKey(HEX_CHARS, applicationContext)
+            } else {
 
-
+                dbPassword = passWordPreferences.getString("dbPassword", "").toString()
+                //initKey(HEX_CHARS, applicationContext)
+            }
+        }
         //Intro guide for new users
         setContentView(R.layout.app_intro_layout)
         firstUse = try {
@@ -127,7 +127,7 @@ initKey(HEX_CHARS,this)
         if (firstUse == false)
             firstUser()
         else if (passwordEnabled)
-            loginScreen()
+         loginScreen()
         else
             loadApp()
     }
@@ -202,8 +202,26 @@ initKey(HEX_CHARS,this)
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
                 userPassword = s.toString()
                 if (userPassword.length == appPassword.length)
-                    if (logIn(userPassword))
+                    if (logIn(userPassword)) {
+                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            trusted=passWordPreferences.getBoolean("trusted",false)
+                            if( trusted==false) {
+                                dbPassword = userPassword
+                                trusted = true
+                                passWordPreferences.edit().putBoolean("trusted", true)
+                                    .putString("dbPassword", dbPassword).apply()
+                                initKey(dbPassword.toCharArray(), applicationContext)
+                            }
+                            else
+                            {
+                                dbPassword = passWordPreferences.getString("dbPassword","").toString()
+                                initKey(dbPassword.toCharArray(),applicationContext)
+                            }
+                        }*/
+
+
                         loadApp()
+                    }
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -380,7 +398,7 @@ initKey(HEX_CHARS,this)
 
 
 
-    //Store the encrypted key in Preferences
+ /*   //Store the encrypted key in Preferences
     fun persistRawKey(userPasscode: CharArray) {
         val storable = toSecure(encryptionKey, userPasscode)
         // Implementation explained in next step
@@ -463,7 +481,7 @@ initKey(HEX_CHARS,this)
             dbCharKeys = encryptionKey.toHex().toCharArray()
         }
     }
-
+*/
 
 
 
