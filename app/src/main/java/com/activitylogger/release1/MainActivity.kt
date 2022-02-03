@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "EXPERIMENTAL_API_USAGE")
 
 package com.activitylogger.release1
 
@@ -36,6 +36,7 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.security.AlgorithmParameters
 import java.security.SecureRandom
 import java.security.spec.KeySpec
@@ -108,11 +109,9 @@ var dbPassword = ""
                 trusted = true
                 passWordPreferences.edit().putBoolean("trusted", true)
                     .putString("dbPassword", dbPassword).apply()
-                //initKey(HEX_CHARS, applicationContext)
             } else {
 
                 dbPassword = passWordPreferences.getString("dbPassword", "").toString()
-                //initKey(HEX_CHARS, applicationContext)
             }
         }
         //Intro guide for new users
@@ -138,33 +137,7 @@ var dbPassword = ""
         const val PREFNAME = appName + "_preferences"
         const val buildType = BuildConfig.BUILD_TYPE
         lateinit var appPreferences: SharedPreferences
-        private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
-        lateinit var encryptionKey: ByteArray
-        lateinit var dbCharKeys: CharArray
-        fun generateEncryptedKeysForDB() {
-            encryptionKey = generateRandomKey()
-            dbCharKeys = encryptionKey.toHex().toCharArray()
-        }
-        fun generateRandomKey(): ByteArray =
-            ByteArray(32).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    SecureRandom.getInstanceStrong().nextBytes(this)
-                } else {
-                    SecureRandom().nextBytes(this)
-                }
-            }
 
-        fun ByteArray.toHex(): String {
-            val result = StringBuilder()
-            forEach {
-                val octet = it.toInt()
-                val firstIndex = (octet and 0xF0).ushr(4)
-                val secondIndex = octet and 0x0F
-                result.append(HEX_CHARS[firstIndex])
-                result.append(HEX_CHARS[secondIndex])
-            }
-            return result.toString()
-        }
     }
 
     private fun firstUser() {
@@ -203,23 +176,6 @@ var dbPassword = ""
                 userPassword = s.toString()
                 if (userPassword.length == appPassword.length)
                     if (logIn(userPassword)) {
-                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            trusted=passWordPreferences.getBoolean("trusted",false)
-                            if( trusted==false) {
-                                dbPassword = userPassword
-                                trusted = true
-                                passWordPreferences.edit().putBoolean("trusted", true)
-                                    .putString("dbPassword", dbPassword).apply()
-                                initKey(dbPassword.toCharArray(), applicationContext)
-                            }
-                            else
-                            {
-                                dbPassword = passWordPreferences.getString("dbPassword","").toString()
-                                initKey(dbPassword.toCharArray(),applicationContext)
-                            }
-                        }*/
-
-
                         loadApp()
                     }
             }
@@ -269,6 +225,7 @@ var dbPassword = ""
         }
     }
 
+    @DelicateCoroutinesApi
     private var mainButtonClick = View.OnClickListener {
         HomeFragment.newRecord(this, 75)
     }
@@ -392,97 +349,4 @@ var dbPassword = ""
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     }
-
-    //Encryption Key Methods for the DB
-
-
-
-
- /*   //Store the encrypted key in Preferences
-    fun persistRawKey(userPasscode: CharArray) {
-        val storable = toSecure(encryptionKey, userPasscode)
-        // Implementation explained in next step
-        saveToPrefs(this, storable)
-    }
-
-    //Generate and Store the encrypted Keys
-    fun toSecure(rawDbKey: ByteArray, userPasscode: CharArray): Secure {
-        // Generate a random 8 byte salt
-        val salt = ByteArray(8).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                SecureRandom.getInstanceStrong().nextBytes(this)
-            } else {
-                SecureRandom().nextBytes(this)
-            }
-        }
-        val secret: SecretKey = generateSecretKey(userPasscode, salt)
-        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(Cipher.ENCRYPT_MODE, secret)
-        val params: AlgorithmParameters = cipher.parameters
-        val iv: ByteArray = params.getParameterSpec(IvParameterSpec::class.java).iv
-        val ciphertext: ByteArray = cipher.doFinal(rawDbKey)
-        return Secure(
-            Base64.encodeToString(iv, Base64.DEFAULT),
-            Base64.encodeToString(ciphertext, Base64.DEFAULT),
-            Base64.encodeToString(salt, Base64.DEFAULT)
-        )
-    }
-
-    private fun generateSecretKey(passcode: CharArray, salt: ByteArray): SecretKey {
-        // Initialize PBE with password
-        val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-        val spec: KeySpec = PBEKeySpec(passcode, salt, 65536, 256)
-        val tmp: SecretKey = factory.generateSecret(spec)
-        return SecretKeySpec(tmp.encoded, "AES")
-    }
-
-    fun saveToPrefs(context: Context, secure: Secure) {
-        val serialized = Gson().toJson(secure)
-        appPreferences.edit()
-            .putString(resources.getString(R.string.encryptedKeyStorage), serialized).apply()
-
-    }
-
-    //Loading the Encryped Key requires these methods
-    private fun getSecurable(context:Context):Secure? {
-        val prefs = appPreferences
-        val serialized = prefs.getString(resources.getString(R.string.encryptedKeyStorage), null)
-        if (serialized.isNullOrBlank())
-            return null
-        return try {
-            Gson().fromJson(serialized, object : TypeToken<Secure>() {}.type)
-        } catch (ex: JsonSyntaxException) {
-            null
-        }
-    }
-
-    private fun getRawByteKey(passcode: CharArray, storable: Secure):ByteArray{
-        val aesWrappedKey = Base64.decode(storable.key, Base64.DEFAULT)
-        val iv = Base64.decode(storable.iv, Base64.DEFAULT)
-        val salt = Base64.decode(storable.salt, Base64.DEFAULT)
-        val secret: SecretKey = generateSecretKey(passcode, salt)
-        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(Cipher.DECRYPT_MODE, secret, IvParameterSpec(iv))
-        return cipher.doFinal(aesWrappedKey)
-    }
-    fun getCharKey(passcode: CharArray, context: Context): CharArray {
-        if (dbCharKeys == null) {
-            initKey(passcode, context)
-        }
-        return dbCharKeys
-    }
-    private fun initKey(passcode: CharArray, context: Context) {
-        val storable = getSecurable(context)
-        if (storable == null) {
-           generateEncryptedKeysForDB()
-            persistRawKey(passcode)
-        } else {
-            encryptionKey = getRawByteKey(passcode, storable)
-            dbCharKeys = encryptionKey.toHex().toCharArray()
-        }
-    }
-*/
-
-
-
 }
