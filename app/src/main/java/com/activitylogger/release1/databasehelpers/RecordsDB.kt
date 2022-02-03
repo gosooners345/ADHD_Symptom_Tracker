@@ -168,12 +168,12 @@ val newDBFile = (context.getDatabasePath(newDB))
                    {
                        encryptDB(context,oldDBFile, passphrase)
                    }
-                   if(!synced)
+                  /* if(!synced)
                    {
                        changeDBKeys(context, newDBFile, passphrase, newPassPhrase)
                        MainActivity.appPreferences.edit().putString("dbPassword",MainActivity.appPreferences.getString("password","")).apply()
                        passphrase= newPassPhrase
-                   }
+                   }*/
                  //  decryptDB(context,newDBFile, passphrase)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         if(newDBFile.exists()){
@@ -182,7 +182,7 @@ val newDBFile = (context.getDatabasePath(newDB))
                                context.applicationContext,
                                RecordsDB::class.java,
                                newDB
-                           )
+                           ).createFromFile(context.getDatabasePath(newDB))
                                .openHelperFactory(factory)
                                .build()
                            Log.i("ENCRYPTEDDB","Encrypted Database is loading")
