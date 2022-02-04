@@ -12,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId "com.activitylogger.release1"
-        minSdk 23
+        minSdk 26
         targetSdk 31
-        versionCode 17
-        versionName "1.7.5"
+        versionCode 18
+        versionName "1.7.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {

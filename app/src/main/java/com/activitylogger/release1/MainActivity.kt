@@ -37,15 +37,7 @@ import com.google.gson.reflect.TypeToken
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.security.AlgorithmParameters
-import java.security.SecureRandom
-import java.security.spec.KeySpec
-import javax.crypto.Cipher
-import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
-import javax.crypto.spec.SecretKeySpec
+import net.sqlcipher.database.SQLiteDatabase
 
 
 @Suppress("SimplifyBooleanWithConstants", "CascadeIf")
@@ -73,7 +65,7 @@ var dbPassword = ""
      var timesRan=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        SQLiteDatabase.loadLibs(this)
         oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
         oldPrefs.edit().clear().apply()
 
@@ -183,7 +175,7 @@ var dbPassword = ""
             override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
                 userPassword = s.toString()
-                if (userPassword.length == appPassword.length)
+               if (userPassword.length == appPassword.length)
                     if (logIn(userPassword)) {
                         loadApp()
                     }
@@ -336,7 +328,8 @@ var dbPassword = ""
                 .show()
             Toast.makeText(this, "Invalid Password, try again", Toast.LENGTH_LONG).show()
             return false
-        } else {
+        }
+        else {
             Toast.makeText(this, "Password correct", Toast.LENGTH_LONG).show()
             return true
 
@@ -344,11 +337,10 @@ var dbPassword = ""
     }
 
     private fun storePassword(password: String) {
-        val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
-        passWordEditor.putString("password", password)
         passwordEnabled = enablePasswordSwitch.isChecked
-        passWordEditor.putBoolean("enablePassword", passwordEnabled)
-        passWordEditor.apply()
+        val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
+        passWordEditor.putString("password", password).putString("dbPassword", password)
+            .putBoolean("enablePassword", passwordEnabled).apply()
         correctPassword = true
     }
 
