@@ -70,6 +70,7 @@ var dbPassword = ""
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainActionButton: ExtendedFloatingActionButton
     var trusted = false
+     var timesRan=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -124,7 +125,13 @@ var dbPassword = ""
         }
         passwordEnabled = passWordPreferences.getBoolean("enablePassword", true)
         if (firstUse == false)
+        {
+            timesRan = passWordPreferences.getInt("dbTimes",0)
+            timesRan++
+            passWordPreferences.edit().putInt("dbTimes",timesRan).apply()
             firstUser()
+
+        }
         else if (passwordEnabled)
          loginScreen()
         else
@@ -154,6 +161,8 @@ var dbPassword = ""
 
     @SuppressLint("SetTextI18n")
     fun loginScreen() {
+
+
         setContentView(R.layout.login_screen)
         enablePasswordSwitch = findViewById(R.id.enablePasswordSwitch)
         title = findViewById(R.id.Login_TitleHdr)
@@ -189,7 +198,14 @@ var dbPassword = ""
             enterButton.text = "Save"
             enterButton.setOnClickListener(saveButtonClickListener)
         } else {
+            timesRan = passWordPreferences.getInt("dbTimes", 0)
+            if (timesRan <= 1)
+            {
+                timesRan++
+                passWordPreferences.edit().putInt("dbTimes",timesRan).apply()
+            }
             title.text = "Welcome Back! Enter your password below to log into your journal!"
+
             enterButton.text = "Log In"
             enterButton.setOnClickListener(loginButtonClickListener)
         }
