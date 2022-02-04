@@ -15,5 +15,6 @@
     <string name="privacy">privacy</string>
     <string name="versionInfo">versionInfo</string>
 <string name="encryptedKeyStorage">encryptedKeyStorage</string>
+    <string name="dbPassword">dbPassword</string>
 
 </resources>

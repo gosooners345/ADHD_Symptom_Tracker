@@ -6,11 +6,13 @@ import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
 import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
@@ -37,11 +39,12 @@ class HomeFragment : Fragment() , OnRecordListener {
     private var _binding: FragmentHomeBinding? = null
     private var reversed = false
     private var tripped = false
-
+var paused = false
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +61,7 @@ class HomeFragment : Fragment() , OnRecordListener {
         adapter = RecordsAdapter(recordsList, this)
         recordsRCV.adapter = adapter
         setupRecordCards()
+        paused=false
         return root
     }
 
@@ -162,6 +166,8 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     }
 
+
+
     private fun setupRecordCards() {
         val layoutString = MainActivity.appPreferences.getString("layoutOption_record", "linear")
 
@@ -233,13 +239,9 @@ class HomeFragment : Fragment() , OnRecordListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode== SETTINGS_CODE){
+        if(requestCode== SETTINGS_CODE)
             if(resultCode==RESULT_OK)
-            {
-setupRecordCards()
-
-            }
-        }
+            requireActivity().recreate()
     }
 
     override fun onDestroyView() {
@@ -268,6 +270,7 @@ setupRecordCards()
     }
 
     //Retrieves records from the DB
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getRecords() {
         try {
 

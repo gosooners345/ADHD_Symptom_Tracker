@@ -150,7 +150,9 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
         }
         passwordChangeTextEditor.setOnPreferenceChangeListener { preference, newValue ->
             Log.i(preference.key, "Password is $newValue")
+
             MainActivity.appPreferences.edit().putString(preference.key, newValue as String)
+             //.putString(resources.getString(R.string.dbPassword),newValue)
                 .commit()
         }
         MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
