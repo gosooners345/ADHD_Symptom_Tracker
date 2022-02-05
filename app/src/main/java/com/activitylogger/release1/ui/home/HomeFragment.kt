@@ -30,6 +30,7 @@ import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.searchhandlers.SearchActivity
 import com.activitylogger.release1.settings.AppSettingsActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 @DelicateCoroutinesApi
@@ -241,7 +242,12 @@ var paused = false
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode== SETTINGS_CODE)
             if(resultCode==RESULT_OK)
-            requireActivity().recreate()
+            {
+            Toast.makeText(requireContext(),String.format("The app is closing to store any changes to passwords, etc. for encryption reasons. You'll need to reenter the application."),Toast.LENGTH_LONG).show()
+
+                requireActivity().finish()
+            }
+
     }
 
     override fun onDestroyView() {
@@ -269,10 +275,34 @@ var paused = false
         adapter.notifyDataSetChanged()
     }
 
+// Prevents accidental deletions
+    private fun validateDeleteRecordChoice(position: Int)
+    {
+        val titleString = "Delete Record?"
+        val messageString = "Are you sure you want to delete this record?"
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(titleString)
+            .setMessage(String.format(messageString))
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Yes") { dialog, _ ->
+                Log.i("Records","Deleted Record Info: ${recordsList[position]}")
+                homeViewModel.deleteRecord(recordsList[position])
+                refreshAdapter()
+
+            }
+            .show()
+
+
+    }
+
+
     //Retrieves records from the DB
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getRecords() {
         try {
+            net.sqlcipher.database.SQLiteDatabase.loadLibs(requireContext())
 
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, {
                 if (recordsList.size > 0) recordsList.clear()
@@ -306,9 +336,7 @@ var paused = false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Log.i("DELETERECORD","Deleted Record Info: ${recordsList[viewHolder.bindingAdapterPosition]}")
-                homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
-                refreshAdapter()
+                validateDeleteRecordChoice(viewHolder.bindingAdapterPosition)
             }
         }
     private var deleteUpTouchHandler : ItemTouchHelper.SimpleCallback=
@@ -322,8 +350,7 @@ var paused = false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
-                refreshAdapter()
+                validateDeleteRecordChoice(viewHolder.bindingAdapterPosition)
             }
         }
 

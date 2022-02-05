@@ -27,10 +27,13 @@ class RecordsRepository(context: Context) {
     fun insertRecord(record: Records?){
         InsertAsync(recordsDB!!.recordDao!!).execute(record)
     }
-@RequiresApi(Build.VERSION_CODES.O)
-fun getRecords(): LiveData<List<Records>>{
+/*@RequiresApi(Build.VERSION_CODES.O)
+suspend fun getRecords(): List<Records>{
+    return recordsDB!!.recordDao!!.getRecords()
+}*/
+fun getRecords() : LiveData<List<Records>>
+{
     return recordsDB!!.recordDao!!.getRecords()
 }
-
 
 }
