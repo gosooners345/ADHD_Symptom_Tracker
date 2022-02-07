@@ -41,6 +41,7 @@ abstract class RecordsDB : RoomDatabase() {
         var synced = passphrase.contentEquals(newPassPhrase)
 
 
+
         fun encryptDB(context: Context, originalDB: File, passcode: ByteArray) {
             try {
                 val attachKEY = String.format("ATTACH DATABASE ? AS plaintext  KEY ''")
@@ -196,7 +197,7 @@ abstract class RecordsDB : RoomDatabase() {
                         synced = passphrase.contentEquals(newPassPhrase)
                     }
 
-                    val factory = SupportFactory(passphrase)
+                    val factory = SupportFactory(passphrase,null,false)
 
 
                     instance = Room.databaseBuilder(

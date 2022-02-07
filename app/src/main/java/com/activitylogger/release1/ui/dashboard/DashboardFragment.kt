@@ -1,6 +1,7 @@
 package com.activitylogger.release1.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -11,10 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
 import com.activitylogger.release1.settings.AppSettingsActivity
+import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.github.mikephil.charting.charts.LineChart
@@ -51,7 +54,7 @@ class DashboardFragment : Fragment() {
     private lateinit var emotionXAxisLabel: TextView
     private lateinit var emotionYAxisLabel: TextView
     private lateinit var emotionBarGraphTitle: TextView
-
+    private lateinit var password : String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -63,6 +66,7 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        password = MainActivity.appPreferences.getString("password","")!!
 //Ratings Line Graph Call
         Log.i("Graphing", "Graphing Line Data")
         lineGraphTitle = root.findViewById(R.id.lineChartTitleLabel)
@@ -85,7 +89,7 @@ class DashboardFragment : Fragment() {
 // Symptoms Bar graph Call
         graphSymptoms(recordsList)
 
-        setHasOptionsMenu(true)
+
 
 
         return root
@@ -236,7 +240,7 @@ class DashboardFragment : Fragment() {
             emotionYAxisLabel.rotation = 270f
             emotionXAxisLabel.text = "Emotions"
 
-barGraphView.invalidate()
+            barGraphView.invalidate()
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
@@ -251,7 +255,7 @@ barGraphView.invalidate()
         try {
             val symptomLists = SymptomList.importData(recordList.symptomList)
             Collections.sort(symptomLists, Symptoms.compareCounts)
-            //Collections.sort(symptomList, Symptoms.compareCounts)
+
             val symptomArray = ArrayList<BarEntry>()
             val symptomListLabels = ArrayList<String>()
             for ((i, symptom) in symptomLists.withIndex()) {
@@ -297,21 +301,7 @@ barGraphView.invalidate()
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.stats_options_menu, menu)
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId)
-        {
-R.id.navigation_settings ->{
-    val settingsIntent = Intent(requireContext(), AppSettingsActivity::class.java)
-    requireContext().startActivity(settingsIntent)
-    return true
-}
-            else -> {false}
-        }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -321,6 +311,7 @@ R.id.navigation_settings ->{
 
 
     }
+
 
 
 }
