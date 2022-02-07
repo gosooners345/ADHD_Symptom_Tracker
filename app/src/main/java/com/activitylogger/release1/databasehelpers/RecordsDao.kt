@@ -13,9 +13,10 @@ interface RecordsDao {
 
 
 
-    @Query("Select * from records")
-    fun getRecords(): LiveData<List<Records>>
-
+   /* @Query("Select * from records")
+    suspend fun getRecords(): List<Records>*/
+   @Query("Select * from records")
+    fun getRecords():LiveData< List<Records>>
     @Delete
     fun deleteRecord(vararg records : Records?) : Int
 

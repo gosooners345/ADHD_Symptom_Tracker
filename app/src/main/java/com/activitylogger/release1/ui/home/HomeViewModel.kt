@@ -13,6 +13,5 @@ fun deleteRecord(record: Records){
         recordsRepo!!.deleteRecord(record)
 
     }
-
 }
 

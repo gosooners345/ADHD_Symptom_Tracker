@@ -30,6 +30,7 @@ import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.searchhandlers.SearchActivity
 import com.activitylogger.release1.settings.AppSettingsActivity
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 @DelicateCoroutinesApi
@@ -39,7 +40,8 @@ class HomeFragment : Fragment() , OnRecordListener {
     private var _binding: FragmentHomeBinding? = null
     private var reversed = false
     private var tripped = false
-var paused = false
+    private lateinit var password : String
+private var paused = false
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -55,6 +57,7 @@ var paused = false
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        //this method handles loading the database into the application by proxy of calling the Repo
         homeViewModel.recordsRepo = RecordsRepository(requireContext())
         recordsRCV = root.findViewById(R.id.tracker_view)
         getRecords()
@@ -62,6 +65,7 @@ var paused = false
         recordsRCV.adapter = adapter
         setupRecordCards()
         paused=false
+        password = MainActivity.appPreferences.getString("password","")!!
         return root
     }
 
@@ -237,15 +241,32 @@ var paused = false
 
     }
 
+    /*Returns from settings two things, if the password has changed, the application will close the DB so the DB can be rekeyed,
+     otherwise the app is refreshed on return*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode== SETTINGS_CODE)
             if(resultCode==RESULT_OK)
-            requireActivity().recreate()
+            {
+                if(MainActivity.appPreferences.getString("password","")!=password)
+                {
+                    Toast.makeText(requireContext(),"Closing the database so it can be reencrypted with your new password",Toast.LENGTH_LONG).show()
+                    homeViewModel.recordsRepo!!.closeDB()
+                        homeViewModel.recordsRepo= RecordsRepository(requireContext())
+                    getRecords()
+                    adapter = RecordsAdapter(recordsList, this)
+                    recordsRCV.adapter = adapter
+                    setupRecordCards()
+                }
+                else
+                    setupRecordCards()
+            }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 
@@ -262,17 +283,40 @@ var paused = false
     //Refreshes the adapter after a record is submitted to the DB
     @SuppressLint("NotifyDataSetChanged")
     fun refreshAdapter() {
-
         recordsList.setRecordData()
         symptomsList = SymptomList.importData(recordsList.symptomList)
         emotionList = EmotionList.importData(recordsList.emotionList)
         adapter.notifyDataSetChanged()
     }
 
+// Prevents accidental deletions
+    private fun validateDeleteRecordChoice(position: Int)
+    {
+        val titleString = "Delete Record?"
+        val messageString = "Are you sure you want to delete this record?"
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(titleString)
+            .setMessage(String.format(messageString))
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton("Yes") { dialog, _ ->
+                Log.i("Records","Deleted Record Info: ${recordsList[position]}")
+                homeViewModel.deleteRecord(recordsList[position])
+                adapter.notifyItemRemoved(position)
+                refreshAdapter()
+
+            }
+            .show()
+refreshAdapter()
+
+    }
+
+
     //Retrieves records from the DB
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getRecords() {
         try {
+            net.sqlcipher.database.SQLiteDatabase.loadLibs(requireContext())
 
             homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, {
                 if (recordsList.size > 0) recordsList.clear()
@@ -283,7 +327,6 @@ var paused = false
                     refreshAdapter()
                 }
                 refreshAdapter()
-
             })
         } catch (ex: Exception) {
             Toast.makeText(requireContext(), "This failed", Toast.LENGTH_LONG).show()
@@ -296,19 +339,18 @@ var paused = false
 //This is the implementation for the delete method to take place.
     @DelicateCoroutinesApi
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
-        object : ItemTouchHelper.SimpleCallback(1, ItemTouchHelper.RIGHT) {
+        object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.RIGHT.or(ItemTouchHelper.LEFT)) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
-            }
+                recyclerView.adapter!!.notifyItemMoved(viewHolder.bindingAdapterPosition,target.bindingAdapterPosition)
 
+                return true
+            }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Log.i("DELETERECORD","Deleted Record Info: ${recordsList[viewHolder.bindingAdapterPosition]}")
-                homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
-                refreshAdapter()
+                validateDeleteRecordChoice(viewHolder.bindingAdapterPosition)
             }
         }
     private var deleteUpTouchHandler : ItemTouchHelper.SimpleCallback=
@@ -322,8 +364,7 @@ var paused = false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                homeViewModel.deleteRecord(recordsList[viewHolder.bindingAdapterPosition])
-                refreshAdapter()
+                validateDeleteRecordChoice(viewHolder.bindingAdapterPosition)
             }
         }
 
@@ -349,14 +390,6 @@ var paused = false
             adapter.notifyDataSetChanged()
 
         }
-
-        const val record_send = "record_selected"
-        const val RECORDTITLE = "RECORDTITLE"
-        const val RECORDEMOTIONS = "RECORDEMOTIONS"
-        const val RECORDDETAILS = "RECORDDETAILS"
-        const val RECORDSOURCES = "RECORDSOURCES"
-        const val RECORDRATINGS = "RECORDRATINGS"
-        const val RECORDSUCCESS = "RECORDSUCCESS"
         var symptomsList = SymptomList()
         var emotionList = EmotionList()
 

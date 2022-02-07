@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
@@ -32,8 +33,8 @@ class RecordsAdapter(
         else ->
             CollapsedRecordsViewHolder(LayoutInflater.from(context).inflate(R.layout.record_item_layout_collapsed,parent,false),onRecordListener)
         }
-
     }
+
 
     @SuppressLint("SetTextI18n")
      override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -50,7 +51,7 @@ class RecordsAdapter(
                 title.text = record.title
                 ratings.text = "Rating: ${record.rating}"
                 symptoms.text =
-                    record.content//"ADHD Symptoms/Benefits: ${if (record.symptoms != "") record.symptoms else "Record Symptoms Here"}"
+                    record.content
                 timeCreated.text =
                     "Time Created: " + DateFormat.getInstance().format(record.timeCreated)
                 timeUpdated.text =
