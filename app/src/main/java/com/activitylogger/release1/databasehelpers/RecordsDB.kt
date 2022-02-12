@@ -22,116 +22,147 @@ AutoMigration(from=3,to=4)
     ]
 )
 
-abstract class RecordsDB : RoomDatabase() {
+abstract class RecordsDB : RoomDatabase()
+{
     abstract val recordDao: RecordsDao?
-
+    
     @DeleteTable.Entries(DeleteTable(tableName = "recordsfts"))
     class RecordsAutoMigration : AutoMigrationSpec
-
-
-    companion object {
+    
+    
+    companion object
+    {
         private const val DATABASE_NAME = "activitylogger_db"
-        const val newDB = "activitylogger_db.db"
+        private const val newDB = "activitylogger_db.db"
         private var instance: RecordsDB? = null
-        var testKeys = "1234"
-        private var dbKeys = MainActivity.appPreferences.getString("dbPassword", "").toString()
-        private var passwordKey = MainActivity.appPreferences.getString("password", "").toString()
-        private var passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
-        private var newPassPhrase = SQLiteDatabase.getBytes(passwordKey.toCharArray())
-        var synced = passphrase.contentEquals(newPassPhrase)
-
-
-
-        fun encryptDB(context: Context, originalDB: File, passcode: ByteArray) {
-            try {
-                val attachKEY = String.format("ATTACH DATABASE ? AS plaintext  KEY ''")
+        private lateinit var dbKeys: String
+        private lateinit var passwordKey: String
+        private lateinit var passphrase :ByteArray
+        private lateinit var newPassPhrase :ByteArray
+        private  lateinit var factory: SupportFactory
+        
+        //       lateinit var synced =false
+        private var encryptedState: Boolean = false
+        
+        
+        private fun encryptDB(context: Context, originalDB: File, passcode: ByteArray)
+        {
+            try
+            {
+                val attachKEY =
+                    String.format("ATTACH DATABASE ? AS plaintext  KEY ''")
                 SQLiteDatabase.loadLibs(context)
-                if (originalDB.exists()) {
+                if (originalDB.exists())
+                {
                     val newFile = File.createTempFile("encrypted", "tmp")
                     var newDBs = SQLiteDatabase.openDatabase(
-                        originalDB.absolutePath,
-                        "",
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE
+                      originalDB.absolutePath,
+                      "",
+                      null,
+                      SQLiteDatabase.OPEN_READWRITE
                     )
                     val version = newDBs.version
                     newDBs.close()
                     newDBs = SQLiteDatabase.openDatabase(
-                        newFile.absolutePath,
-                        passcode,
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE,
-                        null,
-                        null
+                      newFile.absolutePath,
+                      passcode,
+                      null,
+                      SQLiteDatabase.OPEN_READWRITE,
+                      null,
+                      null
                     )
                     val st = newDBs.compileStatement(attachKEY)
                     st.bindString(1, originalDB.absolutePath)
                     st.execute()
-                    newDBs.rawExecSQL("SELECT sqlcipher_export('main','plaintext')")
+                    newDBs.rawExecSQL(
+                      "SELECT sqlcipher_export('main','plaintext')"
+                    )
                     newDBs.rawExecSQL("DETACH DATABASE plaintext")
                     newDBs.version = version
                     originalDB.delete()
                     newFile.renameTo(context.getDatabasePath(newDB))
-
-                } else {
-                    throw FileNotFoundException(originalDB.absolutePath + "not found")
+                    encryptedState = true
                 }
-            } catch (ex: Exception) {
+                else
+                {
+                    throw FileNotFoundException(
+                      originalDB.absolutePath + "not found"
+                    )
+                }
+            }
+            catch (ex: Exception)
+            {
                 ex.printStackTrace()
             }
         }
-
-        fun encryptDBv2(context: Context, originalDB: File, passcode: ByteArray) {
-            try {
-                val attachKEY = String.format("ATTACH DATABASE ? AS records KEY ''")
+        
+        private fun encryptDBv2(context: Context, originalDB: File, passcode: ByteArray)
+        {
+            try
+            {
+                val attachKEY =
+                    String.format("ATTACH DATABASE ? AS records KEY ''")
                 SQLiteDatabase.loadLibs(context)
-                if (originalDB.exists()) {
+                if (originalDB.exists())
+                {
                     Log.i("ENCRYPTION", "Encrypting database")
                     val newFile = File.createTempFile("encrypted", "tmp")
                     var newDBs = SQLiteDatabase.openDatabase(
-                        originalDB.absolutePath,
-                        "",
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE
+                      originalDB.absolutePath,
+                      "",
+                      null,
+                      SQLiteDatabase.OPEN_READWRITE
                     )
                     val version = newDBs.version
                     newDBs.close()
                     newDBs = SQLiteDatabase.openDatabase(
-                        newFile.absolutePath,
-                        passcode,
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE,
-                        null,
-                        null
+                      newFile.absolutePath,
+                      passcode,
+                      null,
+                      SQLiteDatabase.OPEN_READWRITE,
+                      null,
+                      null
                     )
                     val st = newDBs.compileStatement(attachKEY)
                     st.bindString(1, originalDB.absolutePath)
                     st.execute()
-                    newDBs.rawExecSQL("SELECT sqlcipher_export('main','records')")
+                    newDBs.rawExecSQL(
+                      "SELECT sqlcipher_export('main','records')"
+                    )
                     newDBs.rawExecSQL("DETACH DATABASE records")
                     newDBs.version = version
                     originalDB.delete()
                     newFile.renameTo(originalDB)
-
-                } else {
-                    throw FileNotFoundException(originalDB.absolutePath + "not found")
+                    encryptedState = true
                 }
-            } catch (ex: Exception) {
+                else
+                {
+                    throw FileNotFoundException(
+                      originalDB.absolutePath + "not found"
+                    )
+                }
+            }
+            catch (ex: Exception)
+            {
                 ex.printStackTrace()
             }
         }
-
-        fun decryptDBv2(context: Context, originalDB: File, passcode: ByteArray) {
-            try {
+        
+        private fun decryptDBv2(context: Context, originalDB: File, passcode: ByteArray)
+        {
+            try
+            {
                 SQLiteDatabase.loadLibs(context)
-                val attachKEY = String.format("ATTACH DATABASE ? AS records  KEY ''")
-
-                if (originalDB.exists()) {
+                val attachKEY =
+                    String.format("ATTACH DATABASE ? AS records  KEY ''")
+                
+                if (originalDB.exists())
+                {
                     Log.i("DECRYPTION", "Decrypting database")
                     val newFile = File.createTempFile("decrypted", "")
                     var db = SQLiteDatabase.openDatabase(
-                        originalDB.absolutePath,
-                        passcode, null, SQLiteDatabase.OPEN_READWRITE, null, null
+                      originalDB.absolutePath,
+                      passcode, null, SQLiteDatabase.OPEN_READWRITE, null, null
                     )
                     val st = db.compileStatement(attachKEY)
                     st.bindString(1, newFile.absolutePath)
@@ -142,75 +173,123 @@ abstract class RecordsDB : RoomDatabase() {
                     st.close()
                     db.close()
                     db = SQLiteDatabase.openDatabase(
-                        newFile.absolutePath,
-                        "",
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE
+                      newFile.absolutePath,
+                      "",
+                      null,
+                      SQLiteDatabase.OPEN_READWRITE
                     )
                     db.version = version
                     db.close()
                     originalDB.delete()
                     newFile.renameTo(originalDB)
-                } else {
-                    throw FileNotFoundException(originalDB.absolutePath + "not found")
+                    encryptedState = false
                 }
-            } catch (ex: Exception) {
+                else
+                {
+                    throw FileNotFoundException(
+                      originalDB.absolutePath + "not found"
+                    )
+                }
+            }
+            catch (ex: Exception)
+            {
                 ex.printStackTrace()
             }
         }
-
+        
         // Change the encryption keys on the databases
-        fun changeSyncDBs(
+        private fun changeSyncDBs(
             context: Context,
             dbFile: File,
             oldPasscode: ByteArray,
-            newPasscode: ByteArray
-        ) {
+            newPasscode: ByteArray,
+            passwordKey : String
+        )
+        {
             decryptDBv2(context, dbFile, oldPasscode)
             Log.i("KEYS", "Changing DB Keys for encryption")
+            if(passwordKey!="")
             encryptDBv2(context, dbFile, newPasscode)
+           
         }
 
+        private fun getEncyptedState(condition : Boolean) : Boolean{
+            return  condition
+        }
+        
+        //Initialize the Passcodes and the associated ByteArrays
+        private fun initializePasscodes()
+        {
+            dbKeys = MainActivity.appPreferences
+                .getString("dbPassword", "").toString()
+            passwordKey = MainActivity.appPreferences
+                .getString("password", "").toString()
+            encryptedState = getEncyptedState(dbKeys.isNotBlank())
+           passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
+            if(passwordKey!="")
+            newPassPhrase = SQLiteDatabase.getBytes(passwordKey.toCharArray())
+            else
+                newPassPhrase= passphrase
+                
+        }
+        
+        private fun renewDBPassCode()
+        {
+            
+            MainActivity.appPreferences.edit().putString(
+              "dbPassword",
+              MainActivity.appPreferences.getString("password", "")
+            ).apply()
+            dbKeys = MainActivity.appPreferences.getString(
+                  "dbPassword", ""
+                ).toString()
+            
+            passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
+            
+        }
+        
         @JvmStatic
-        fun getInstance(context: Context): RecordsDB? {
-            if (instance == null) {
-                try {
+        fun getInstance(context: Context): RecordsDB?
+        {
+            if (instance == null)
+            {
+                try
+                {
                     SQLiteDatabase.loadLibs(context)
-                    var oldDBFile = (context.getDatabasePath(DATABASE_NAME))
+                    //Initialize the passcode variables
+                    initializePasscodes()
+                    val synced = passphrase.contentEquals(newPassPhrase)
+                    val oldDBFile = (context.getDatabasePath(DATABASE_NAME))
                     val newDBFile = (context.getDatabasePath(newDB))
-
-                    if (oldDBFile.exists() && !newDBFile.exists()) {
+                    //Encrypt and remove the Old DB if there's a password
+                    if (oldDBFile.exists() && !newDBFile.exists())
                         encryptDB(context, oldDBFile, passphrase)
+//Check for password changes since last load
+                    if (newDBFile.exists() && !synced)
+                    {
+                        if( MainActivity.appPreferences.getString("password", "")!="")
+                        {
+                            changeSyncDBs(
+                              context, newDBFile, passphrase, newPassPhrase,
+                              passwordKey
+                            )
+                            renewDBPassCode()
+                        }
                     }
-                    // Test Code for changing passwords and encrypting with a new key
-                    //    passphrase=SQLiteDatabase.getBytes(testKeys.toCharArray())
-
-                    if (newDBFile.exists() && !synced) {
-                        changeSyncDBs(context, newDBFile, passphrase, newPassPhrase)
-                        MainActivity.appPreferences.edit().putString(
-                            "dbPassword",
-                            MainActivity.appPreferences.getString("password", "")
-                        ).apply()
-                        dbKeys = MainActivity.appPreferences.getString("dbPassword", "").toString()
-
-                        passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
-                        synced = passphrase.contentEquals(newPassPhrase)
-                    }
-
-                    val factory = SupportFactory(passphrase,null,false)
-
-
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        RecordsDB::class.java,
-                        newDB
-                    )
-                        .openHelperFactory(factory)
-                        .build()
-                    Log.i("ENCRYPTEDDB", "Encrypted Database is loading")
+                    factory = SupportFactory(passphrase, null, false)
+                    instance =
+                        Room.databaseBuilder(
+                          context.applicationContext,
+                          RecordsDB::class.java,
+                          newDB
+                        )
+                            .openHelperFactory(factory)
+                            .build()
                     return instance
-
-                } catch (ex: Exception) {
+                    
+                }
+                catch (ex: Exception)
+                {
                     ex.printStackTrace()
                 }
             }

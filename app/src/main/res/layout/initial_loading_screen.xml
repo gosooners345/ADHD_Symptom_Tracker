@@ -6,7 +6,24 @@
     android:layout_height="match_parent"
     >
 
-
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/enablePasswordSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        android:text="@string/enable_password"
+        android:textColor="#8D6E63"
+        android:textOff="@string/disabled"
+        android:textOn="@string/enabled"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox"
+        tools:ignore="TextContrastCheck,TextContrastCheck" />
     <TextView
         android:id="@+id/Login_TitleHdr"
         android:layout_width="0dp"
@@ -21,13 +38,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextBox"
+        android:id="@+id/greetingTextBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:hint="@string/password"
+        android:hint="Enter your name here"
         android:layoutDirection="locale"
         android:padding="5dp"
         app:endIconMode="clear_text"
@@ -36,23 +53,46 @@
         app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/TextBox"
+            android:id="@+id/greetingTextBoxET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:inputType="textPassword"
+            android:inputType="textCapSentences"
             android:singleLine="true"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/passwordTextBox"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="8dp"
+    android:hint="Enter your password here"
+    android:layoutDirection="locale"
+    android:padding="5dp"
+    app:endIconMode="clear_text"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/greetingTextBox">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/TextBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        tools:ignore="TextContrastCheck" />
+</com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/enterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:text="@string/enter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
+        app:layout_constraintTop_toBottomOf="@+id/enablePasswordSwitch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

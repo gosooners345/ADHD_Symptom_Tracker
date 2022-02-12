@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
-                    android:inputType="textMultiLine|text|textImeMultiLine"
+                    android:inputType="textMultiLine|text|textCapSentences|textImeMultiLine"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
-                    android:inputType="textMultiLine|text|textImeMultiLine"
+                    android:inputType="textMultiLine|textCapSentences|text|textImeMultiLine"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
-                    android:inputType="textMultiLine|text|textImeMultiLine"
+                    android:inputType="textMultiLine|text|textCapSentences|textImeMultiLine"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 

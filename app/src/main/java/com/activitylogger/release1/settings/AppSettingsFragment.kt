@@ -1,5 +1,6 @@
 package com.activitylogger.release1.settings
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -22,6 +23,9 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
     //Version Info Preference
     private lateinit var versionInfoPreference: Preference
 
+    //Personalized Greeting settings
+    private lateinit var greetingPreference : EditTextPreference
+
     //Symptom Custom Layout Options
     private lateinit var symptomLayoutOptionPrefs: ListPreference
     private lateinit var symptomVerticalOptions: ListPreference
@@ -37,10 +41,13 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
 
     //Reset everything
     private lateinit var resetPreference: Preference
+    @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_page, rootKey)
 
         versionInfoPreference = findPreference("versionInfo")!!
+
+        greetingPreference = findPreference(resources.getString(R.string.greeting))!!
 
         emailPreference = findPreference("feedback")!!
         emailPreference.setOnPreferenceClickListener {
@@ -94,7 +101,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
            recordVerticalOptions.setOnPreferenceChangeListener { preference, newValue ->
             preference.sharedPreferences!!.edit().putString(preference.key, newValue as String)
                 .apply()
-            MainActivity.appPreferences!!.edit().putString(preference.key, newValue).commit()
+            MainActivity.appPreferences.edit().putString(preference.key, newValue).commit()
 
         }
        }
@@ -107,15 +114,16 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
         resetPreference = findPreference("firstUse")!!
         resetPreference.setOnPreferenceClickListener {
             it.sharedPreferences!!.edit().putBoolean(it.key, false).putString("password", "")
-                ?.putString("layoutOption", "linear")?.putInt("gridSize", 3)
+                ?.putString("layoutOption", "linear")?.putInt("gridSize", 2)
                 ?.putString("linear_horizontal_records", "vertical")
-                ?.putString("linear_horizontal_symptoms", "vertical")
+                ?.putString("linear_horizontal_symptoms", "vertical")?.putString("greeting","")
                 ?.putString("layoutOption_record", "linear")?.putBoolean("enablePassword", false)!!.apply()
-            MainActivity.appPreferences.edit().putBoolean(it.key, false).putString("password", "")
+            MainActivity.appPreferences.edit().putBoolean(it.key, false)
+                .putString("password", "")
                 ?.putString("layoutOption", "linear")?.putInt("gridSize", 2)
                 ?.putString("layoutOption_record", "linear")
                 ?.putString("linear_horizontal_records", "vertical")
-                ?.putString("linear_horizontal_symptoms", "vertical")
+                ?.putString("linear_horizontal_symptoms", "vertical")?.putString("greeting","")
                 ?.putBoolean("enablePassword", false)!!.commit()
         }
 
@@ -149,12 +157,23 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
             editText.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
         passwordChangeTextEditor.setOnPreferenceChangeListener { preference, newValue ->
+         if(MainActivity.buildType=="debug")
             Log.i(preference.key, "Password is $newValue")
-
+            if(newValue =="")
+            {
+                enablePasswordSwitch.performClick()
+            }
             MainActivity.appPreferences.edit().putString(preference.key, newValue as String)
-             //.putString(resources.getString(R.string.dbPassword),newValue)
                 .commit()
         }
+        greetingPreference.setOnPreferenceChangeListener { preference, newValue ->
+            if (MainActivity.buildType=="debug")
+                Log.i(preference.key,"Greeting is: Hello $newValue, What " +
+                                     "would you like to record today?")
+            MainActivity.appPreferences.edit().putString(preference.key,newValue as String).commit()
+        }
+
+
         MainActivity.appPreferences.registerOnSharedPreferenceChangeListener(this)
 
     }
@@ -212,7 +231,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
         MainActivity.appPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
 

@@ -16,5 +16,6 @@
     <string name="versionInfo">versionInfo</string>
 <string name="encryptedKeyStorage">encryptedKeyStorage</string>
     <string name="dbPassword">dbPassword</string>
+    <string name="greeting">greeting</string>
 
 </resources>

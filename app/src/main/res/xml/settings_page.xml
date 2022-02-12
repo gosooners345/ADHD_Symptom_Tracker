@@ -5,7 +5,16 @@
     <PreferenceCategory
         app:icon="@drawable/display_screen_ic"
         app:key="@string/display_settings"
-        app:title="Custom Layout Options">
+        app:title="Display Settings">
+        <EditTextPreference
+            app:key="@string/greeting"
+           android:defaultValue=""
+            app:dialogMessage="Personalize your journal even further by entering your name here."
+android:dialogTitle="Personal greeting"
+            app:title="Personalize your greeting here"
+app:icon="@drawable/ic_baseline_edit_24"
+
+            />
         <ListPreference
             android:defaultValue="linear"
             app:entries="@array/layoutOptionLabels_Array"
