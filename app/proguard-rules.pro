@@ -17,6 +17,14 @@
 -keepattributes SourceFile,LineNumberTable
 -keep,includedescriptorclasses class net.sqlcipher.** { *; }
 -keep,includedescriptorclasses interface net.sqlcipher.** { *; }
+
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepnames class com.activitylogger.release1.ui.*
+-keepnames class com.activitylogger.release1.settings.*
+-keepnames class com.activitylogger.release1.MainActivity
+-keepnames class com.activitylogger.release1.databasehelpers.*
+-keepnames class com.activitylogger.release1.adapters.*
+-keepnames class com.activitylogger.release1.searchhandlers.*

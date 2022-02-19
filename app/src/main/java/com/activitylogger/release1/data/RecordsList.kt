@@ -4,37 +4,28 @@ package com.activitylogger.release1.data
 
 import java.util.*
 import kotlin.collections.ArrayList
+import com.activitylogger.release1.utils.StringUtils
 
-class RecordsList : ArrayList<Records>() {
-
+class RecordsList : ArrayList<Records>()
+{
     private var recordStats = ArrayList<Double>()
     private var recordDates = ArrayList<Date>()
-private var recordIDs = ArrayList<Int>()
+    private var recordIDs = ArrayList<Int>()
     var successCt = 0
     var failCt = 0
     var emotionList = ArrayList<String>()
     var symptomList = ArrayList<String>()
-var dateRatingList = ArrayList<DatesandRatings>()
+    var dateRatingList = ArrayList<DatesandRatings>()
     private var recordStateList = ArrayList<Records.RecordState>()
-
-
-
-
-    private fun sanitizeSearchQuery(query: String?): String {
-        if (query == null) {
-            return ""
-        }
-        val queryWithEscapedQuotes = query.replace(Regex.fromLiteral("\""), "\"\"")
-        return "*\"$queryWithEscapedQuotes\"*"
-    }
-
-    fun setRecordData(){
-        if(emotionList.size>0)
+    fun setRecordData()
+    {
+        if (emotionList.size > 0)
             emotionList.clear()
-        if(symptomList.size>0)
+        if (symptomList.size > 0)
             symptomList.clear()
-        for(record in this) {
-            record.recordState=Records.RecordState.COLLAPSED
+        for (record in this)
+        {
+            record.recordState = Records.RecordState.COLLAPSED
             recordStats.add(record.rating)
             recordDates.add(record.timeCreated)
             recordStateList.add(Records.RecordState.COLLAPSED)
@@ -44,7 +35,7 @@ var dateRatingList = ArrayList<DatesandRatings>()
             else
                 failCt++
             emotionList.addAll(
-                sanitizeSearchQuery(record.emotions).trim(
+                StringUtils.sanitizeSearchQuery(record.emotions).trim(
                     '*',
                     ' ',
                     '"',
@@ -54,16 +45,16 @@ var dateRatingList = ArrayList<DatesandRatings>()
                     '\b'
                 ).trimStart().split(",", "and", "|", ":", ";", ".")
             )
-            if (record.symptoms != "") {
+            if (record.symptoms != "")
+            {
                 symptomList.addAll(record.symptoms.trim().split(","))
-            } else {
+            }
+            else
+            {
                 symptomList.add("")
             }
-
         }
-
     }
-
 }
 
 class DatesandRatings(var date : Date,var rating:ArrayList<Double>)

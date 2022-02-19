@@ -94,9 +94,9 @@ class HomeFragment : Fragment(), OnRecordListener
           ComponentName(
             context,
             SearchActivity::class.java
-                       )
-                                       )
-                       )
+          )
+        )
+      )
     }
     
     
@@ -301,7 +301,7 @@ class HomeFragment : Fragment(), OnRecordListener
     requestCode: Int,
     resultCode: Int,
     data: Intent?
-                               )
+  )
   {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == SETTINGS_CODE)

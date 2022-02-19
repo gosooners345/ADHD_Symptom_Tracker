@@ -4,17 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.preference.*
 import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 
-@Suppress("SpellCheckingInspection")
+@Suppress("SpellCheckingInspection", "SameParameterValue")
 class AppSettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -247,36 +245,50 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
                                 ) "Disabled" else "Enabled"
                             }"
                 )
-
+  
             }
-            "firstUse" -> {
-                Log.i(key, "Everything has been reset except records")
-                Toast.makeText(
-                    requireContext(),
-                    "Everything has been reset except your logs.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            }
-            "linearOption" -> Log.i(key, "value is " + sharedPreferences?.getString(key, "linear"))
-            "gridSize" -> Log.i(key,"value is" + sharedPreferences?.getInt(key,3))
+          "firstUse"         ->
+          {
+            Log.i(key, "Everything has been reset except records")
+            Toast.makeText(
+              requireContext(),
+              "Everything has been reset except your logs.",
+              Toast.LENGTH_LONG
+            ).show()
+    
+          }
+          "linearOption"     -> Log.i(
+            key, "value is " + sharedPreferences?.getString(
+              key, "linear"
+            )
+          )
+          "gridSize"         -> Log.i(
+            key, "value is" + sharedPreferences?.getInt(
+              key, 3
+            )
+          )
         }
-//requireContext().getSharedPreferences(MainActivity.PREFNAME,MODE_PRIVATE).edit().clear().commit()
-
+  
+  
     }
-
-    fun composeEmail(addresses : Array<String>,subject: String){
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data=Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL,addresses)
-            putExtra(Intent.EXTRA_SUBJECT,subject)
-        }
-        startActivity(intent)
-            }
-
-    fun clickAway() : Boolean{
-        composeEmail(resources.getStringArray(R.array.addresses),"Feedback about ADHD Journal Version #${MainActivity.versionName}")
-        return true
+  
+  private fun composeEmail(addresses: Array<String>, subject: String)
+  {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+      data = Uri.parse("mailto:")
+      putExtra(Intent.EXTRA_EMAIL, addresses)
+      putExtra(Intent.EXTRA_SUBJECT, subject)
     }
+    startActivity(intent)
+  }
+  
+  private fun clickAway(): Boolean
+  {
+    composeEmail(
+      resources.getStringArray(R.array.addresses),
+      "Feedback about ADHD Journal Version #${MainActivity.versionName}"
+    )
+    return true
+  }
 }
 

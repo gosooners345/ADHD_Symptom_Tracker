@@ -3,7 +3,6 @@ package com.activitylogger.release1.data
 import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.*
 import java.text.DateFormat
@@ -68,49 +67,59 @@ var successState :Boolean?=null
         timeValue: Long,
         success: Boolean,
         sources: String?,
-symptoms : String
-    ) : this() {
+        symptoms: String
+    ) : this()
+    {
         this.id = id!!
         this.title = title!!
         content = details!!
         this.emotions = emotions!!
-        this.symptoms= symptoms
+        this.symptoms = symptoms
         this.rating = ratings
         this.timeUpdated = timeValue
         this.successState = success
         this.sources = sources!!
         this.timeCreated = dateValue
-recordState=RecordState.COLLAPSED
+        recordState = RecordState.COLLAPSED
     }
-
-    constructor(timeCreatedValue:Date) : this() {
-    this.title=""
-    this.content=""
-    this.sources=""
-    this.emotions=""
-this.symptoms=""
-    this.rating=0.0
-    this.timeUpdated=System.currentTimeMillis()
-       this.timeCreated = timeCreatedValue
-    this.successState=false
-this.recordState=RecordState.COLLAPSED
-}
-    override fun compareTo(other: Records): Int {
-     return this.id.compareTo(other.id)
+    
+    constructor(timeCreatedValue: Date) : this()
+    {
+        this.title = ""
+        this.content = ""
+        this.sources = ""
+        this.emotions = ""
+        this.symptoms = ""
+        this.rating = 0.0
+        this.timeUpdated = System.currentTimeMillis()
+        this.timeCreated = timeCreatedValue
+        this.successState = false
+        this.recordState = RecordState.COLLAPSED
     }
-
-    override fun toString(): String {
-        return String.format("Entry title: $title \r\n" +
-                "Event: $content\r\n" +
-                "Rating: $rating\r\n" +
-                "Time Occurred: ${DateFormat.getInstance().format(timeCreated)}\r\n" +
-                "Emotions: $emotions \r\n " +
-                "Sources: $sources \r\n"+
-                "ADHD Symptoms or Benefits: $symptoms \r\n"+
-                "Success or Fail: ${ if(successState!!)"success" else "fail"}"                 )
+    
+    override fun compareTo(other: Records): Int
+    {
+        return this.id.compareTo(other.id)
     }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    
+    override fun toString(): String
+    {
+        return String.format(
+            "Entry title: $title \r\n" +
+            "Event: $content\r\n" +
+            "Rating: $rating\r\n" +
+            "Time Occurred: ${
+                DateFormat.getInstance().format(timeCreated)
+            }\r\n" +
+            "Emotions: $emotions \r\n " +
+            "Sources: $sources \r\n" +
+            "ADHD Symptoms or Benefits: $symptoms \r\n" +
+            "Success or Fail: ${if (successState!!) "success" else "fail"}"
+        )
+    }
+    
+    override fun writeToParcel(parcel: Parcel, flags: Int)
+    {
         parcel.writeInt(id)
         parcel.writeString(title)
         parcel.writeString(content)

@@ -5,17 +5,14 @@ package com.activitylogger.release1
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
@@ -25,16 +22,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.activitylogger.release1.databinding.ActivityMainBinding
-import com.activitylogger.release1.security.Secure
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -57,15 +50,16 @@ class MainActivity : AppCompatActivity()
   lateinit var title: TextView
   private lateinit var firstUse: Any
   private lateinit var passwordTextBox: TextInputLayout
-  lateinit var greetingTextBox : TextInputLayout
-  var dbPassword = ""
+  private lateinit var greetingTextBox: TextInputLayout
+  private var dbPassword = ""
   var userPassword = ""
+  
   //lateinit var titleHdr : TextView
   private lateinit var enablePasswordSwitch: SwitchMaterial
   private lateinit var binding: ActivityMainBinding
   private lateinit var mainActionButton: ExtendedFloatingActionButton
-  var trusted = false
-  var timesRan = 0
+  private var trusted = false
+  private var timesRan = 0
   override fun onCreate(savedInstanceState: Bundle?)
   {
     super.onCreate(savedInstanceState)
@@ -113,7 +107,7 @@ class MainActivity : AppCompatActivity()
     }
     //Intro guide for new users
     setContentView(R.layout.app_intro_layout)
-    firstUse =  appPreferences.getBoolean("firstUse", false)
+    firstUse = appPreferences.getBoolean("firstUse", false)
     passwordEnabled = appPreferences.getBoolean("enablePassword", true)
     timesRan = appPreferences.getInt("dbTimes", 0)
     timesRan++
@@ -154,61 +148,61 @@ class MainActivity : AppCompatActivity()
   @SuppressLint("SetTextI18n")
   fun loginScreen()
   {
-    //val passWordEditor: SharedPreferences.Editor = passWordPreferences.edit()
   
-    if(firstUse==true)
+    if (firstUse == true)
     {
       setContentView(R.layout.login_screen)
       title = findViewById(R.id.Login_TitleHdr)
       val name = appPreferences.getString("greeting", "")
-      title.text = "Welcome back $name! Enter your password below to enter " +
+      title.text = "Welcome back, $name! Enter your password to access " +
                    "your journal."
       appPassword = appPreferences.getString("password", "").toString()
-  
-  
-  
+    
+    
+    
       enterButton = findViewById(R.id.enterButton)
       passwordTextBox = findViewById(R.id.passwordTextBox)
-      passwordTextBox.editText!!.addTextChangedListener(object : TextWatcher
-                                                        {
-                                                          override fun beforeTextChanged(
-                                                            s: CharSequence,
-                                                            start: Int,
-                                                            before: Int,
-                                                            count: Int
-                                                          )
-                                                          {
-                                                          }
-    
-                                                          override fun onTextChanged(
-                                                            s: CharSequence,
-                                                            start: Int,
-                                                            before: Int,
-                                                            after: Int
-                                                          )
-                                                          {
-                                                            userPassword =
-                                                              s.toString()
-                                                            if (userPassword.length == appPassword.length)
-                                                              if (logIn(
-                                                                  userPassword
-                                                                )
-                                                              )
-                                                              {
-                                                                loadApp()
-                                                              }
-                                                          }
-    
-                                                          override fun afterTextChanged(
-                                                            editable: Editable
-                                                          )
-                                                          {
-      
-                                                          }
-                                                        })
+      passwordTextBox.editText!!
+        .addTextChangedListener(object : TextWatcher
+                                {
+                                  override fun beforeTextChanged(
+                                    s: CharSequence,
+                                    start: Int,
+                                    before: Int,
+                                    count: Int
+                                  )
+                                  {
+                                  }
+        
+                                  override fun onTextChanged(
+                                    s: CharSequence,
+                                    start: Int,
+                                    before: Int,
+                                    after: Int
+                                  )
+                                  {
+                                    userPassword =
+                                      s.toString()
+                                    if (userPassword.length == appPassword.length)
+                                      if (logIn(
+                                          userPassword
+                                        )
+                                      )
+                                      {
+                                        loadApp()
+                                      }
+                                  }
+        
+                                  override fun afterTextChanged(
+                                    editable: Editable
+                                  )
+                                  {
+          
+                                  }
+                                })
       if (appPassword == "")
       {
-    enterButton.text="Save"
+        enterButton.text = "Save"
         enterButton.setOnClickListener(saveButtonClickListener)
       }
       else
@@ -230,45 +224,42 @@ class MainActivity : AppCompatActivity()
       title.text = "Enter your name to customize your journal and a password " +
                    "to secure it. "
       greetingTextBox = findViewById(R.id.greetingTextBox)
-      greetingTextBox.editText!!.addTextChangedListener(object : TextWatcher
-                                                        {
-                                                          override fun beforeTextChanged(
-                                                            s: CharSequence?,
-                                                            start: Int,
-                                                            count: Int,
-                                                            after: Int
-                                                          )
-                                                          {
+      greetingTextBox.editText!!
+        .addTextChangedListener(object : TextWatcher
+                                {
+                                  override fun beforeTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    count: Int,
+                                    after: Int
+                                  )
+                                  {
+                                  }
       
-                                                          }
-    
-                                                          override fun onTextChanged(
-                                                            s: CharSequence?,
-                                                            start: Int,
-                                                            before: Int,
-                                                            count: Int
-                                                          )
-                                                          {
-                                                            Log.i(
-                                                              "Test",
-                                                              "Greeting is" +
-                                                              " $s"
-                                                            )
+                                  override fun onTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    before: Int,
+                                    count: Int
+                                  )
+                                  {
+                                    if (BuildConfig.BUILD_TYPE == "debug")
+                                      Log.i(
+                                        "Greeting", "$s is the current greeting"
+                                      )
+                                  }
       
-                                                          }
-    
-                                                          override fun afterTextChanged(
-                                                            s: Editable?
-                                                          )
-                                                          {
-      
-                                                          }
-                                                        })
+                                  override fun afterTextChanged(
+                                    s: Editable?
+                                  )
+                                  {
+                                  }
+                                })
       enterButton.text = "Save"
       enterButton.setOnClickListener(enhancedSaveButtonClickListener)
-      
+  
     }
-    
+  
   }
   
   private var skipButtonClickListener = View.OnClickListener {
@@ -278,32 +269,21 @@ class MainActivity : AppCompatActivity()
   fun loadApp()
   {
     
-    try
-    {
-      binding = ActivityMainBinding.inflate(layoutInflater)
-      setContentView(binding.root)
-      val navView: BottomNavigationView = binding.navView
-      val navController =
-        findNavController(R.id.nav_host_fragment_activity_main)
-      // Passing each menu ID as a set of Ids because each
-      // menu should be considered as top level destinations.
-      val appBarConfiguration = AppBarConfiguration(
-        setOf(
-          R.id.navigation_home, R.id.navigation_dashboard
-        )
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    val navView: BottomNavigationView = binding.navView
+    val navController =
+      findNavController(R.id.nav_host_fragment_activity_main)
+    
+    val appBarConfiguration = AppBarConfiguration(
+      setOf(
+        R.id.navigation_home, R.id.navigation_dashboard
       )
-      
-      setupActionBarWithNavController(navController, appBarConfiguration)
-      navView.setupWithNavController(navController)
-      mainActionButton = findViewById(R.id.record_button)
-      mainActionButton.setOnClickListener(mainButtonClick)
-    }
-    catch (ex: Exception)
-    {
-      ex.printStackTrace()
-      Toast.makeText(this, ex.message!!, Toast.LENGTH_LONG).show()
-      
-    }
+    )
+    setupActionBarWithNavController(navController, appBarConfiguration)
+    navView.setupWithNavController(navController)
+    mainActionButton = findViewById(R.id.record_button)
+    mainActionButton.setOnClickListener(mainButtonClick)
   }
   
   @DelicateCoroutinesApi
@@ -320,16 +300,16 @@ class MainActivity : AppCompatActivity()
         "Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
         "\nThis can help you in therapy and so much more!\n  Swipe left to continue."
       ),
-      resources.getColor(R.color.white),
+      resources.getColor(R.color.white, null),
       R.drawable.ic_home_black_24dp,
       R.drawable.ic_next_arrow
     )
     val secondPage = PaperOnboardingPage(
       "Security", String.format(
-      "This is your personal journal. That means you can control who has access to it and who doesn\'t.\n" +
-      "This application\'s data is secured using encryption so that hackers can\'t break into your stuff. \n" +
-      "It would be a good idea to save a password so that it is secure."
-    ), resources.getColor(R.color.white),
+        "This is your personal journal. That means you can control who has access to it and who doesn\'t.\n" +
+        "This application\'s data is secured using encryption so that hackers can\'t break into your stuff. \n" +
+        "It would be a good idea to save a password so that it is secure."
+      ), resources.getColor(R.color.white, null),
       R.drawable.ic_security_lock,
       R.drawable.ic_next_arrow
     )
@@ -342,7 +322,7 @@ class MainActivity : AppCompatActivity()
         " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
         "        Hit save and its logged."
       ),
-      resources.getColor(R.color.white),
+      resources.getColor(R.color.white, null),
       R.drawable.ic_baseline_edit_24,
       R.drawable.ic_next_arrow
     )
@@ -351,7 +331,7 @@ class MainActivity : AppCompatActivity()
       String.format(
         "Track your statistics here. You can see how you are doing on rating, success/fail percentage, symptoms, and emotional statistics."
       ),
-      resources.getColor(R.color.white),
+      resources.getColor(R.color.white, null),
       R.drawable.ic_dashboard_black_24dp,
       R.drawable.ic_next_arrow
     )
@@ -362,7 +342,7 @@ class MainActivity : AppCompatActivity()
         "You can also change your password, send feedback, and also customize your personal greeting when you log in." +
         "Hit the button below to close this tutorial."
       ),
-      resources.getColor(R.color.white),
+      resources.getColor(R.color.white, null),
       R.drawable.ic_home_black_24dp,
       R.drawable.ic_home_black_24dp
     )
@@ -378,35 +358,37 @@ class MainActivity : AppCompatActivity()
   private var saveButtonClickListener = View.OnClickListener {
     
     userPassword = passwordTextBox.editText!!.text.toString()
-    if(userPassword!="")
-    {
-      storePassword(userPassword)
-logIn(userPassword)
-      loadApp()
-    }
-    else{
-      MaterialAlertDialogBuilder(this)
-        .setTitle("Password required")
-        .setMessage("Please Enter a password")
-        .setPositiveButton("OK"){ dialog,_-> dialog.dismiss()}
-    }
-  }
-  private var enhancedSaveButtonClickListener = View.OnClickListener {
-    
-    userPassword = passwordTextBox.editText!!.text.toString()
-    val name = greetingTextBox.editText!!.text.toString()
-    appPreferences.edit().putString("greeting",name).apply()
-    if(userPassword!="")
+    if (userPassword != "")
     {
       storePassword(userPassword)
       logIn(userPassword)
       loadApp()
     }
-    else{
+    else
+    {
       MaterialAlertDialogBuilder(this)
         .setTitle("Password required")
         .setMessage("Please Enter a password")
-        .setPositiveButton("OK"){ dialog,_-> dialog.dismiss()}
+        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+    }
+  }
+  private var enhancedSaveButtonClickListener = View.OnClickListener {
+  
+    userPassword = passwordTextBox.editText!!.text.toString()
+    val name = greetingTextBox.editText!!.text.toString()
+    appPreferences.edit().putString("greeting", name).apply()
+    if (userPassword != "")
+    {
+      storePassword(userPassword)
+      logIn(userPassword)
+      loadApp()
+    }
+    else
+    {
+      MaterialAlertDialogBuilder(this)
+        .setTitle("Password required")
+        .setMessage("Please Enter a password")
+        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
     }
   }
   private var loginButtonClickListener = View.OnClickListener {
@@ -421,7 +403,6 @@ logIn(userPassword)
   {
     if (password != appPassword)
     {
-      
       MaterialAlertDialogBuilder(this)
         .setTitle("Incorrect Password")
         .setMessage(String.format("Invalid Password, Try Again?"))
@@ -437,6 +418,7 @@ logIn(userPassword)
     }
     else
     {
+  
       Toast.makeText(this, "Password correct", Toast.LENGTH_LONG).show()
       return true
       
@@ -445,13 +427,13 @@ logIn(userPassword)
   
   private fun storePassword(password: String)
   {
-    
+  
     passwordEnabled = enablePasswordSwitch.isChecked
     appPreferences.edit().putString("password", password)
       .putBoolean("enablePassword", passwordEnabled).apply()
-    if(timesRan<2)
-      appPreferences.edit().putString("dbPassword",password).apply()
-    appPassword=password
+    if (timesRan < 2)
+      appPreferences.edit().putString("dbPassword", password).apply()
+    appPassword = password
     correctPassword = true
   }
   
