@@ -1,23 +1,20 @@
 package com.activitylogger.release1.ui.dashboard
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.*
 import com.activitylogger.release1.databinding.FragmentDashboardBinding
-import com.activitylogger.release1.settings.AppSettingsActivity
-import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.emotionList
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
 import com.github.mikephil.charting.charts.LineChart
@@ -29,7 +26,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -54,44 +50,42 @@ class DashboardFragment : Fragment() {
     private lateinit var emotionXAxisLabel: TextView
     private lateinit var emotionYAxisLabel: TextView
     private lateinit var emotionBarGraphTitle: TextView
-    private lateinit var password : String
-
-    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var counterTextView: TextView
+    private lateinit var password: String
+    var ratingValue = 0.0
+    var successPge = 0.0
+    var failPge = 0.0
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-
-
+    ): View
+    {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        password = MainActivity.appPreferences.getString("password","")!!
-//Ratings Line Graph Call
+        //Ratings Line Graph Call
         Log.i("Graphing", "Graphing Line Data")
         lineGraphTitle = root.findViewById(R.id.lineChartTitleLabel)
         avgRatingLabel = binding.avgRatingTV
         ratingGraphTest = root.findViewById(R.id.graphViewTest)
+        counterTextView = root.findViewById(R.id.counter_TextView)
         xAxisTitleLabel = root.findViewById(R.id.xAxisLabel)
         yAxisTitleLabel = root.findViewById(R.id.yAxisLabel)
         graphLineData(recordsList)
         //Success Pie Chart Call
         Log.i("Graphing", "Graphing Success/Fail rate")
         successPieChart = root.findViewById(R.id.successfail_piechart)
-
         graphPieChart(recordsList)
-//Emotions Bar Graph Call
+        //Emotions Bar Graph Call
         emotionBarGraphTitle = binding.emotionBarGraphLabel
         emotionXAxisLabel = binding.xAxisLabelEmotions
         emotionYAxisLabel = binding.yAxisLabelEmotions
         barGraphView = root.findViewById(R.id.emotionBarChart)
         graphBarGraph()
-// Symptoms Bar graph Call
+        // Symptoms Bar graph Call
         graphSymptoms(recordsList)
-
-
-
-
+        printCountHeader(recordsList)
         return root
     }
 
@@ -100,43 +94,58 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+    
     //Line Graph Method Code
     @SuppressLint("ResourceType", "SetTextI18n", "SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun graphLineData(recordList: RecordsList) {
-        try {
+    private fun graphLineData(recordList: RecordsList)
+    {
+        try
+        {
             Collections.sort(recordList, Records.compareCreatedTimes)
             val ratingsData = ArrayList<Entry>()
             var avgRating = 0.0
             val recordDateList = ArrayList<String>()
-            for (record in recordList) {
+            for (record in recordList)
+            {
                 val pattern = "MM/dd/yyyy HH:mm:ss aa"
                 val formatter = SimpleDateFormat(pattern)
                 val formattedRecordDate = formatter.format(record.timeCreated)
                 recordDateList.add(formattedRecordDate)
-                ratingsData.add(Entry((recordDateList.size - 1).toFloat(), record.rating.toFloat()))
+                ratingsData.add(
+                    Entry(
+                        (recordDateList.size - 1).toFloat(),
+                        record.rating.toFloat()
+                    )
+                )
                 avgRating += record.rating
             }
             val recordDataSet = LineDataSet(ratingsData, "Ratings")
             recordDataSet.axisDependency = YAxis.AxisDependency.LEFT
-
+            
             val data = LineData(recordDataSet)
-
-            val totavgRating = (avgRating / recordDateList.size.toDouble()).roundToInt().toDouble()
-            val formatter: ValueFormatter = object : ValueFormatter() {
+            
+            val totavgRating =
+                (avgRating / recordDateList.size.toDouble()).roundToInt()
+                    .toDouble()
+            val formatter: ValueFormatter = object : ValueFormatter()
+            {
                 val recordLabels = recordDateList.toTypedArray()
-
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return recordLabels.getOrNull(value.toInt()) ?: value.toString()
+                
+                override fun getAxisLabel(value: Float, axis: AxisBase?): String
+                {
+                    return recordLabels.getOrNull(value.toInt())
+                           ?: value.toString()
                 }
-
-                override fun getPointLabel(entry: Entry?): String {
+                
+                override fun getPointLabel(entry: Entry?): String
+                {
                     return super.getPointLabel(entry)
                 }
-
+                
             }
-            avgRatingLabel.text = "Average Rating from Records is : $totavgRating"
+            avgRatingLabel.text =
+                "Average Rating from Records is : $totavgRating"
             data.setDrawValues(true)
             ratingGraphTest.description.isEnabled = false
             ratingGraphTest.setBackgroundColor(Color.WHITE)
@@ -146,31 +155,37 @@ class DashboardFragment : Fragment() {
             xAxis.granularity = 1f
             ratingGraphTest.setScaleEnabled(true)
             ratingGraphTest.isScaleXEnabled = true
-
+            
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.valueFormatter = formatter
             ratingGraphTest.isAutoScaleMinMaxEnabled = true
-
+            ratingValue = totavgRating
             lineGraphTitle.text = "Ratings from Records"
             yAxisTitleLabel.text = "Ratings"
             yAxisTitleLabel.rotation = 270f
             xAxisTitleLabel.text = "Dates"
             ratingGraphTest.invalidate()
-
-        } catch (ex: Exception) {
+            
+        }
+        catch (ex: Exception)
+        {
             ex.printStackTrace()
-            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
-
+            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG)
+                .show()
+            
         }
     }
 
     //Pie Chart Graph Method Code
     private fun graphPieChart(recordList: RecordsList) {
-        try {
+        try
+        {
             val successCTNum = recordList.successCt
             val failCTNum = recordList.failCt
             val totalCtNum = successCTNum + failCTNum
-
+    
+            successPge = (successCTNum.toDouble() / totalCtNum.toDouble())
+            failPge = (failCTNum.toDouble() / totalCtNum.toDouble())
             val pieEntries = ArrayList<PieEntry>()
             pieEntries.add(
                 PieEntry(
@@ -293,23 +308,47 @@ class DashboardFragment : Fragment() {
             binding.xSymptomAxisLabel.text = "Symptoms"
             binding.ySymptomAxisLabel.text = "Quantity"
             binding.ySymptomAxisLabel.rotation = 270f
-            binding.symptomGraphLabel.text = "ADHD Symptoms/Benefits from Records"
+            binding.symptomGraphLabel.text =
+                "ADHD Symptoms/Benefits from Records"
             binding.symptomGraphTest.invalidate()
-        } catch (ex: Exception) {
+    
+    
+        }
+        catch (ex: Exception)
+        {
             ex.printStackTrace()
-            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG)
+                .show()
         }
     }
-
-
-
-    override fun onResume() {
+    
+    fun printCountHeader(recordList: RecordsList)
+    {
+        
+        binding.counterTextView.text =
+            "You have ${recordList.count()} entries " +
+            "in your journal."
+        binding.ratingsTextView.text = "Your average rating is $ratingValue."
+        binding.successFailRateTextView.text = "You're trending more on ${
+            if
+              (successPge > failPge) "Success"
+            else "Fail"
+        } based on your success/fail " +
+                                               "ratings."
+        Collections.sort(recordList, Records.compareCreatedTimes)
+        Collections.reverse(recordList)
+        binding.symptomOccurTextView.text = "Your most recently occurring " +
+                                            "symptoms are ${recordList.first().symptoms}"
+    }
+    
+    override fun onResume()
+    {
         super.onResume()
         binding.symptomGraphTest.invalidate()
         ratingGraphTest.invalidate()
         barGraphView.invalidate()
-
-
+        
+        
     }
 
 
