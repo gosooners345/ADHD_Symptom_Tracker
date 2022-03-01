@@ -48,11 +48,13 @@
 
                 <TextView
                     android:id="@+id/counter_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_8"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:padding="5dp"
+
                     android:layout_marginBottom="@dimen/dimen_8"
                     app:layout_constraintBottom_toTopOf="@id/ratings_TextView"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,10 +63,12 @@
 
                 <TextView
                     android:id="@+id/ratings_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_8"
                     android:layout_marginTop="8dp"
+                    android:padding="5dp"
+
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="@dimen/dimen_8"
                     app:layout_constraintBottom_toTopOf="@id/success_fail_rate_TextView"
@@ -74,12 +78,14 @@
 
                 <TextView
                     android:id="@+id/success_fail_rate_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_8"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="@dimen/dimen_8"
+
+                    android:padding="5dp"
                     app:layout_constraintBottom_toTopOf="@id/symptom_occur_TextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -87,13 +93,13 @@
 
                 <TextView
                     android:id="@+id/symptom_occur_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_marginStart="@dimen/dimen_8"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="@dimen/dimen_16"
+                    android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

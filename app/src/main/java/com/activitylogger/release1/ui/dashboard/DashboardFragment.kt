@@ -324,7 +324,7 @@ class DashboardFragment : Fragment() {
     
     fun printCountHeader(recordList: RecordsList)
     {
-        
+    
         binding.counterTextView.text =
             "You have ${recordList.count()} entries " +
             "in your journal."
@@ -337,8 +337,22 @@ class DashboardFragment : Fragment() {
                                                "ratings."
         Collections.sort(recordList, Records.compareCreatedTimes)
         Collections.reverse(recordList)
-        binding.symptomOccurTextView.text = "Your most recently occurring " +
-                                            "symptoms are ${recordList.first().symptoms}"
+        if (recordList.isNotEmpty())
+            binding.symptomOccurTextView.text = "${
+                if (recordList
+                        .first().symptoms != "" ||
+                    !recordList
+                        .first()
+                        .symptoms.contains("No Symptoms")
+                ) "Your most recently occurring " +
+                  "symptoms are: " + recordList.first().symptoms
+                else
+                    "No symptoms recently " +
+                    "affecting you"
+            }"
+        else
+            binding.symptomOccurTextView.text = "It seems you may be doing " +
+                                                "good today!"
     }
     
     override fun onResume()
