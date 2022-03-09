@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro_fifth_page">You can change the look of the journal entries and other important settings like password in the settings of the app. From the settings page, you can also give feedback and email the developer about any bugs or app ideas for future updates.
+    Hit the skip button to proceed into giving your journal a password and custom name for greeting you. Let\'s make ADHD treatment better for all.</string>
+    <string name="intro_first_page">Welcome to the ADHD Journal! This journal serves you like a personal diary would. It intends to help people with ADHD track their symptoms better, track emotional state,
+    and more. This app hopefully will make ADHD treatment better as more people use it. Swipe left to continue</string>
+    <string name="intro_second_page">This journal is your private journal. This means it is going to be encrypted so that hackers and unsuspecting people can\'t just log into this app and see your private thoughts.
+    You will need to enter a password to encrypt the journal, even though you may not feel like putting it in to log in every time.
+    The journal is stored inside an encrypted database locally and the password is stored inside an encrypted file so hackers can\'t steal your info.</string>
+    <string name="intro_third_page">You can record entries by hitting the record button on the bottom right corner of the app. You can enter a title, put details about the event in,
+    how you\'re feeling, relevant ADHD symptoms, any thoughts about the event or thought in the entry you might have, a rating from 0 (bad) to 100 (great), and give it a success or fail rating.
+    </string>
+    <string name="intro_fourth_page">The dashboard gives you an overview of statistics information about your ratings, success/fail rate, emotional info, symptom data, and a summary of the data.</string>
+
+</resources>

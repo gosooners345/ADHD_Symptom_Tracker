@@ -1,8 +1,9 @@
+@file:Suppress("RemoveSingleExpressionStringTemplate")
+
 package com.activitylogger.release1.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.*
@@ -31,14 +31,14 @@ import kotlin.math.roundToInt
 
 @Suppress("SpellCheckingInspection")
 class DashboardFragment : Fragment() {
-
-
+    
+    
     private var _binding: FragmentDashboardBinding? = null
-
+    
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    
     // MP Android Chart Library and surrounding labels
     private lateinit var ratingGraphTest: LineChart
     private lateinit var lineGraphTitle: TextView
@@ -51,10 +51,9 @@ class DashboardFragment : Fragment() {
     private lateinit var emotionYAxisLabel: TextView
     private lateinit var emotionBarGraphTitle: TextView
     private lateinit var counterTextView: TextView
-    private lateinit var password: String
-    var ratingValue = 0.0
-    var successPge = 0.0
-    var failPge = 0.0
+    private var ratingValue = 0.0
+    private var successPge = 0.0
+    private var failPge = 0.0
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,8 +87,8 @@ class DashboardFragment : Fragment() {
         printCountHeader(recordsList)
         return root
     }
-
-
+    
+    
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -97,7 +96,6 @@ class DashboardFragment : Fragment() {
     
     //Line Graph Method Code
     @SuppressLint("ResourceType", "SetTextI18n", "SimpleDateFormat")
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun graphLineData(recordList: RecordsList)
     {
         try
@@ -175,7 +173,7 @@ class DashboardFragment : Fragment() {
             
         }
     }
-
+    
     //Pie Chart Graph Method Code
     private fun graphPieChart(recordList: RecordsList) {
         try
@@ -183,7 +181,7 @@ class DashboardFragment : Fragment() {
             val successCTNum = recordList.successCt
             val failCTNum = recordList.failCt
             val totalCtNum = successCTNum + failCTNum
-    
+            
             successPge = (successCTNum.toDouble() / totalCtNum.toDouble())
             failPge = (failCTNum.toDouble() / totalCtNum.toDouble())
             val pieEntries = ArrayList<PieEntry>()
@@ -211,11 +209,11 @@ class DashboardFragment : Fragment() {
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
-
+            
         }
-
+        
     }
-
+    
     //Emotion Bar Graph Method Code
     @SuppressLint("SetTextI18n")
     private fun graphBarGraph() {
@@ -238,15 +236,15 @@ class DashboardFragment : Fragment() {
             barGraphView.setBackgroundColor(resources.getColor((R.color.white)))
             val formatter: ValueFormatter = object : ValueFormatter() {
                 val recordLabels = emotionLabels.toTypedArray()
-
+                
                 override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                     return recordLabels.getOrNull(value.toInt()) ?: value.toString()
                 }
-
+                
                 override fun getBarLabel(barEntry: BarEntry?): String {
                     return super.getBarLabel(barEntry)
                 }
-
+                
             }
             xAxis.valueFormatter = formatter
             emotionBarGraphTitle.text = "Emotion Data from Records"
@@ -254,15 +252,15 @@ class DashboardFragment : Fragment() {
             barGraphView.description.isEnabled = false
             emotionYAxisLabel.rotation = 270f
             emotionXAxisLabel.text = "Emotions"
-
+            
             barGraphView.invalidate()
         } catch (ex: Exception) {
             ex.printStackTrace()
             Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
         }
-
+        
     }
-
+    
     //Symptoms Bar Graph Method Code
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("Variableexpected")
@@ -270,14 +268,14 @@ class DashboardFragment : Fragment() {
         try {
             val symptomLists = SymptomList.importData(recordList.symptomList)
             Collections.sort(symptomLists, Symptoms.compareCounts)
-
+            
             val symptomArray = ArrayList<BarEntry>()
             val symptomListLabels = ArrayList<String>()
             for ((i, symptom) in symptomLists.withIndex()) {
-
+                
                 symptomArray.add(BarEntry(i.toFloat(), symptom.count.toFloat()))
                 symptomListLabels.add(symptom.symptom)
-
+                
             }
             val symptomDataSet = BarDataSet(symptomArray, "Symptoms")
             symptomDataSet.axisDependency = YAxis.AxisDependency.LEFT
@@ -285,22 +283,22 @@ class DashboardFragment : Fragment() {
             binding.symptomGraphTest.data = data
             val xAxis = binding.symptomGraphTest.xAxis
             xAxis.labelRotationAngle = 270f
-
+            
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             binding.symptomGraphTest.setBackgroundColor(resources.getColor((R.color.white)))
             binding.symptomGraphTest.description.isEnabled = false
             xAxis.granularity = 1f
             val formatter: ValueFormatter = object : ValueFormatter() {
                 val recordLabels = symptomListLabels.toTypedArray()
-
+                
                 override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                     return recordLabels.getOrNull(value.toInt()) ?: value.toString()
                 }
-
+                
                 override fun getBarLabel(barEntry: BarEntry?): String {
                     return super.getBarLabel(barEntry)
                 }
-
+                
             }
             binding.symptomGraphTest.setScaleEnabled(true)
             binding.symptomGraphTest.isScaleXEnabled = true
@@ -311,8 +309,8 @@ class DashboardFragment : Fragment() {
             binding.symptomGraphLabel.text =
                 "ADHD Symptoms/Benefits from Records"
             binding.symptomGraphTest.invalidate()
-    
-    
+            
+            
         }
         catch (ex: Exception)
         {
@@ -322,9 +320,10 @@ class DashboardFragment : Fragment() {
         }
     }
     
-    fun printCountHeader(recordList: RecordsList)
+    @SuppressLint("SetTextI18n")
+    private fun printCountHeader(recordList: RecordsList)
     {
-    
+        
         binding.counterTextView.text =
             "You have ${recordList.count()} entries " +
             "in your journal."
@@ -364,7 +363,6 @@ class DashboardFragment : Fragment() {
         
         
     }
-
-
-
+    
+    
 }

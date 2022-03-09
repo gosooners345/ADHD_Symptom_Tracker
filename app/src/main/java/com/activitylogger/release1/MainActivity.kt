@@ -297,8 +297,7 @@ class MainActivity : AppCompatActivity()
     val firstPage = PaperOnboardingPage(
       "Welcome!",
       String.format(
-        "Welcome to the ADHD Journal! \nThis is a personal diary for recording anything and everything that impacts your life. " +
-        "\nThis can help you in therapy and so much more!\n  Swipe left to continue."
+        resources.getString(R.string.intro_first_page)
       ),
       resources.getColor(R.color.white, null),
       R.drawable.ic_home_black_24dp,
@@ -306,9 +305,11 @@ class MainActivity : AppCompatActivity()
     )
     val secondPage = PaperOnboardingPage(
       "Security", String.format(
-        "This is your personal journal. That means you can control who has access to it and who doesn\'t.\n" +
+        resources.getString(R.string.intro_second_page)
+        /*"This is your personal journal. That means you can control who has access to it and who doesn\'t.\n" +
         "This application\'s data is secured using encryption so that hackers can\'t break into your stuff. \n" +
-        "It would be a good idea to save a password so that it is secure."
+        "It would be a good idea to save a password so that it is secure."*/
+  
       ), resources.getColor(R.color.white, null),
       R.drawable.ic_security_lock,
       R.drawable.ic_next_arrow
@@ -316,11 +317,12 @@ class MainActivity : AppCompatActivity()
     val thirdPage = PaperOnboardingPage(
       "Record Entries",
       String.format(
-        "You can record events by simply hitting record on the home screen. \n" +
+        /*"You can record events by simply hitting record on the home screen. \n" +
         "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
         "        You can rate the entry  from your perspective on a scale from 0(bad) to 100(good).\n" +
         " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
-        "        Hit save and its logged."
+        "        Hit save and its logged."*/
+        resources.getString(R.string.intro_third_page)
       ),
       resources.getColor(R.color.white, null),
       R.drawable.ic_baseline_edit_24,
@@ -329,7 +331,7 @@ class MainActivity : AppCompatActivity()
     val fourthPage = PaperOnboardingPage(
       "Statistics",
       String.format(
-        "Track your statistics here. You can see how you are doing on rating, success/fail percentage, symptoms, and emotional statistics."
+        resources.getString(R.string.intro_fourth_page)
       ),
       resources.getColor(R.color.white, null),
       R.drawable.ic_dashboard_black_24dp,
@@ -338,9 +340,7 @@ class MainActivity : AppCompatActivity()
     val fifthPage = PaperOnboardingPage(
       "Finally",
       String.format(
-        "You can customize the look of your journal entries and the loading screen from the settings under display options. " +
-        "You can also change your password, send feedback, and also customize your personal greeting when you log in." +
-        "Hit the button below to close this tutorial."
+        resources.getString(R.string.intro_fifth_page)
       ),
       resources.getColor(R.color.white, null),
       R.drawable.ic_home_black_24dp,

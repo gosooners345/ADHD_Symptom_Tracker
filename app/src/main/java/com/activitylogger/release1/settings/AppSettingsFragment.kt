@@ -252,7 +252,7 @@ class AppSettingsFragment : PreferenceFragmentCompat(),
             Log.i(key, "Everything has been reset except records")
             Toast.makeText(
               requireContext(),
-              "Everything has been reset except your logs.",
+              "Everything has been reset except your records.",
               Toast.LENGTH_LONG
             ).show()
     

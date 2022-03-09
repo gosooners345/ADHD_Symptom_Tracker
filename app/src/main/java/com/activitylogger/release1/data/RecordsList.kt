@@ -1,10 +1,9 @@
-@file:Suppress("unused", "SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection")
 
 package com.activitylogger.release1.data
 
-import java.util.*
-import kotlin.collections.ArrayList
 import com.activitylogger.release1.utils.StringUtils
+import java.util.*
 
 class RecordsList : ArrayList<Records>()
 {
@@ -13,9 +12,10 @@ class RecordsList : ArrayList<Records>()
     private var recordIDs = ArrayList<Int>()
     var successCt = 0
     var failCt = 0
+    
+    //  var avgRatingStat =0.0
     var emotionList = ArrayList<String>()
     var symptomList = ArrayList<String>()
-    var dateRatingList = ArrayList<DatesandRatings>()
     private var recordStateList = ArrayList<Records.RecordState>()
     fun setRecordData()
     {
@@ -30,6 +30,7 @@ class RecordsList : ArrayList<Records>()
             recordDates.add(record.timeCreated)
             recordStateList.add(Records.RecordState.COLLAPSED)
             recordIDs.add(record.id)
+//            avgRatingStat +=record.rating
             if (record.successState == true)
                 successCt++
             else
@@ -54,14 +55,7 @@ class RecordsList : ArrayList<Records>()
                 symptomList.add("")
             }
         }
+    
     }
 }
 
-class DatesandRatings(var date : Date,var rating:ArrayList<Double>)
-{
-    companion object{
-        var compareDates = java.util.Comparator<DatesandRatings>{
-            r1,r2 -> r1.date.compareTo(r2.date)
-        }
-    }
-}
