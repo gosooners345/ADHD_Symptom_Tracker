@@ -63,13 +63,14 @@ class MainActivity : AppCompatActivity()
   override fun onCreate(savedInstanceState: Bundle?)
   {
     super.onCreate(savedInstanceState)
+    appPreferences = getSecretSharedPref(this)
     SQLiteDatabase.loadLibs(this)
     oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
     oldPrefs.edit().clear().apply()
     
     oldPrefs = getSharedPreferences(PREFNAME, MODE_PRIVATE)
-    appPreferences = getSecretSharedPref(this)
-    
+  
+  
     var transferred = appPreferences.getBoolean("transferred", false)
     
     appPassword = appPreferences.getString("password", "").toString()
