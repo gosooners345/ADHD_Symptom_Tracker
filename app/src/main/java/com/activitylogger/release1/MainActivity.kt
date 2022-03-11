@@ -38,7 +38,6 @@ import net.sqlcipher.database.SQLiteDatabase
 class MainActivity : AppCompatActivity()
 {
   
-  
   private var correctPassword = false
   private lateinit var fragmentManager: FragmentManager
   private lateinit var passWordPreferences: SharedPreferences
@@ -67,10 +66,8 @@ class MainActivity : AppCompatActivity()
     SQLiteDatabase.loadLibs(this)
     oldPrefs = getSharedPreferences("ADHDTracker", MODE_PRIVATE)
     oldPrefs.edit().clear().apply()
-    
     oldPrefs = getSharedPreferences(PREFNAME, MODE_PRIVATE)
-  
-  
+    
     var transferred = appPreferences.getBoolean("transferred", false)
     
     appPassword = appPreferences.getString("password", "").toString()
@@ -78,7 +75,6 @@ class MainActivity : AppCompatActivity()
     if (transferred == false)
     {
       transferred = true
-      
       appPreferences.edit()
         .putBoolean("firstUse", oldPrefs.getBoolean("firstUse", false))
         .putString("password", oldPrefs.getString("password", ""))
@@ -86,9 +82,7 @@ class MainActivity : AppCompatActivity()
         .putBoolean(
           "enablePassword", oldPrefs.getBoolean("enablePassword", true)
         )
-        
         .putBoolean("transferred", transferred).apply()
-      
     }
     if (transferred)
     {
@@ -142,14 +136,11 @@ class MainActivity : AppCompatActivity()
     fragmentTransaction.commit()
     skipButton = findViewById(R.id.skipButton)
     skipButton.setOnClickListener(skipButtonClickListener)
-    
-    
   }
   
   @SuppressLint("SetTextI18n")
   fun loginScreen()
   {
-  
     if (firstUse == true)
     {
       setContentView(R.layout.login_screen)
@@ -158,9 +149,9 @@ class MainActivity : AppCompatActivity()
       title.text = "Welcome back, $name! Enter your password to access " +
                    "your journal."
       appPassword = appPreferences.getString("password", "").toString()
-    
-    
-    
+      
+      
+      
       enterButton = findViewById(R.id.enterButton)
       passwordTextBox = findViewById(R.id.passwordTextBox)
       passwordTextBox.editText!!
@@ -260,7 +251,6 @@ class MainActivity : AppCompatActivity()
       enterButton.setOnClickListener(enhancedSaveButtonClickListener)
   
     }
-  
   }
   
   private var skipButtonClickListener = View.OnClickListener {
@@ -269,13 +259,11 @@ class MainActivity : AppCompatActivity()
   
   fun loadApp()
   {
-    
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
     val navView: BottomNavigationView = binding.navView
     val navController =
       findNavController(R.id.nav_host_fragment_activity_main)
-    
     val appBarConfiguration = AppBarConfiguration(
       setOf(
         R.id.navigation_home, R.id.navigation_dashboard
@@ -307,10 +295,6 @@ class MainActivity : AppCompatActivity()
     val secondPage = PaperOnboardingPage(
       "Security", String.format(
         resources.getString(R.string.intro_second_page)
-        /*"This is your personal journal. That means you can control who has access to it and who doesn\'t.\n" +
-        "This application\'s data is secured using encryption so that hackers can\'t break into your stuff. \n" +
-        "It would be a good idea to save a password so that it is secure."*/
-  
       ), resources.getColor(R.color.white, null),
       R.drawable.ic_security_lock,
       R.drawable.ic_next_arrow
@@ -318,11 +302,6 @@ class MainActivity : AppCompatActivity()
     val thirdPage = PaperOnboardingPage(
       "Record Entries",
       String.format(
-        /*"You can record events by simply hitting record on the home screen. \n" +
-        "        You can log event details, emotions surrounding event, any lessons learned, sources of pain, etc.\n" +
-        "        You can rate the entry  from your perspective on a scale from 0(bad) to 100(good).\n" +
-        " You can include any ADHD symptoms that impacted the event or entry by clicking the symptoms area on screen.        \n" +
-        "        Hit save and its logged."*/
         resources.getString(R.string.intro_third_page)
       ),
       resources.getColor(R.color.white, null),
@@ -374,7 +353,6 @@ class MainActivity : AppCompatActivity()
     }
   }
   private var enhancedSaveButtonClickListener = View.OnClickListener {
-  
     userPassword = passwordTextBox.editText!!.text.toString()
     val name = greetingTextBox.editText!!.text.toString()
     appPreferences.edit().putString("greeting", name).apply()
@@ -419,16 +397,13 @@ class MainActivity : AppCompatActivity()
     }
     else
     {
-  
       Toast.makeText(this, "Password correct", Toast.LENGTH_LONG).show()
       return true
-      
     }
   }
   
   private fun storePassword(password: String)
   {
-  
     passwordEnabled = enablePasswordSwitch.isChecked
     appPreferences.edit().putString("password", password)
       .putBoolean("enablePassword", passwordEnabled).apply()
@@ -443,7 +418,6 @@ class MainActivity : AppCompatActivity()
     val masterKey = MasterKey.Builder(context)
       .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
       .build()
-    
     return EncryptedSharedPreferences.create(
       context,
       PREFNAME + "_secured",
