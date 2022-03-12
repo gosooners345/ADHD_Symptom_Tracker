@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entry_categories">
+        <item>ADHD Event</item>
+        <item>Special Life Event</item>
+        <item>Personal Thoughts</item>
+        <item>List</item>
+        <item>Reminders</item>
+        <item>Other Mental Health Event</item>
+    </string-array>
+
+</resources>

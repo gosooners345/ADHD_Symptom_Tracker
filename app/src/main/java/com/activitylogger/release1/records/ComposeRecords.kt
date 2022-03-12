@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
 import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
@@ -18,6 +19,7 @@ import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,7 +27,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
-import kotlin.collections.ArrayList
 
 @DelicateCoroutinesApi
 @Suppress("SpellCheckingInspection", "LiftReturnOrAssignment")
@@ -53,16 +54,24 @@ private var recordSymptoms = ""
     private lateinit var recordEmotion : TextInputLayout
     private lateinit var recordSources : TextInputLayout
     private lateinit var enterArrow : ImageView
+    
     private lateinit var symptomselectorCB : TextView
     private lateinit var ratingSeekbar : SeekBar
     private lateinit var successChip : Chip
      var success =false
-
+    
     @SuppressLint("SetTextI18n")
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.records_compose_layout)
+        if (MainActivity.buildType == "debug")
+        {
+            setContentView(R.layout.records_compose_layout_test)
+            
+        }
+        else
+            setContentView(R.layout.records_compose_layout)
+        
         titleHdr = findViewById(R.id.Login_TitleHdr)
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
@@ -76,36 +85,41 @@ private var recordSymptoms = ""
         successChip.setOnCheckedChangeListener(successChanged)
         recordsRepo = RecordsRepository(this)
         symptomselectorCB = findViewById(R.id.symptomSelectorCB)
-symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
-symptomselectorCB.setOnClickListener(symptomSelectedListener)
+        symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
+        symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
         @RequiresApi(Build.VERSION_CODES.O)
-        if (!intentInfo) {
-            titleHdr.text="Edit Record"
+        if (!intentInfo)
+        {
+            titleHdr.text = "Edit Record"
             recordTitle.editText!!.setText(record.title)
             recordContent.editText!!.setText(record.content)
             recordEmotion.editText!!.setText(record.emotions)
             successChip.isChecked = record.successState!!
             ratingSeekbar.progress = record.rating.toInt()
-            if(record.sources!="")
+            if (record.sources != "")
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            if(record.symptoms!="") {
+            if (record.symptoms != "")
+            {
                 symptomselectorCB.text = record.symptoms
                 recordSymptoms = symptomselectorCB.text.toString()
             }
-            else {
+            else
+            {
                 symptomselectorCB.text = ""
                 recordSymptoms = symptomselectorCB.text.toString()
             }
-
-
-Log.i(TAG,"Accessing Record for Editing")
-
-        } else {
+            
+            
+            Log.i(TAG, "Accessing Record for Editing")
+            
+        }
+        else
+        {
             titleHdr.text = "New Record"
-            record= Records(Date())
+            record = Records(Date())
             recordTitle.editText!!.setText(emptyString)
             recordContent.editText!!.setText(emptyString)
             recordEmotion.editText!!.setText(emptyString)
@@ -113,52 +127,147 @@ Log.i(TAG,"Accessing Record for Editing")
             successChip.isChecked = false
             ratingSeekbar.progress = 0
             symptomselectorCB.text = ""
-
-            recordSymptoms=symptomselectorCB.text.toString()
-
-            Log.i(TAG,"Logging New Event")
-
-
+            
+            recordSymptoms = symptomselectorCB.text.toString()
+            
+            Log.i(TAG, "Logging New Event")
+            
+            
         }
-        recordTitle.editText!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
-                recordTitleString = s.toString()
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
-        recordContent.editText!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                recordContentString = s.toString()
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-
-        })
-        recordEmotion.editText!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
-                recordEmotionString = s.toString()
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
-        recordSources.editText!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, after: Int) {
-                 recordSourcesString= s.toString()
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
-
+        recordTitle.editText!!.addTextChangedListener(object : TextWatcher
+                                                      {
+                                                          override fun beforeTextChanged(
+                                                              s: CharSequence,
+                                                              start: Int,
+                                                              before: Int,
+                                                              count: Int
+                                                          )
+                                                          {
+                                                          }
+            
+                                                          override fun onTextChanged(
+                                                              s: CharSequence,
+                                                              start: Int,
+                                                              before: Int,
+                                                              after: Int
+                                                          )
+                                                          {
+                                                              recordTitleString =
+                                                                  s.toString()
+                                                          }
+            
+                                                          override fun afterTextChanged(
+                                                              editable: Editable
+                                                          )
+                                                          {
+                                                          }
+                                                      })
+        recordContent.editText!!.addTextChangedListener(object : TextWatcher
+                                                        {
+                                                            override fun beforeTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                count: Int,
+                                                                after: Int
+                                                            )
+                                                            {
+                                                            }
+            
+                                                            override fun onTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                before: Int,
+                                                                count: Int
+                                                            )
+                                                            {
+                                                                recordContentString =
+                                                                    s.toString()
+                                                            }
+            
+                                                            override fun afterTextChanged(
+                                                                editable: Editable
+                                                            )
+                                                            {
+                                                            }
+            
+                                                        })
+        recordEmotion.editText!!.addTextChangedListener(object : TextWatcher
+                                                        {
+                                                            override fun beforeTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                before: Int,
+                                                                count: Int
+                                                            )
+                                                            {
+                                                            }
+            
+                                                            override fun onTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                before: Int,
+                                                                after: Int
+                                                            )
+                                                            {
+                                                                recordEmotionString =
+                                                                    s.toString()
+                                                            }
+            
+                                                            override fun afterTextChanged(
+                                                                editable: Editable
+                                                            )
+                                                            {
+                                                            }
+                                                        })
+        recordSources.editText!!.addTextChangedListener(object : TextWatcher
+                                                        {
+                                                            override fun beforeTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                before: Int,
+                                                                count: Int
+                                                            )
+                                                            {
+                                                            }
+            
+                                                            override fun onTextChanged(
+                                                                s: CharSequence,
+                                                                start: Int,
+                                                                before: Int,
+                                                                after: Int
+                                                            )
+                                                            {
+                                                                recordSourcesString =
+                                                                    s.toString()
+                                                            }
+            
+                                                            override fun afterTextChanged(
+                                                                editable: Editable
+                                                            )
+                                                            {
+                                                            }
+                                                        })
+        
         saveButton = findViewById(R.id.saveNote)
         saveButton.setOnClickListener(saveRecord)
         editButton = findViewById(R.id.editButton)
         editButton.setOnClickListener(editRecord)
-
+        if (MainActivity.buildType == "debug")
+        {
+            var types = ArrayList<String>()
+            types.addAll(resources.getStringArray(R.array.entry_categories))
+            var typeAdapter = ArrayAdapter(
+                this, R.layout
+                    .support_simple_spinner_dropdown_item, types
+            )
+            
+            var recordSpinner = SmartMaterialSpinner<Any>(this)
+            recordSpinner.item = types as List<Any>?
+            
+            recordSpinner.adapter = typeAdapter
+            
+            
+        }
     }
 
     private val intentInfo : Boolean
@@ -178,6 +287,8 @@ Log.i(TAG,"Accessing Record for Editing")
             }
 
         }
+    
+    
     private var symptomSelectedListener = View.OnClickListener{
 val sendIntent = Intent(this,ItemSelectorFragment::class.java)
 
