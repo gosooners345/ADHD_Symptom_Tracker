@@ -54,6 +54,7 @@ private var recordSymptoms = ""
     private lateinit var symptomselectorCB : TextView
     private lateinit var ratingSeekbar: SeekBar
     private lateinit var ratingDisplay: TextView
+    private lateinit var ratingRanking: TextView
     private lateinit var successChip: Chip
      var success =false
     
@@ -76,12 +77,14 @@ private var recordSymptoms = ""
         recordSources = findViewById(R.id.sourcesContainer)
         ratingSeekbar = findViewById(R.id.ratingSeekbar)
         ratingDisplay = findViewById(R.id.ratingValue)
+        ratingRanking = findViewById(R.id.rating_ranking)
         successChip = findViewById(R.id.successchip)
         symptomSelectorCardView = findViewById(R.id.symptomSelectorCBLayout)
         enterArrow = findViewById(R.id.enterArrow)
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
         successChip.setOnCheckedChangeListener(successChanged)
         recordsRepo = RecordsRepository(this)
+    
         symptomselectorCB = findViewById(R.id.symptomSelectorCB)
         symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
         symptomselectorCB.setOnClickListener(symptomSelectedListener)
@@ -96,6 +99,30 @@ private var recordSymptoms = ""
             successChip.isChecked = record.successState!!
             ratingSeekbar.progress = record.rating.toInt()
             ratingDisplay.text = ratingSeekbar.progress.toString()
+            if (ratingDisplay.text.toString().toInt() > 89)
+            {
+                ratingRanking.text = "Great"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 79) &&
+                     ratingDisplay.text.toString().toInt() < 90
+            )
+            {
+                ratingRanking.text = "Good"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 69) &&
+                     ratingDisplay.text.toString().toInt() < 80
+            )
+            {
+                ratingRanking.text = "Okay"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 49) &&
+                     ratingDisplay.text.toString().toInt() < 70
+            )
+            {
+                ratingRanking.text = "Could be better"
+            }
+            else
+                ratingRanking.text = "Poor"
             if (record.sources != "")
                 recordSources.editText!!.setText(record.sources)
             else
@@ -126,13 +153,37 @@ private var recordSymptoms = ""
             successChip.isChecked = false
             ratingSeekbar.progress = 0
             ratingDisplay.text = ratingSeekbar.progress.toString()
+            if (ratingDisplay.text.toString().toInt() > 89)
+            {
+                ratingRanking.text = "Great"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 79) &&
+                     ratingDisplay.text.toString().toInt() < 90
+            )
+            {
+                ratingRanking.text = "Good"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 69) &&
+                     ratingDisplay.text.toString().toInt() < 80
+            )
+            {
+                ratingRanking.text = "Okay"
+            }
+            else if ((ratingDisplay.text.toString().toInt() > 49) &&
+                     ratingDisplay.text.toString().toInt() < 70
+            )
+            {
+                ratingRanking.text = "Could be better"
+            }
+            else
+                ratingRanking.text = "Poor"
             symptomselectorCB.text = ""
-            
+    
             recordSymptoms = symptomselectorCB.text.toString()
-            
+    
             Log.i(TAG, "Logging New Event")
-            
-            
+    
+    
         }
         recordTitle.editText!!.addTextChangedListener(object : TextWatcher
                                                       {
@@ -240,14 +291,148 @@ private var recordSymptoms = ""
                                                                 recordSourcesString =
                                                                     s.toString()
                                                             }
-            
+    
                                                             override fun afterTextChanged(
                                                                 editable: Editable
                                                             )
                                                             {
                                                             }
                                                         })
+        ratingDisplay.addTextChangedListener(object : TextWatcher
+                                             {
+                                                 override fun beforeTextChanged(
+                                                     s: CharSequence?,
+                                                     start: Int,
+                                                     count: Int,
+                                                     after: Int
+                                                 )
+                                                 {
+                                                     if (s!!.toString()
+                                                             .toInt() > 89
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Great"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 79) &&
+                                                              s.toString()
+                                                                  .toInt() < 90
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Good"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 69) &&
+                                                              s.toString()
+                                                                  .toInt() < 80
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Okay"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 49) &&
+                                                              s.toString()
+                                                                  .toInt() < 70
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Could be better"
+                                                     }
+                                                     else
+                                                         ratingRanking.text =
+                                                             "Poor"
+                                                 }
         
+                                                 override fun onTextChanged(
+                                                     s: CharSequence?,
+                                                     start: Int,
+                                                     before: Int,
+                                                     count: Int
+                                                 )
+                                                 {
+                                                     if (s!!.toString()
+                                                             .toInt() > 89
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Great"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 79) &&
+                                                              s.toString()
+                                                                  .toInt() < 90
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Good"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 69) &&
+                                                              s.toString()
+                                                                  .toInt() < 80
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Okay"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 49) &&
+                                                              s.toString()
+                                                                  .toInt() < 70
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Could be better"
+                                                     }
+                                                     else
+                                                         ratingRanking.text =
+                                                             "Poor"
+                                                 }
+        
+                                                 override fun afterTextChanged(s: Editable?)
+                                                 {
+                                                     if (s!!.toString()
+                                                             .toInt() > 89
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Great"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 79) &&
+                                                              s.toString()
+                                                                  .toInt() < 90
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Good"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 69) &&
+                                                              s.toString()
+                                                                  .toInt() < 80
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Okay"
+                                                     }
+                                                     else if ((s.toString()
+                                                                   .toInt() > 49) &&
+                                                              s.toString()
+                                                                  .toInt() < 70
+                                                     )
+                                                     {
+                                                         ratingRanking.text =
+                                                             "Could be better"
+                                                     }
+                                                     else
+                                                         ratingRanking.text =
+                                                             "Poor"
+                                                 }
+                                             })
         saveButton = findViewById(R.id.saveNote)
         saveButton.setOnClickListener(saveRecord)
         editButton = findViewById(R.id.editButton)
@@ -269,7 +454,8 @@ private var recordSymptoms = ""
             
         }*/
     }
-
+    
+    
     private val intentInfo : Boolean
         get(){
             if (intent.hasExtra("RECORDSENT")) {
