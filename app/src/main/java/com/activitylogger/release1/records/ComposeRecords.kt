@@ -2,16 +2,13 @@ package com.activitylogger.release1.records
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.activitylogger.release1.MainActivity
 import com.activitylogger.release1.R
 import com.activitylogger.release1.async.RecordsRepository
 import com.activitylogger.release1.customlayouthandlers.ItemSelectorFragment
@@ -19,7 +16,6 @@ import com.activitylogger.release1.data.Records
 import com.activitylogger.release1.ui.home.HomeFragment
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.homeViewModel
 import com.activitylogger.release1.ui.home.HomeFragment.Companion.recordsList
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -56,28 +52,30 @@ private var recordSymptoms = ""
     private lateinit var enterArrow : ImageView
     
     private lateinit var symptomselectorCB : TextView
-    private lateinit var ratingSeekbar : SeekBar
-    private lateinit var successChip : Chip
+    private lateinit var ratingSeekbar: SeekBar
+    private lateinit var ratingDisplay: TextView
+    private lateinit var successChip: Chip
      var success =false
     
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        if (MainActivity.buildType == "debug")
-        {
-            setContentView(R.layout.records_compose_layout_test)
-            
-        }
-        else
-            setContentView(R.layout.records_compose_layout)
-        
+        /*  if (MainActivity.buildType == "debug")
+          {
+              setContentView(R.layout.records_compose_layout_test)
+              
+          }*/
+    
+        setContentView(R.layout.records_compose_layout)
+    
         titleHdr = findViewById(R.id.Login_TitleHdr)
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
         recordEmotion = findViewById(R.id.emotionsContainer)
         recordSources = findViewById(R.id.sourcesContainer)
         ratingSeekbar = findViewById(R.id.ratingSeekbar)
+        ratingDisplay = findViewById(R.id.ratingValue)
         successChip = findViewById(R.id.successchip)
         symptomSelectorCardView = findViewById(R.id.symptomSelectorCBLayout)
         enterArrow = findViewById(R.id.enterArrow)
@@ -88,7 +86,7 @@ private var recordSymptoms = ""
         symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
         symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
-        @RequiresApi(Build.VERSION_CODES.O)
+    
         if (!intentInfo)
         {
             titleHdr.text = "Edit Record"
@@ -97,6 +95,7 @@ private var recordSymptoms = ""
             recordEmotion.editText!!.setText(record.emotions)
             successChip.isChecked = record.successState!!
             ratingSeekbar.progress = record.rating.toInt()
+            ratingDisplay.text = ratingSeekbar.progress.toString()
             if (record.sources != "")
                 recordSources.editText!!.setText(record.sources)
             else
@@ -126,6 +125,7 @@ private var recordSymptoms = ""
             recordSources.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
+            ratingDisplay.text = ratingSeekbar.progress.toString()
             symptomselectorCB.text = ""
             
             recordSymptoms = symptomselectorCB.text.toString()
@@ -252,7 +252,7 @@ private var recordSymptoms = ""
         saveButton.setOnClickListener(saveRecord)
         editButton = findViewById(R.id.editButton)
         editButton.setOnClickListener(editRecord)
-        if (MainActivity.buildType == "debug")
+        /*if (MainActivity.buildType == "debug")
         {
             var types = ArrayList<String>()
             types.addAll(resources.getStringArray(R.array.entry_categories))
@@ -267,11 +267,10 @@ private var recordSymptoms = ""
             recordSpinner.adapter = typeAdapter
             
             
-        }
+        }*/
     }
 
     private val intentInfo : Boolean
-        @RequiresApi(Build.VERSION_CODES.O)
         get(){
             if (intent.hasExtra("RECORDSENT")) {
 
@@ -332,15 +331,17 @@ startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
     private var ratingSeekBarListener :SeekBar.OnSeekBarChangeListener = object :SeekBar.OnSeekBarChangeListener{
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             ratingsInfo = progress.times(1.0)
-
+            ratingDisplay.text = progress.toString()
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
             ratingsInfo = seekBar!!.progress.times(1.0)
+            ratingDisplay.text = seekBar!!.progress.toString()
         }
 
         override fun onStopTrackingTouch(seekBar: SeekBar?) {
             ratingsInfo = seekBar!!.progress.times(1.0)
+            ratingDisplay.text = seekBar!!.progress.toString()
         }
 
     }

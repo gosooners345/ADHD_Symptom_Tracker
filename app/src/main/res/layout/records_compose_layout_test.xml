@@ -35,25 +35,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-                android:id="@+id/recordType_CB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/spinner_outline"
-                android:entries="@array/entry_categories"
-                android:paddingLeft="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Login_TitleHdr"
-                app:smsp_arrowColor="?attr/colorOnBackground"
-                app:smsp_floatingLabelColor="?attr/colorPrimary"
-                app:smsp_itemColor="?attr/colorOnBackground"
-
-                app:smsp_itemListColor="?attr/colorOnBackground" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/topicContainer"
                 android:layout_width="0dp"
@@ -67,7 +48,7 @@
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recordType_CB">
+                app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordTextBox"
@@ -191,6 +172,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/symptomSelectorCBLayout" />
 
 
+            <!-- <TextView
+                 android:id="@+id/symptomSelectorCB"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="8dp"
+                 android:layout_marginTop="16dp"
+                 android:layout_marginEnd="8dp"
+                 android:layout_marginBottom="16dp"
+                 android:background="@drawable/spinner_outline"
+                 android:minHeight="48dp"
+                 android:paddingStart="5dp"
+                 android:text="here"
+                 android:textAlignment="textStart"
+                 android:textColor="@color/itemselected"
+                 android:textSize="14sp"
+                 app:layout_constraintBottom_toTopOf="@+id/divider"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/symptomTH" />-->
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/symptomSelectorCBLayout"
                 android:layout_width="match_parent"
@@ -288,6 +289,18 @@
                 android:padding="@dimen/dimen_padding_5"
                 android:text="Rating:"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <TextView
+                android:id="@+id/ratingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layoutDirection="locale"
+                android:padding="@dimen/dimen_padding_5"
+                android:text=""
+                app:layout_constraintStart_toEndOf="@id/ratingTitleBar"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <com.google.android.material.chip.Chip
