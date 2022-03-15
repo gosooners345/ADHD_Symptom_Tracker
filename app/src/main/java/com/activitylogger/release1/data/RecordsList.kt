@@ -5,6 +5,8 @@ package com.activitylogger.release1.data
 import com.activitylogger.release1.utils.StringUtils
 import java.util.*
 
+// ADHD Records List.
+
 class RecordsList : ArrayList<Records>()
 {
     private var recordStats = ArrayList<Double>()

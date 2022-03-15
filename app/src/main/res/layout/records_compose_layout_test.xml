@@ -65,7 +65,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="What's on your mind?"
+                android:hint="What happened?"
                 android:layoutDirection="locale"
                 android:padding="5dp"
 
@@ -114,7 +114,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="Did you want to add anything?"
+                android:hint="Any lessons learned or any thoughts about this?"
                 android:layoutDirection="locale"
                 android:padding="5dp"
                 app:endIconMode="clear_text"
@@ -172,25 +172,25 @@
                 app:layout_constraintTop_toBottomOf="@+id/symptomSelectorCBLayout" />
 
 
-           <!-- <TextView
-                android:id="@+id/symptomSelectorCB"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/spinner_outline"
-                android:minHeight="48dp"
-                android:paddingStart="5dp"
-                android:text="here"
-                android:textAlignment="textStart"
-                android:textColor="@color/itemselected"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/divider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/symptomTH" />-->
+            <!-- <TextView
+                 android:id="@+id/symptomSelectorCB"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="8dp"
+                 android:layout_marginTop="16dp"
+                 android:layout_marginEnd="8dp"
+                 android:layout_marginBottom="16dp"
+                 android:background="@drawable/spinner_outline"
+                 android:minHeight="48dp"
+                 android:paddingStart="5dp"
+                 android:text="here"
+                 android:textAlignment="textStart"
+                 android:textColor="@color/itemselected"
+                 android:textSize="14sp"
+                 app:layout_constraintBottom_toTopOf="@+id/divider"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/symptomTH" />-->
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/symptomSelectorCBLayout"
@@ -301,18 +301,6 @@
                 android:padding="@dimen/dimen_padding_5"
                 android:text=""
                 app:layout_constraintStart_toEndOf="@id/ratingTitleBar"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-            <TextView
-                android:id="@+id/rating_ranking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layoutDirection="locale"
-                android:padding="@dimen/dimen_padding_5"
-                android:text=""
-                app:layout_constraintStart_toEndOf="@id/ratingValue"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <com.google.android.material.chip.Chip
