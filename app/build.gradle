@@ -14,8 +14,8 @@ android {
         applicationId "com.activitylogger.release1"
         minSdk 26
         targetSdk 31
-        versionCode 23
-        versionName "1.7.9.2"
+        versionCode 24
+        versionName "1.7.9.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {

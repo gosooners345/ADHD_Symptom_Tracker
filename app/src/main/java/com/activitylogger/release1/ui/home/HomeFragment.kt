@@ -6,14 +6,12 @@ import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*

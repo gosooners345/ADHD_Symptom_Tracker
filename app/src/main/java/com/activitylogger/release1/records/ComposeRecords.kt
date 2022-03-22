@@ -39,7 +39,8 @@ private lateinit var saveButton : Button
     var recordTitleString=""
     var recordContentString=""
     var recordEmotionString=""
-    var recordSourcesString=""
+    var recordSourcesString = ""
+    var recordTagsString = ""
     private val emptyString = ""
     var ratingsInfo =0.0
 private var recordSymptoms = ""
@@ -49,9 +50,9 @@ private var recordSymptoms = ""
     private lateinit var recordContent : TextInputLayout
     private lateinit var recordEmotion : TextInputLayout
     private lateinit var recordSources : TextInputLayout
-    private lateinit var enterArrow : ImageView
-    
-    private lateinit var symptomselectorCB : TextView
+    private lateinit var enterArrow: ImageView
+    private lateinit var tagsContainer: TextInputLayout
+    private lateinit var symptomselectorCB: TextView
     private lateinit var ratingSeekbar: SeekBar
     private lateinit var ratingDisplay: TextView
     private lateinit var ratingRanking: TextView
@@ -67,14 +68,15 @@ private var recordSymptoms = ""
               setContentView(R.layout.records_compose_layout_test)
               
           }*/
-    
-        setContentView(R.layout.records_compose_layout)
+
+        setContentView(R.layout.records_compose_layout_test)
     
         titleHdr = findViewById(R.id.Login_TitleHdr)
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
         recordEmotion = findViewById(R.id.emotionsContainer)
         recordSources = findViewById(R.id.sourcesContainer)
+        tagsContainer = findViewById(R.id.tagsContainer)
         ratingSeekbar = findViewById(R.id.ratingSeekbar)
         ratingDisplay = findViewById(R.id.ratingValue)
         ratingRanking = findViewById(R.id.rating_ranking)
@@ -84,7 +86,7 @@ private var recordSymptoms = ""
         ratingSeekbar.setOnSeekBarChangeListener(ratingSeekBarListener)
         successChip.setOnCheckedChangeListener(successChanged)
         recordsRepo = RecordsRepository(this)
-    
+
         symptomselectorCB = findViewById(R.id.symptomSelectorCB)
         symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
         symptomselectorCB.setOnClickListener(symptomSelectedListener)
@@ -99,48 +101,40 @@ private var recordSymptoms = ""
             successChip.isChecked = record.successState!!
             ratingSeekbar.progress = record.rating.toInt()
             ratingDisplay.text = ratingSeekbar.progress.toString()
-            if (ratingDisplay.text.toString().toInt() > 89)
-            {
+            if (ratingDisplay.text.toString().toInt() > 89) {
                 ratingRanking.text = "Great"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 79) &&
-                     ratingDisplay.text.toString().toInt() < 90
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 79) &&
+                ratingDisplay.text.toString().toInt() < 90
+            ) {
                 ratingRanking.text = "Good"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 69) &&
-                     ratingDisplay.text.toString().toInt() < 80
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 69) &&
+                ratingDisplay.text.toString().toInt() < 80
+            ) {
                 ratingRanking.text = "Okay"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 49) &&
-                     ratingDisplay.text.toString().toInt() < 70
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 49) &&
+                ratingDisplay.text.toString().toInt() < 70
+            ) {
                 ratingRanking.text = "Could be better"
-            }
-            else
+            } else
                 ratingRanking.text = "Poor"
             if (record.sources != "")
                 recordSources.editText!!.setText(record.sources)
             else
                 recordSources.editText!!.setText(emptyString)
-            if (record.symptoms != "")
-            {
+            if (record.symptoms != "") {
                 symptomselectorCB.text = record.symptoms
                 recordSymptoms = symptomselectorCB.text.toString()
-            }
-            else
-            {
+            } else {
                 symptomselectorCB.text = ""
                 recordSymptoms = symptomselectorCB.text.toString()
             }
-            
-            
+            if (record.tags != "")
+                tagsContainer.editText!!.setText(record.tags)
+            else
+                tagsContainer.editText!!.setText(emptyString)
+
             Log.i(TAG, "Accessing Record for Editing")
-            
+
         }
         else
         {
@@ -150,37 +144,30 @@ private var recordSymptoms = ""
             recordContent.editText!!.setText(emptyString)
             recordEmotion.editText!!.setText(emptyString)
             recordSources.editText!!.setText(emptyString)
+            tagsContainer.editText!!.setText(emptyString)
             successChip.isChecked = false
             ratingSeekbar.progress = 0
             ratingDisplay.text = ratingSeekbar.progress.toString()
-            if (ratingDisplay.text.toString().toInt() > 89)
-            {
+            if (ratingDisplay.text.toString().toInt() > 89) {
                 ratingRanking.text = "Great"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 79) &&
-                     ratingDisplay.text.toString().toInt() < 90
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 79) &&
+                ratingDisplay.text.toString().toInt() < 90
+            ) {
                 ratingRanking.text = "Good"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 69) &&
-                     ratingDisplay.text.toString().toInt() < 80
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 69) &&
+                ratingDisplay.text.toString().toInt() < 80
+            ) {
                 ratingRanking.text = "Okay"
-            }
-            else if ((ratingDisplay.text.toString().toInt() > 49) &&
-                     ratingDisplay.text.toString().toInt() < 70
-            )
-            {
+            } else if ((ratingDisplay.text.toString().toInt() > 49) &&
+                ratingDisplay.text.toString().toInt() < 70
+            ) {
                 ratingRanking.text = "Could be better"
-            }
-            else
+            } else
                 ratingRanking.text = "Poor"
             symptomselectorCB.text = ""
     
             recordSymptoms = symptomselectorCB.text.toString()
-    
+
             Log.i(TAG, "Logging New Event")
     
     
@@ -291,23 +278,44 @@ private var recordSymptoms = ""
                                                                 recordSourcesString =
                                                                     s.toString()
                                                             }
-    
+
                                                             override fun afterTextChanged(
                                                                 editable: Editable
-                                                            )
-                                                            {
+                                                            ) {
                                                             }
                                                         })
-        ratingDisplay.addTextChangedListener(object : TextWatcher
-                                             {
-                                                 override fun beforeTextChanged(
-                                                     s: CharSequence?,
-                                                     start: Int,
-                                                     count: Int,
-                                                     after: Int
-                                                 )
-                                                 {
-                                                     if (s!!.toString()
+        tagsContainer.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                after: Int
+            ) {
+                recordTagsString =
+                    s.toString()
+            }
+
+            override fun afterTextChanged(
+                editable: Editable
+            ) {
+            }
+        })
+        ratingDisplay.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                if (s!!.toString()
                                                              .toInt() > 89
                                                      )
                                                      {
@@ -539,14 +547,16 @@ startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 recordContentString=recordContent.editText!!.text.toString()
         recordTitleString=recordTitle.editText!!.text.toString()
         recordEmotionString=recordEmotion.editText!!.text.toString()
-        recordSourcesString=recordSources.editText!!.text.toString()
+        recordSourcesString = recordSources.editText!!.text.toString()
+        recordTagsString = tagsContainer.editText!!.text.toString()
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
         record.title= recordTitleString
         record.content=recordContentString
         record.emotions=recordEmotionString
         record.sources = recordSourcesString
-        record.rating=ratingsInfo
+        record.tags = recordTagsString
+        record.rating = ratingsInfo
         record.symptoms = symptomselectorCB.text.toString()
         record.successState = success
         run {

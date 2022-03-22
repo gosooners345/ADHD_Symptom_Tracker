@@ -23,7 +23,6 @@ import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
 import com.activitylogger.release1.ui.home.HomeFragment
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
-import kotlin.collections.ArrayList
 
 @DelicateCoroutinesApi
 @Suppress("ReplaceRangeToWithUntil")
@@ -71,6 +70,7 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
       searchArray.add(resultList[i].emotions)
       searchArray.add(resultList[i].sources)
       searchArray.add(resultList[i].symptoms)
+      searchArray.add(resultList[i].tags)
       for (x in 0..searchArray.size - 1)
       {
         if (searchArray[x].contains(query))

@@ -1,9 +1,7 @@
 package com.activitylogger.release1.data
 
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.RequiresApi
 import androidx.room.*
 import java.text.DateFormat
 import java.util.*
@@ -22,21 +20,29 @@ class Records() : Cloneable,Comparable<Records>,Parcelable
     @ColumnInfo(name="rating")
     var rating : Double=0.0
     @TypeConverters(DateConverter::class)
-    @ColumnInfo(name="time_created")
-    var timeCreated =Date()
-    @ColumnInfo(name="time_updated")
-    var timeUpdated :Long = 0
-@ColumnInfo(name="success")
-var successState :Boolean?=null
-    @ColumnInfo(name="emotions")
-    var emotions : String = ""
-    @ColumnInfo(name="sources",defaultValue = "")
-    var sources : String = ""
-    @ColumnInfo(name="symptoms", defaultValue = "")
-    var symptoms  = ""
+    @ColumnInfo(name = "time_created")
+    var timeCreated = Date()
+
+    @ColumnInfo(name = "time_updated")
+    var timeUpdated: Long = 0
+
+    @ColumnInfo(name = "success")
+    var successState: Boolean? = null
+
+    @ColumnInfo(name = "emotions")
+    var emotions: String = ""
+
+    @ColumnInfo(name = "sources", defaultValue = "")
+    var sources: String = ""
+
+    @ColumnInfo(name = "tags", defaultValue = "")
+    var tags: String = ""
+
+    @ColumnInfo(name = "symptoms", defaultValue = "")
+    var symptoms = ""
 
     @Ignore
-    lateinit var recordState : RecordState
+    lateinit var recordState: RecordState
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()
@@ -49,6 +55,7 @@ var successState :Boolean?=null
         emotions = parcel.readString()!!
         sources = parcel.readString()!!
         symptoms = parcel.readString()!!
+        tags = parcel.readString()!!
     }
 
     enum class RecordState {
@@ -56,7 +63,6 @@ var successState :Boolean?=null
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     constructor(
         title: String?,
         id: Int?,
@@ -67,7 +73,7 @@ var successState :Boolean?=null
         timeValue: Long,
         success: Boolean,
         sources: String?,
-        symptoms: String
+        symptoms: String, tags: String
     ) : this()
     {
         this.id = id!!
@@ -81,6 +87,7 @@ var successState :Boolean?=null
         this.sources = sources!!
         this.timeCreated = dateValue
         recordState = RecordState.COLLAPSED
+        this.tags = tags
     }
     
     constructor(timeCreatedValue: Date) : this()
@@ -94,6 +101,7 @@ var successState :Boolean?=null
         this.timeUpdated = System.currentTimeMillis()
         this.timeCreated = timeCreatedValue
         this.successState = false
+        this.tags = ""
         this.recordState = RecordState.COLLAPSED
     }
     
@@ -106,15 +114,16 @@ var successState :Boolean?=null
     {
         return String.format(
             "Entry title: $title \r\n" +
-            "Event: $content\r\n" +
-            "Rating: $rating\r\n" +
-            "Time Occurred: ${
-                DateFormat.getInstance().format(timeCreated)
-            }\r\n" +
-            "Emotions: $emotions \r\n " +
-            "Sources: $sources \r\n" +
-            "ADHD Symptoms or Benefits: $symptoms \r\n" +
-            "Success or Fail: ${if (successState!!) "success" else "fail"}"
+                    "Event: $content\r\n" +
+                    "Rating: $rating\r\n" +
+                    "Time Occurred: ${
+                        DateFormat.getInstance().format(timeCreated)
+                    }\r\n" +
+                    "Emotions: $emotions \r\n " +
+                    "Sources: $sources \r\n" +
+                    "ADHD Symptoms or Benefits: $symptoms \r\n" +
+                    "Tags: $tags\r\n" +
+                    "Success or Fail: ${if (successState!!) "success" else "fail"}"
         )
     }
     
@@ -130,6 +139,7 @@ var successState :Boolean?=null
         parcel.writeString(emotions)
         parcel.writeString(sources)
         parcel.writeString(symptoms)
+        parcel.writeString(tags)
     }
 
     override fun describeContents(): Int {

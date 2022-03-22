@@ -15,10 +15,15 @@ import java.io.FileNotFoundException
 
 @Database(
     entities = [Records::class],
-    version = 4,
-exportSchema = true,
-    autoMigrations = [AutoMigration(from=1,to=2),AutoMigration(from = 2,to=3,spec=RecordsDB.RecordsAutoMigration::class),
-AutoMigration(from=3,to=4)
+    version = 5,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2), AutoMigration(
+            from = 2,
+            to = 3,
+            spec = RecordsDB.RecordsAutoMigration::class
+        ),
+        AutoMigration(from = 3, to = 4), AutoMigration(from = 4, to = 5),
     ]
 )
 
@@ -30,25 +35,23 @@ abstract class RecordsDB : RoomDatabase()
     class RecordsAutoMigration : AutoMigrationSpec
     
     
-    companion object
-    {
+    companion object {
         private const val DATABASE_NAME = "activitylogger_db"
         private const val newDB = "activitylogger_db.db"
         private var instance: RecordsDB? = null
         private lateinit var dbKeys: String
         private lateinit var passwordKey: String
-        private lateinit var passphrase :ByteArray
-        private lateinit var newPassPhrase :ByteArray
-        private  lateinit var factory: SupportFactory
-        
-        //       lateinit var synced =false
+        private lateinit var passphrase: ByteArray
+        private lateinit var newPassPhrase: ByteArray
+        private lateinit var factory: SupportFactory
+        var dbVersion = 0
+        var newDBVersion = 5
+
         private var encryptedState: Boolean = false
-        
-        
-        private fun encryptDB(context: Context, originalDB: File, passcode: ByteArray)
-        {
-            try
-            {
+
+        // Encrypts existing old DB Versions and so forth
+        private fun encryptDB(context: Context, originalDB: File, passcode: ByteArray) {
+            try {
                 val attachKEY =
                     String.format("ATTACH DATABASE ? AS plaintext  KEY ''")
                 SQLiteDatabase.loadLibs(context)
@@ -95,7 +98,8 @@ abstract class RecordsDB : RoomDatabase()
                 ex.printStackTrace()
             }
         }
-        
+
+        // Encrypts the database
         private fun encryptDBv2(context: Context, originalDB: File, passcode: ByteArray)
         {
             try
@@ -147,7 +151,8 @@ abstract class RecordsDB : RoomDatabase()
                 ex.printStackTrace()
             }
         }
-        
+
+        //Decrypts the database.
         private fun decryptDBv2(context: Context, originalDB: File, passcode: ByteArray)
         {
             try
@@ -155,7 +160,6 @@ abstract class RecordsDB : RoomDatabase()
                 SQLiteDatabase.loadLibs(context)
                 val attachKEY =
                     String.format("ATTACH DATABASE ? AS records  KEY ''")
-                
                 if (originalDB.exists())
                 {
                     Log.i("DECRYPTION", "Decrypting database")
@@ -183,69 +187,91 @@ abstract class RecordsDB : RoomDatabase()
                     originalDB.delete()
                     newFile.renameTo(originalDB)
                     encryptedState = false
+
                 }
                 else
                 {
                     throw FileNotFoundException(
-                      originalDB.absolutePath + "not found"
+                        originalDB.absolutePath + "not found"
                     )
                 }
-            }
-            catch (ex: Exception)
-            {
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         }
-        
+
+        // Check the DB Version and upgrade if out of date, this forces decryption so it can be upgraded without causing problems for end user
+        private fun checkDBVerison(context: Context, originalDB: File, passcode: ByteArray) {
+            try {
+                val db = SQLiteDatabase.openDatabase(
+                    originalDB.absolutePath,
+                    passcode, null, SQLiteDatabase.OPEN_READWRITE, null, null
+                )
+                dbVersion = db.version
+                Log.i("Database Version", "DB Version is $dbVersion")
+                db.close()
+                if (dbVersion != newDBVersion) {
+                    decryptDBv2(context, originalDB, passphrase)
+                    instance =
+                        Room.databaseBuilder(
+                            context.applicationContext,
+                            RecordsDB::class.java,
+                            newDB
+                        )
+                            .build()
+                    encryptDBv2(context, originalDB, passphrase)
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+
+            }
+        }
+
+
         // Change the encryption keys on the databases
         private fun changeSyncDBs(
             context: Context,
             dbFile: File,
             oldPasscode: ByteArray,
             newPasscode: ByteArray,
-            passwordKey : String
-        )
-        {
+            passwordKey: String
+        ) {
             decryptDBv2(context, dbFile, oldPasscode)
             Log.i("KEYS", "Changing DB Keys for encryption")
-            if(passwordKey!="")
-            encryptDBv2(context, dbFile, newPasscode)
-           
+            if (passwordKey != "")
+                encryptDBv2(context, dbFile, newPasscode)
+
         }
 
         private fun getEncyptedState(condition : Boolean) : Boolean{
             return  condition
         }
-        
+
         //Initialize the Passcodes and the associated ByteArrays
-        private fun initializePasscodes()
-        {
+        private fun initializePasscodes() {
             dbKeys = MainActivity.appPreferences
                 .getString("dbPassword", "").toString()
             passwordKey = MainActivity.appPreferences
                 .getString("password", "").toString()
             encryptedState = getEncyptedState(dbKeys.isNotBlank())
-           passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
-            if(passwordKey!="")
-            newPassPhrase = SQLiteDatabase.getBytes(passwordKey.toCharArray())
+            passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
+            if (passwordKey != "")
+                newPassPhrase = SQLiteDatabase.getBytes(passwordKey.toCharArray())
             else
-                newPassPhrase= passphrase
+                newPassPhrase = passphrase
                 
         }
-        
-        private fun renewDBPassCode()
-        {
-            
+
+        private fun renewDBPassCode() {
             MainActivity.appPreferences.edit().putString(
-              "dbPassword",
-              MainActivity.appPreferences.getString("password", "")
+                "dbPassword",
+                MainActivity.appPreferences.getString("password", "")
             ).apply()
             dbKeys = MainActivity.appPreferences.getString(
-                  "dbPassword", ""
-                ).toString()
-            
+                "dbPassword", ""
+            ).toString()
+
             passphrase = SQLiteDatabase.getBytes(dbKeys.toCharArray())
-            
         }
         
         @JvmStatic
@@ -253,25 +279,27 @@ abstract class RecordsDB : RoomDatabase()
         {
             if (instance == null)
             {
-                try
-                {
+                try {
+                    //This checks encrypted state
+
                     SQLiteDatabase.loadLibs(context)
                     //Initialize the passcode variables
                     initializePasscodes()
                     val synced = passphrase.contentEquals(newPassPhrase)
                     val oldDBFile = (context.getDatabasePath(DATABASE_NAME))
                     val newDBFile = (context.getDatabasePath(newDB))
-                    //Encrypt and remove the Old DB if there's a password
+                    //Removes legacy DB files with old naming scheme and replaces with new encrypted db
                     if (oldDBFile.exists() && !newDBFile.exists())
                         encryptDB(context, oldDBFile, passphrase)
-//Check for password changes since last load
-                    if (newDBFile.exists() && !synced)
-                    {
-                        if( MainActivity.appPreferences.getString("password", "")!="")
-                        {
+                    //This decrypts the database and opens it for this round, when the user goes to
+                    //Change passwords, the encryption will re-encrypt the database
+                    checkDBVerison(context, newDBFile, passphrase)
+// Check for password changes
+                    if (newDBFile.exists() && !synced) {
+                        if (MainActivity.appPreferences.getString("password", "") != "") {
                             changeSyncDBs(
-                              context, newDBFile, passphrase, newPassPhrase,
-                              passwordKey
+                                context, newDBFile, passphrase, newPassPhrase,
+                                passwordKey
                             )
                             renewDBPassCode()
                         }
@@ -286,7 +314,6 @@ abstract class RecordsDB : RoomDatabase()
                             .openHelperFactory(factory)
                             .build()
                     return instance
-                    
                 }
                 catch (ex: Exception)
                 {
@@ -295,5 +322,6 @@ abstract class RecordsDB : RoomDatabase()
             }
             return instance
         }
+
     }
 }

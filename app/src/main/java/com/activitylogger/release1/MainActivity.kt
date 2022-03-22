@@ -52,8 +52,7 @@ class MainActivity : AppCompatActivity()
   private lateinit var greetingTextBox: TextInputLayout
   private var dbPassword = ""
   var userPassword = ""
-  
-  //lateinit var titleHdr : TextView
+
   private lateinit var enablePasswordSwitch: SwitchMaterial
   private lateinit var binding: ActivityMainBinding
   private lateinit var mainActionButton: ExtendedFloatingActionButton

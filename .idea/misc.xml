@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/activity_main.xml" value="0.20521590423257802" />
+        <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/content_records.xml" value="0.1" />
+        <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/fragment_home.xml" value="0.20521590423257802" />
+        <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/record_item_layout_collapsed.xml" value="0.1" />
+        <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout_test.xml" value="0.24959481361426256" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/display_screen_ic.xml" value="0.14114583333333333" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/expand_collapse_arrow.xml" value="0.14114583333333333" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/drawable-anydpi/expand_icon.xml" value="0.1390625" />
