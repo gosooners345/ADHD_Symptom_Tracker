@@ -37,4 +37,15 @@
     <string name="sort_by">Sort By</string>
     <string name="date_created">Date Created</string>
     <string name="recently_updated">Recently Updated</string>
+    <string name="tags_hint_string">How would you categorize this?</string>
+    <string name="thoughts_sources_string">Do you want to add any thoughts to this?</string>
+    <string name="emotions_hint_string">How are you feeling?</string>
+    <string name="event_string">What happened?</string>
+    <string name="event_title_string">What do you want to call this?</string>
+    <string name="save_record_string">Save Record</string>
+    <string name="success_fail">Success/Fail</string>
+    <string name="accessiblility_enterarrow_string">This is an entry point into the symptom select screen</string>
+    <string name="rating">Rating:</string>
+    <string name="related_adhd_symptom_benefit">Related ADHD Symptom/Benefit</string>
+
 </resources>

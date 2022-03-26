@@ -26,30 +26,30 @@ import java.util.*
 
 @DelicateCoroutinesApi
 @Suppress("SpellCheckingInspection", "LiftReturnOrAssignment")
-class ComposeRecords : AppCompatActivity(){
+class ComposeRecords : AppCompatActivity() {
 
-    lateinit var title : String
-    lateinit var  content : String
-    lateinit var record : Records
-    private var  mode =0
-    private var recordsRepo : RecordsRepository? = null
-private lateinit var saveButton : Button
-    private lateinit    var editButton : Button
-    private lateinit var symptomSelectorCardView : MaterialCardView
-    var recordTitleString=""
-    var recordContentString=""
-    var recordEmotionString=""
+    lateinit var title: String
+    lateinit var content: String
+    lateinit var record: Records
+    private var mode = 0
+    private var recordsRepo: RecordsRepository? = null
+    private lateinit var saveButton: Button
+    private lateinit var editButton: Button
+    private lateinit var symptomSelectorCardView: MaterialCardView
+    var recordTitleString = ""
+    var recordContentString = ""
+    var recordEmotionString = ""
     var recordSourcesString = ""
     var recordTagsString = ""
     private val emptyString = ""
-    var ratingsInfo =0.0
-private var recordSymptoms = ""
+    var ratingsInfo = 0.0
+    private var recordSymptoms = ""
     private var isnewRecord = false
-    private lateinit var titleHdr : TextView
-    private lateinit var recordTitle : TextInputLayout
-    private lateinit var recordContent : TextInputLayout
-    private lateinit var recordEmotion : TextInputLayout
-    private lateinit var recordSources : TextInputLayout
+    private lateinit var titleHdr: TextView
+    private lateinit var recordTitle: TextInputLayout
+    private lateinit var recordContent: TextInputLayout
+    private lateinit var recordEmotion: TextInputLayout
+    private lateinit var recordSources: TextInputLayout
     private lateinit var enterArrow: ImageView
     private lateinit var tagsContainer: TextInputLayout
     private lateinit var symptomselectorCB: TextView
@@ -57,20 +57,14 @@ private var recordSymptoms = ""
     private lateinit var ratingDisplay: TextView
     private lateinit var ratingRanking: TextView
     private lateinit var successChip: Chip
-     var success =false
-    
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
-        super.onCreate(savedInstanceState)
-        /*  if (MainActivity.buildType == "debug")
-          {
-              setContentView(R.layout.records_compose_layout_test)
-              
-          }*/
+    var success = false
 
-        setContentView(R.layout.records_compose_layout_test)
-    
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.records_compose_layout)
+
         titleHdr = findViewById(R.id.Login_TitleHdr)
         recordTitle = findViewById(R.id.topicContainer)
         recordContent = findViewById(R.id.contentContainer)
@@ -91,9 +85,8 @@ private var recordSymptoms = ""
         symptomSelectorCardView.setOnClickListener(symptomSelectedListener)
         symptomselectorCB.setOnClickListener(symptomSelectedListener)
         enterArrow.setOnClickListener(symptomSelectedListener)
-    
-        if (!intentInfo)
-        {
+
+        if (!intentInfo) {
             titleHdr.text = "Edit Record"
             recordTitle.editText!!.setText(record.title)
             recordContent.editText!!.setText(record.content)
@@ -135,9 +128,7 @@ private var recordSymptoms = ""
 
             Log.i(TAG, "Accessing Record for Editing")
 
-        }
-        else
-        {
+        } else {
             titleHdr.text = "New Record"
             record = Records(Date())
             recordTitle.editText!!.setText(emptyString)
@@ -165,125 +156,110 @@ private var recordSymptoms = ""
             } else
                 ratingRanking.text = "Poor"
             symptomselectorCB.text = ""
-    
+
             recordSymptoms = symptomselectorCB.text.toString()
 
             Log.i(TAG, "Logging New Event")
-    
-    
-        }
-        recordTitle.editText!!.addTextChangedListener(object : TextWatcher
-                                                      {
-                                                          override fun beforeTextChanged(
-                                                              s: CharSequence,
-                                                              start: Int,
-                                                              before: Int,
-                                                              count: Int
-                                                          )
-                                                          {
-                                                          }
-            
-                                                          override fun onTextChanged(
-                                                              s: CharSequence,
-                                                              start: Int,
-                                                              before: Int,
-                                                              after: Int
-                                                          )
-                                                          {
-                                                              recordTitleString =
-                                                                  s.toString()
-                                                          }
-            
-                                                          override fun afterTextChanged(
-                                                              editable: Editable
-                                                          )
-                                                          {
-                                                          }
-                                                      })
-        recordContent.editText!!.addTextChangedListener(object : TextWatcher
-                                                        {
-                                                            override fun beforeTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                count: Int,
-                                                                after: Int
-                                                            )
-                                                            {
-                                                            }
-            
-                                                            override fun onTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                before: Int,
-                                                                count: Int
-                                                            )
-                                                            {
-                                                                recordContentString =
-                                                                    s.toString()
-                                                            }
-            
-                                                            override fun afterTextChanged(
-                                                                editable: Editable
-                                                            )
-                                                            {
-                                                            }
-            
-                                                        })
-        recordEmotion.editText!!.addTextChangedListener(object : TextWatcher
-                                                        {
-                                                            override fun beforeTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                before: Int,
-                                                                count: Int
-                                                            )
-                                                            {
-                                                            }
-            
-                                                            override fun onTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                before: Int,
-                                                                after: Int
-                                                            )
-                                                            {
-                                                                recordEmotionString =
-                                                                    s.toString()
-                                                            }
-            
-                                                            override fun afterTextChanged(
-                                                                editable: Editable
-                                                            )
-                                                            {
-                                                            }
-                                                        })
-        recordSources.editText!!.addTextChangedListener(object : TextWatcher
-                                                        {
-                                                            override fun beforeTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                before: Int,
-                                                                count: Int
-                                                            )
-                                                            {
-                                                            }
-            
-                                                            override fun onTextChanged(
-                                                                s: CharSequence,
-                                                                start: Int,
-                                                                before: Int,
-                                                                after: Int
-                                                            )
-                                                            {
-                                                                recordSourcesString =
-                                                                    s.toString()
-                                                            }
 
-                                                            override fun afterTextChanged(
-                                                                editable: Editable
-                                                            ) {
-                                                            }
-                                                        })
+
+        }
+        recordTitle.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                after: Int
+            ) {
+                recordTitleString =
+                    s.toString()
+            }
+
+            override fun afterTextChanged(
+                editable: Editable
+            ) {
+            }
+        })
+        recordContent.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                recordContentString =
+                    s.toString()
+            }
+
+            override fun afterTextChanged(
+                editable: Editable
+            ) {
+            }
+
+        })
+        recordEmotion.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                after: Int
+            ) {
+                recordEmotionString =
+                    s.toString()
+            }
+
+            override fun afterTextChanged(
+                editable: Editable
+            ) {
+            }
+        })
+        recordSources.editText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                after: Int
+            ) {
+                recordSourcesString =
+                    s.toString()
+            }
+
+            override fun afterTextChanged(
+                editable: Editable
+            ) {
+            }
+        })
         tagsContainer.editText!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence,
@@ -315,181 +291,137 @@ private var recordSymptoms = ""
                 count: Int,
                 after: Int
             ) {
+                if (s!!.toString().toInt() > 89) {
+                    ratingRanking.text =
+                        "Great"
+                } else if ((s.toString()
+                        .toInt() > 79) &&
+                    s.toString()
+                        .toInt() < 90
+                ) {
+                    ratingRanking.text =
+                        "Good"
+                } else if ((s.toString()
+                        .toInt() > 69) &&
+                    s.toString()
+                        .toInt() < 80
+                ) {
+                    ratingRanking.text =
+                        "Okay"
+                } else if ((s.toString()
+                        .toInt() > 49) &&
+                    s.toString()
+                        .toInt() < 70
+                ) {
+                    ratingRanking.text =
+                        "Could be better"
+                } else
+                    ratingRanking.text =
+                        "Poor"
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 if (s!!.toString()
-                                                             .toInt() > 89
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Great"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 79) &&
-                                                              s.toString()
-                                                                  .toInt() < 90
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Good"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 69) &&
-                                                              s.toString()
-                                                                  .toInt() < 80
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Okay"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 49) &&
-                                                              s.toString()
-                                                                  .toInt() < 70
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Could be better"
-                                                     }
-                                                     else
-                                                         ratingRanking.text =
-                                                             "Poor"
-                                                 }
-        
-                                                 override fun onTextChanged(
-                                                     s: CharSequence?,
-                                                     start: Int,
-                                                     before: Int,
-                                                     count: Int
-                                                 )
-                                                 {
-                                                     if (s!!.toString()
-                                                             .toInt() > 89
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Great"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 79) &&
-                                                              s.toString()
-                                                                  .toInt() < 90
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Good"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 69) &&
-                                                              s.toString()
-                                                                  .toInt() < 80
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Okay"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 49) &&
-                                                              s.toString()
-                                                                  .toInt() < 70
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Could be better"
-                                                     }
-                                                     else
-                                                         ratingRanking.text =
-                                                             "Poor"
-                                                 }
-        
-                                                 override fun afterTextChanged(s: Editable?)
-                                                 {
-                                                     if (s!!.toString()
-                                                             .toInt() > 89
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Great"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 79) &&
-                                                              s.toString()
-                                                                  .toInt() < 90
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Good"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 69) &&
-                                                              s.toString()
-                                                                  .toInt() < 80
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Okay"
-                                                     }
-                                                     else if ((s.toString()
-                                                                   .toInt() > 49) &&
-                                                              s.toString()
-                                                                  .toInt() < 70
-                                                     )
-                                                     {
-                                                         ratingRanking.text =
-                                                             "Could be better"
-                                                     }
-                                                     else
-                                                         ratingRanking.text =
-                                                             "Poor"
-                                                 }
-                                             })
+                        .toInt() > 89
+                ) {
+                    ratingRanking.text =
+                        "Great"
+                } else if ((s.toString()
+                        .toInt() > 79) &&
+                    s.toString()
+                        .toInt() < 90
+                ) {
+                    ratingRanking.text =
+                        "Good"
+                } else if ((s.toString()
+                        .toInt() > 69) &&
+                    s.toString()
+                        .toInt() < 80
+                ) {
+                    ratingRanking.text =
+                        "Okay"
+                } else if ((s.toString()
+                        .toInt() > 49) &&
+                    s.toString()
+                        .toInt() < 70
+                ) {
+                    ratingRanking.text =
+                        "Could be better"
+                } else
+                    ratingRanking.text =
+                        "Poor"
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.toString()
+                        .toInt() > 89
+                ) {
+                    ratingRanking.text =
+                        "Great"
+                } else if ((s.toString()
+                        .toInt() > 79) &&
+                    s.toString()
+                        .toInt() < 90
+                ) {
+                    ratingRanking.text =
+                        "Good"
+                } else if ((s.toString()
+                        .toInt() > 69) &&
+                    s.toString()
+                        .toInt() < 80
+                ) {
+                    ratingRanking.text =
+                        "Okay"
+                } else if ((s.toString()
+                        .toInt() > 49) &&
+                    s.toString()
+                        .toInt() < 70
+                ) {
+                    ratingRanking.text =
+                        "Could be better"
+                } else
+                    ratingRanking.text =
+                        "Poor"
+            }
+        })
         saveButton = findViewById(R.id.saveNote)
         saveButton.setOnClickListener(saveRecord)
         editButton = findViewById(R.id.editButton)
         editButton.setOnClickListener(editRecord)
-        /*if (MainActivity.buildType == "debug")
-        {
-            var types = ArrayList<String>()
-            types.addAll(resources.getStringArray(R.array.entry_categories))
-            var typeAdapter = ArrayAdapter(
-                this, R.layout
-                    .support_simple_spinner_dropdown_item, types
-            )
-            
-            var recordSpinner = SmartMaterialSpinner<Any>(this)
-            recordSpinner.item = types as List<Any>?
-            
-            recordSpinner.adapter = typeAdapter
-            
-            
-        }*/
+
     }
-    
-    
-    private val intentInfo : Boolean
-        get(){
+
+
+    private val intentInfo: Boolean
+        get() {
             if (intent.hasExtra("RECORDSENT")) {
 
-                record= intent.getParcelableExtra("RECORDSENT")!!
+                record = intent.getParcelableExtra("RECORDSENT")!!
                 Log.d(TAG, record.toString())
-                mode= EDIT_ON
-                isnewRecord=false
+                mode = EDIT_ON
+                isnewRecord = false
                 return false
-            }
-            else{
+            } else {
                 isnewRecord = true
                 return true
             }
 
         }
-    
-    
-    private var symptomSelectedListener = View.OnClickListener{
-val sendIntent = Intent(this,ItemSelectorFragment::class.java)
 
-    val listofSymptoms = ArrayList<String>()
-    listofSymptoms.addAll(recordSymptoms.split(','))
-    sendIntent.putStringArrayListExtra("symptom",listofSymptoms)
-startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
-}
+
+    private var symptomSelectedListener = View.OnClickListener {
+        val sendIntent = Intent(this, ItemSelectorFragment::class.java)
+
+        val listofSymptoms = ArrayList<String>()
+        listofSymptoms.addAll(recordSymptoms.split(','))
+        sendIntent.putStringArrayListExtra("symptom", listofSymptoms)
+        startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
+    }
 
     override fun onBackPressed() {
         val messageString = if (!isnewRecord) "Save your edits?" else "Save new record?"
@@ -507,53 +439,54 @@ startActivityForResult(sendIntent, REQ_CODE_SYMPTOM)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        recordSymptoms=""
-        symptomselectorCB.text=""
+        recordSymptoms = ""
+        symptomselectorCB.text = ""
 
-        if(requestCode == REQ_CODE_SYMPTOM) {
+        if (requestCode == REQ_CODE_SYMPTOM) {
             if (resultCode == RESULT_OK) {
                 val symptomList = data!!.getStringArrayListExtra("symptom")!!
                 for (item in symptomList)
                     recordSymptoms += String.format("$item,")
-                recordSymptoms = recordSymptoms.trimEnd(',',' ')
+                recordSymptoms = recordSymptoms.trimEnd(',', ' ')
             }
-            symptomselectorCB.text =recordSymptoms.trimEnd(',',' ')
+            symptomselectorCB.text = recordSymptoms.trimEnd(',', ' ')
 
         }
     }
 
-    private var ratingSeekBarListener :SeekBar.OnSeekBarChangeListener = object :SeekBar.OnSeekBarChangeListener{
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            ratingsInfo = progress.times(1.0)
-            ratingDisplay.text = progress.toString()
-        }
+    private var ratingSeekBarListener: SeekBar.OnSeekBarChangeListener =
+        object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                ratingsInfo = progress.times(1.0)
+                ratingDisplay.text = progress.toString()
+            }
 
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            ratingsInfo = seekBar!!.progress.times(1.0)
-            ratingDisplay.text = seekBar!!.progress.toString()
-        }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                ratingsInfo = seekBar!!.progress.times(1.0)
+                ratingDisplay.text = seekBar.progress.toString()
+            }
 
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            ratingsInfo = seekBar!!.progress.times(1.0)
-            ratingDisplay.text = seekBar!!.progress.toString()
-        }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                ratingsInfo = seekBar!!.progress.times(1.0)
+                ratingDisplay.text = seekBar.progress.toString()
+            }
 
-    }
+        }
 
 
     @DelicateCoroutinesApi
-    private var saveRecord =View.OnClickListener{
+    private var saveRecord = View.OnClickListener {
 
-recordContentString=recordContent.editText!!.text.toString()
-        recordTitleString=recordTitle.editText!!.text.toString()
-        recordEmotionString=recordEmotion.editText!!.text.toString()
+        recordContentString = recordContent.editText!!.text.toString()
+        recordTitleString = recordTitle.editText!!.text.toString()
+        recordEmotionString = recordEmotion.editText!!.text.toString()
         recordSourcesString = recordSources.editText!!.text.toString()
         recordTagsString = tagsContainer.editText!!.text.toString()
         ratingsInfo = ratingSeekbar.progress.times(1.0)
         record.timeUpdated = System.currentTimeMillis()
-        record.title= recordTitleString
-        record.content=recordContentString
-        record.emotions=recordEmotionString
+        record.title = recordTitleString
+        record.content = recordContentString
+        record.emotions = recordEmotionString
         record.sources = recordSourcesString
         record.tags = recordTagsString
         record.rating = ratingsInfo
@@ -569,52 +502,52 @@ recordContentString=recordContent.editText!!.text.toString()
                 HomeFragment.refreshData()
 
             }
-            Log.i(TAG,"Saving Record to storage")
-            Log.i(TAG,record.toString())
+            Log.i(TAG, "Saving Record to storage")
+            Log.i(TAG, record.toString())
         }
         finish()
     }
 
     private var editRecord = View.OnClickListener {
-    when (mode){
-        EDIT_OFF -> enableEdit()
-        EDIT_ON -> disableEdit()
+        when (mode) {
+            EDIT_OFF -> enableEdit()
+            EDIT_ON -> disableEdit()
+        }
     }
-}
 
-    private fun enableEdit(){
+    private fun enableEdit() {
         mode = EDIT_ON
-        recordContent.isEnabled=true
-        recordTitle.isEnabled=true
-        recordEmotion.isEnabled=true
+        recordContent.isEnabled = true
+        recordTitle.isEnabled = true
+        recordEmotion.isEnabled = true
         symptomselectorCB.isEnabled = true
-        symptomSelectorCardView.isEnabled=true
-        ratingSeekbar.isEnabled=true
-        enterArrow.isEnabled=true
-        successChip.isEnabled=true
-        recordSources.isEnabled=true
+        symptomSelectorCardView.isEnabled = true
+        ratingSeekbar.isEnabled = true
+        enterArrow.isEnabled = true
+        successChip.isEnabled = true
+        recordSources.isEnabled = true
         val anchorView = findViewById<View>(R.id.masterLayout)
-        Snackbar.make(anchorView,"Record Editing Enabled",Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(anchorView, "Record Editing Enabled", Snackbar.LENGTH_SHORT).show()
     }
 
     private fun disableEdit() {
         mode = EDIT_OFF
-        recordContent.isEnabled=false
-        recordTitle.isEnabled=false
-        enterArrow.isEnabled=false
-        symptomSelectorCardView.isEnabled=false
+        recordContent.isEnabled = false
+        recordTitle.isEnabled = false
+        enterArrow.isEnabled = false
+        symptomSelectorCardView.isEnabled = false
 
-        recordEmotion.isEnabled=false
-        recordSources.isEnabled=false
-        symptomselectorCB.isEnabled=false
-        ratingSeekbar.isEnabled=false
-        successChip.isEnabled=false
+        recordEmotion.isEnabled = false
+        recordSources.isEnabled = false
+        symptomselectorCB.isEnabled = false
+        ratingSeekbar.isEnabled = false
+        successChip.isEnabled = false
         val anchorView = findViewById<View>(R.id.masterLayout)
-        Snackbar.make(anchorView,"Record Editing Disabled",Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(anchorView, "Record Editing Disabled", Snackbar.LENGTH_SHORT).show()
     }
 
     @SuppressLint("SetTextI18n")
-    private var successChanged =CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
+    private var successChanged = CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
         if (compoundButton.isChecked) {
             success = true
             compoundButton.text = "Success"

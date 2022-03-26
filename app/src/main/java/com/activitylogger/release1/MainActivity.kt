@@ -403,6 +403,7 @@ class MainActivity : AppCompatActivity()
   
   private fun storePassword(password: String)
   {
+    enablePasswordSwitch = findViewById(R.id.enablePasswordSwitch)
     passwordEnabled = enablePasswordSwitch.isChecked
     appPreferences.edit().putString("password", password)
       .putBoolean("enablePassword", passwordEnabled).apply()

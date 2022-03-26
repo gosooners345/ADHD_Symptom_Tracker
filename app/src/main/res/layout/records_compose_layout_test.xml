@@ -42,7 +42,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="What do you want to call this?"
+                android:hint="@string/event_title_string"
                 android:layoutDirection="locale"
                 android:padding="5dp"
                 app:endIconMode="clear_text"
@@ -51,11 +51,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/Login_TitleHdr">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordTextBox"
+                    android:id="@+id/topicTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:singleLine="true"
-                    tools:ignore="TextContrastCheck" />
+                    tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +66,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="What happened?"
+                android:hint="@string/event_string"
                 android:layoutDirection="locale"
                 android:padding="5dp"
 
@@ -80,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
                     android:inputType="textMultiLine|text|textCapSentences|textImeMultiLine"
-                    tools:ignore="TextContrastCheck" />
+                    android:minHeight="48dp"
+                    tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -90,7 +92,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="How are you feeling?"
+                android:hint="@string/emotions_hint_string"
                 android:layoutDirection="locale"
                 android:padding="5dp"
                 app:endIconMode="clear_text"
@@ -104,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
                     android:inputType="textMultiLine|textCapSentences|text|textImeMultiLine"
-                    tools:ignore="TextContrastCheck" />
+                    android:minHeight="48dp"
+                    tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -114,7 +117,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="Any lessons learned or any thoughts about this?"
+                android:hint="@string/thoughts_sources_string"
                 android:layoutDirection="locale"
                 android:padding="5dp"
                 app:endIconMode="clear_text"
@@ -128,7 +131,8 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
                     android:inputType="textMultiLine|text|textCapSentences|textImeMultiLine"
-                    tools:ignore="TextContrastCheck" />
+                    android:minHeight="48dp"
+                    tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -150,7 +154,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="5dp"
-                android:hint="What categories would you classify this as?"
+                android:hint="@string/tags_hint_string"
                 android:layoutDirection="locale"
                 android:padding="5dp"
                 app:endIconMode="clear_text"
@@ -164,7 +168,8 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="normal"
                     android:inputType="textMultiLine|text|textCapSentences|textImeMultiLine"
-                    tools:ignore="TextContrastCheck" />
+                    android:minHeight="48dp"
+                    tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -190,7 +195,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="36dp"
                 android:layout_marginBottom="32dp"
-                android:text="Save Record"
+                android:text="@string/save_record_string"
                 app:icon="@android:drawable/ic_menu_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/contentContainer"
@@ -226,7 +231,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/symptomTH"
                 app:strokeColor="@color/m3_textfield_stroke_color"
-                app:strokeWidth="1dp">
+                app:strokeWidth="1dp"
+                tools:ignore="PrivateResource">
 
                 <TextView
                     android:id="@+id/symptomSelectorCB"
@@ -237,9 +243,10 @@
                     android:layout_marginEnd="@dimen/dimen_16"
                     android:layout_marginBottom="@dimen/dimen_8"
                     android:breakStrategy="high_quality"
+                    android:contentDescription="@string/related_adhd_symptom_benefit"
                     android:layoutDirection="locale"
                     android:padding="@dimen/dimen_padding_5"
-                    android:text="test"
+                    android:text=""
                     android:textColor="@color/itemselected"
                     app:autoSizeTextType="uniform" />
 
@@ -250,11 +257,12 @@
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
                     android:clickable="true"
-                    android:minWidth="@dimen/dimen_24"
-                    android:minHeight="@dimen/dimen_24"
+                    android:contentDescription="@string/accessiblility_enterarrow_string"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
                     android:padding="@dimen/dimen_padding_5"
                     android:src="@drawable/ic_next_arrow"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -292,7 +300,7 @@
                 android:layout_marginTop="16dp"
                 android:layoutDirection="locale"
                 android:padding="@dimen/dimen_padding_5"
-                android:text="Success/Fail"
+                android:text="@string/success_fail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingSeekbar" />
 
@@ -304,7 +312,7 @@
                 android:layout_marginTop="16dp"
                 android:layoutDirection="locale"
                 android:padding="@dimen/dimen_padding_5"
-                android:text="Rating:"
+                android:text="@string/rating"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -327,7 +335,8 @@
                 android:layout_marginStart="@dimen/dimen_8"
                 android:layout_marginTop="@dimen/dimen_16"
                 android:checkable="true"
-                android:text="Fail"
+                android:minHeight="48dp"
+                android:text="@string/success_fail"
                 app:checkedIconEnabled="true"
                 app:checkedIconVisible="true"
                 app:layout_constraintStart_toStartOf="parent"
@@ -341,7 +350,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:padding="2dp"
-                android:text="Related ADHD Symptom/Benefit"
+                android:text="@string/related_adhd_symptom_benefit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
