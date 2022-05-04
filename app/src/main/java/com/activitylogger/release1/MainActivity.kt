@@ -255,24 +255,24 @@ class MainActivity : AppCompatActivity()
   private var skipButtonClickListener = View.OnClickListener {
     loginScreen()
   }
-  
-  fun loadApp()
-  {
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-    val navView: BottomNavigationView = binding.navView
-    val navController =
-      findNavController(R.id.nav_host_fragment_activity_main)
-    val appBarConfiguration = AppBarConfiguration(
-      setOf(
-        R.id.navigation_home, R.id.navigation_dashboard
-      )
-    )
-    setupActionBarWithNavController(navController, appBarConfiguration)
-    navView.setupWithNavController(navController)
-    mainActionButton = findViewById(R.id.record_button)
-    mainActionButton.setOnClickListener(mainButtonClick)
-  }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun loadApp() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val navView: BottomNavigationView = binding.navView
+        val navController =
+            findNavController(R.id.nav_host_fragment_activity_main)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+        mainActionButton = findViewById(R.id.record_button)
+        mainActionButton.setOnClickListener(mainButtonClick)
+    }
   
   @DelicateCoroutinesApi
   private var mainButtonClick = View.OnClickListener {
