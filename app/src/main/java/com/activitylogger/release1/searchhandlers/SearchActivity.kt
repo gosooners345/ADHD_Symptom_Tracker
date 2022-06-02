@@ -5,7 +5,6 @@ package com.activitylogger.release1.searchhandlers
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -13,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.activitylogger.release1.BuildConfig
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
 import com.activitylogger.release1.data.Records
+import com.activitylogger.release1.data.RecordsList
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
@@ -54,39 +53,23 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
     recordsRCV.addItemDecoration(divider)
     cancelButton = findViewById(R.id.clearButton)
     cancelButton.setOnClickListener(cancelButtonClickListener)
-    
+
   }
+
   //git rekt
-  private fun searchDB(query: String)
-  {
+  private fun searchDB(query: String) {
     var i = resultList.size - 1
-    while (i > -1)
-    {
-      
-      val searchArray = ArrayList<String>()
-      var counter = 0
-      searchArray.add(resultList[i].title)
-      searchArray.add(resultList[i].content)
-      searchArray.add(resultList[i].emotions)
-      searchArray.add(resultList[i].sources)
-      searchArray.add(resultList[i].symptoms)
-      searchArray.add(resultList[i].tags)
-      for (x in 0..searchArray.size - 1)
-      {
-        if (searchArray[x].contains(query))
-        {
-          counter++
-        }
-      }
-      if (BuildConfig.DEBUG)
-        Log.i("Size", "${resultList.size} entries")
-      if (counter == 0)
-        resultList.removeAt(i)
-      i--
+    try {
+      net.sqlcipher.database.SQLiteDatabase.loadLibs(this)
+
+      resultList =
+        (HomeFragment.homeViewModel.recordsRepo!!.getSearchedRecords(query).value as RecordsList)
+      Collections.sort(resultList, Records.compareUpdatedTimes)
+    } catch (Ex: Exception) {
+      print(Ex)
+
     }
-    Collections.sort(resultList, Records.compareUpdatedTimes)
   }
-  
   override fun onBackPressed()
   {
     super.onBackPressed()
