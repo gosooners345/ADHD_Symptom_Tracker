@@ -52,4 +52,14 @@
         <item>Depression</item>
         <item>Anxiety</item>
     </string-array>
+    <string-array name="positive_symptom_array">
+        <item>No Symptoms</item>
+        <item>Momentum driven</item>
+        <item>Flow</item>
+        <item>A small/big win today</item>
+        <item>Major win</item>
+        <item>Emotional Resiliency</item>
+        <item>Hyperfocus</item>
+    </string-array>
+    <string-array name="emotional_symptom_array"></string-array>
 </resources>
