@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.data.Records
@@ -157,9 +156,9 @@ notifyDataSetChanged()
     }
     //Collapsed and Expanded View holder classes
     class CollapsedRecordsViewHolder(itemView: View, private var onRecordListener: OnRecordListener):RecyclerView.ViewHolder(itemView),View.OnClickListener{
-        var expandButton : ImageButton = itemView.findViewById(R.id.expand_collapse_button)
-        var titleTV :TextView = itemView.findViewById(R.id.content_Title)
-        var ratingTV : TextView = itemView.findViewById(R.id.ratingDisplay)
+        var expandButton: ImageButton = itemView.findViewById(R.id.expand_collapse_button)
+        var titleTV: TextView = itemView.findViewById(R.id.title_card_label)
+        var ratingTV: TextView = itemView.findViewById(R.id.ratingDisplay)
         var symptomsTV : TextView = itemView.findViewById(R.id.symptoms_text)
         var timeCreateTV : TextView = itemView.findViewById(R.id.time_created)
         var timeUpdatedTV : TextView = itemView.findViewById(R.id.timeStamp)
@@ -174,9 +173,9 @@ notifyDataSetChanged()
     class ExpandedViewHolder(itemView: View, private var onRecordListener: OnRecordListener):
             RecyclerView.ViewHolder(itemView),View.OnClickListener
     {
-        var collapseButton : ImageButton = itemView.findViewById(R.id.expand_collapse_button)
-        var subjectView: TextView = itemView.findViewById(R.id.content_Title)
-var contentView : TextView=itemView.findViewById(R.id.content_text)
+        var collapseButton: ImageButton = itemView.findViewById(R.id.expand_collapse_button)
+        var subjectView: TextView = itemView.findViewById(R.id.title_card_label)
+        var contentView: TextView = itemView.findViewById(R.id.content_text)
 var rating : TextView = itemView.findViewById(R.id.ratingDisplay)
 var timeStamp : TextView=itemView.findViewById(R.id.timeStamp)
 var timeCreated : TextView = itemView.findViewById(R.id.time_created)

@@ -18,32 +18,34 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     private lateinit var saveButton: Button
     var symptoms = ArrayList<String>()
     private lateinit var itemClassAdapter: ItemClassAdapter
+
     private lateinit var itemRCV: RecyclerView
+
     var itemClassList =ItemClassList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val resourceSymptoms = resources.getStringArray(R.array.positive_symptom_array)
-        symptoms= intent.getStringArrayListExtra("symptom")!!
+        title = "ADHD Symptom Selection"
+
+        // These are responsible for handling the Symptom Lists and their additions.
+        val resourceSymptoms = resources.getStringArray(R.array.symptom_array)
+
+
+        symptoms = intent.getStringArrayListExtra("symptom")!!
 // Add a reference for the various symptom type lists
-        if(itemClassList.size==0)
-        for (i in 0..resourceSymptoms.size - 1) {
-            itemClassList.add(
-                ItemClass(
-                    resourceSymptoms[i],
-                    symptoms.contains(resourceSymptoms[i])
-                )
-            )
+        if (itemClassList.size == 0) {
+            getSymptomsChecked(resourceSymptoms, itemClassList)
         }
+
         setContentView(R.layout.itemclassview)
         saveButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener(saveButtonClickListener)
 
         val layoutPrefs = MainActivity.appPreferences
 
-
-
         itemRCV = findViewById(R.id.itemListDropDown)
-        itemClassAdapter = ItemClassAdapter(itemClassList, this)
+        itemClassAdapter = ItemClassAdapter(itemClassList, this, resourceSymptoms)
+
         val itemLayoutPrefs = layoutPrefs.getString("layoutOption", "linear")
         val gridSize = layoutPrefs.getInt("gridSize", 2)
         @Suppress("CanBeVal") var layoutMgr: RecyclerView.LayoutManager?
@@ -86,6 +88,18 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     override fun onBackPressed() {
         closeSymptomBox()
         super.onBackPressed()
+    }
+
+
+    fun getSymptomsChecked(symptomString: Array<String>, classList: ItemClassList) {
+        for (i in 0..symptomString.size - 1) {
+            classList.add(
+                ItemClass(
+                    symptomString[i],
+                    symptoms.contains(symptomString[i])
+                )
+            )
+        }
     }
 
     override fun onItemChecked(position: Int, checkedState: Boolean) {

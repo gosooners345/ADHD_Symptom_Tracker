@@ -19,7 +19,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/content_Title"
+        android:id="@+id/title_card_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -70,7 +70,7 @@
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_Title" />
+        app:layout_constraintTop_toBottomOf="@+id/title_card_label" />
     <TextView
         android:id="@+id/time_created"
         android:layout_width="wrap_content"

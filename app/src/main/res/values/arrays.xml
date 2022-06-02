@@ -21,22 +21,16 @@
         <item>staggered</item>
         <item>grid</item>
     </string-array>
-    <string-array name="stressor_symptom_array">
-        <item>Stress enhanced ADHD Response</item>
-        <item>Existential crisis</item>
-        <item>Depression</item>
-        <item>Anxiety</item>
-    </string-array>
-    <string-array name="executive_dysfunction_symptom_list">
-        <item>Impulsiveness</item>
-        <item>Impatience</item>
-        <item>Hyperactivity</item>
-        <item>Executive Dysfunction </item>
-        <item>Mental Sluggishness/Dopamine Hunt</item>
-        <item>Having a bad day</item>
-        <item>Working Memory Issues</item>
-    </string-array>
-    <string-array name="inattentive_symptom_list">
+    <string-array name="symptom_array">
+        <item>Positive Symptoms/Benefits</item>
+        <item>No Symptoms</item>
+        <item>Momentum driven</item>
+        <item>Flow</item>
+        <item>A small/big win today</item>
+        <item>Major win</item>
+        <item>Emotional Resiliency</item>
+        <item>Hyperfocus</item>
+        <item>Attention-based symptoms based on intensity</item>
         <item>Distractions</item>
         <item>Procrastination</item>
         <item>Sensory Overload</item>
@@ -46,21 +40,24 @@
         <item>Brain Fog</item>
         <item>ADHD Burnout</item>
         <item>Freeze/Mental Paralysis</item>
-    </string-array>
-    <string-array name="positive_symptom_array">
-        <item>No Symptoms</item>
-        <item>Momentum driven</item>
-        <item>Flow</item>
-        <item>A small/big win today</item>
-        <item>Major win</item>
-        <item>Emotional Resiliency</item>
-        <item>Hyperfocus</item>
-    </string-array>
-    <string-array name="emotional_symptom_array">
+        <item>Common ADHD symptoms based on intensity</item>
+        <item>Impulsiveness</item>
+        <item>Impatience</item>
+        <item>Hyperactivity</item>
+        <item>Executive Dysfunction </item>
+        <item>Mental Sluggishness/Dopamine Hunt</item>
+        <item>Having a bad day</item>
+        <item>Working Memory Issues</item>
+        <item>Emotional regulation based symptoms based on intensity</item>
         <item>Emotional Flooding</item>
         <item>Emotion fueled response</item>
         <item>Rejection Sensitivity Dysphoria</item>
         <item>Emotional Meltdown</item>
+        <item>Stress-based symptoms based on intensity</item>
+        <item>Stress enhanced ADHD Response</item>
+        <item>Existential crisis</item>
+        <item>Depression</item>
+        <item>Anxiety</item>
     </string-array>
 
 </resources>
