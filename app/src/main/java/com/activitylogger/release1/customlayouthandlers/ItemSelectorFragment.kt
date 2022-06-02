@@ -22,9 +22,9 @@ class ItemSelectorFragment :AppCompatActivity(),OnItemSelected {
     var itemClassList =ItemClassList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val resourceSymptoms = resources.getStringArray(R.array.symptom_array)
+        val resourceSymptoms = resources.getStringArray(R.array.positive_symptom_array)
         symptoms= intent.getStringArrayListExtra("symptom")!!
-
+// Add a reference for the various symptom type lists
         if(itemClassList.size==0)
         for (i in 0..resourceSymptoms.size - 1) {
             itemClassList.add(
