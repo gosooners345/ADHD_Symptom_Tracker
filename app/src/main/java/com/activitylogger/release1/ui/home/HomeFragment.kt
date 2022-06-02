@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), OnRecordListener
     //this method handles loading the database into the application by proxy of calling the Repo
     homeViewModel.recordsRepo = RecordsRepository(requireContext())
     recordsRCV = root.findViewById(R.id.tracker_view)
-    getRecords()
+    getRecords("")
     adapter = RecordsAdapter(recordsList, this)
     recordsRCV.adapter = adapter
     setupRecordCards()
@@ -87,6 +87,7 @@ class HomeFragment : Fragment(), OnRecordListener
         Context.SEARCH_SERVICE
                                         ) as SearchManager
     ((menu.findItem(R.id.menu_search_widget).actionView) as SearchView).apply {
+      //getRecords(this.query.toString())
       setSearchableInfo(
         searchManager.getSearchableInfo(
           ComponentName(
@@ -95,6 +96,7 @@ class HomeFragment : Fragment(), OnRecordListener
           )
         )
       )
+
     }
     
     
@@ -322,7 +324,7 @@ class HomeFragment : Fragment(), OnRecordListener
                           ).show()
           homeViewModel.recordsRepo!!.closeDB()
           homeViewModel.recordsRepo = RecordsRepository(requireContext())
-          getRecords()
+          getRecords("")
           adapter = RecordsAdapter(recordsList, this)
           recordsRCV.adapter = adapter
           setupRecordCards()
@@ -383,19 +385,16 @@ class HomeFragment : Fragment(), OnRecordListener
     refreshAdapter()
     
   }
-  
-  
+
+
   //Retrieves records from the DB
-  private fun getRecords()
-  {
-    try
-    {
+  public fun getRecords(query: String) {
+    try {
       net.sqlcipher.database.SQLiteDatabase.loadLibs(requireContext())
-      
-      homeViewModel.recordsRepo!!.getRecords().observe(viewLifecycleOwner, {
+
+      homeViewModel.recordsRepo!!.getRecords(query).observe(viewLifecycleOwner, {
         if (recordsList.size > 0) recordsList.clear()
-        if (it != null)
-        {
+        if (it != null) {
           recordsList.addAll(it)
           Collections.sort(recordsList, Records.compareUpdatedTimes)
           recordsList.reverse()

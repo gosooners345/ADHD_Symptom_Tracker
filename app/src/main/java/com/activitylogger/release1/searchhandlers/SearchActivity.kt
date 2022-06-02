@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.activitylogger.release1.R
 import com.activitylogger.release1.adapters.RecordsAdapter
+import com.activitylogger.release1.data.EmotionList
 import com.activitylogger.release1.data.Records
-import com.activitylogger.release1.data.RecordsList
+import com.activitylogger.release1.data.SymptomList
 import com.activitylogger.release1.interfaces.OnRecordListener
 import com.activitylogger.release1.records.ComposeRecords
 import com.activitylogger.release1.supports.RecyclerViewSpaceExtender
@@ -56,14 +57,27 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
 
   }
 
+  fun refreshAdapter() {
+    HomeFragment.recordsList.setRecordData()
+    HomeFragment.symptomsList = SymptomList.importData(HomeFragment.recordsList.symptomList)
+    HomeFragment.emotionList = EmotionList.importData(HomeFragment.recordsList.emotionList)
+    recordsRCV.adapter!!.notifyDataSetChanged()
+  }
+
   //git rekt
   private fun searchDB(query: String) {
     var i = resultList.size - 1
     try {
       net.sqlcipher.database.SQLiteDatabase.loadLibs(this)
+      HomeFragment.homeViewModel.recordsRepo!!.getRecords(query).observe(this, {
+        if (resultList.size > 0) resultList.clear()
+        if (it != null) {
+          resultList.addAll(it)
+          Collections.sort(resultList, Records.compareAlphabetized)
+          refreshAdapter()
 
-      resultList =
-        (HomeFragment.homeViewModel.recordsRepo!!.getSearchedRecords(query).value as RecordsList)
+        }
+      })
       Collections.sort(resultList, Records.compareUpdatedTimes)
     } catch (Ex: Exception) {
       print(Ex)

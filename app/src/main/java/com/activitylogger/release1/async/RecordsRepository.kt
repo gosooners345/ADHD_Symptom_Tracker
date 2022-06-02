@@ -24,8 +24,13 @@ class RecordsRepository(context: Context) {
         InsertAsync(recordsDB!!.recordDao!!).execute(record)
     }
 
-    fun getRecords(): LiveData<List<Records>> {
-        return recordsDB!!.recordDao!!.getRecords()
+    fun getRecords(query: String): LiveData<List<Records>> {
+        if (query == "")
+            return recordsDB!!.recordDao!!.getRecords()
+        else {
+            val sequldquery = "%$query%"
+            return getSearchedRecords(sequldquery)
+        }
     }
 
     fun getSearchedRecords(query: String): LiveData<List<Records>> {
