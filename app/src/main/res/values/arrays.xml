@@ -21,36 +21,31 @@
         <item>staggered</item>
         <item>grid</item>
     </string-array>
-    <string-array name="symptom_array">
+    <string-array name="stressor_symptom_array">
+        <item>Stress enhanced ADHD Response</item>
+        <item>Existential crisis</item>
+        <item>Depression</item>
+        <item>Anxiety</item>
+    </string-array>
+    <string-array name="executive_dysfunction_symptom_list">
         <item>Impulsiveness</item>
         <item>Impatience</item>
         <item>Hyperactivity</item>
-        <item>Working Memory Issues</item>
         <item>Executive Dysfunction </item>
         <item>Mental Sluggishness/Dopamine Hunt</item>
         <item>Having a bad day</item>
+        <item>Working Memory Issues</item>
+    </string-array>
+    <string-array name="inattentive_symptom_list">
         <item>Distractions</item>
-        <item>Brain Fog</item>
-        <item>No Symptoms</item>
-        <item>Positive Environment/Grace</item>
-        <item>Momentum driven</item>
-        <item>Sensory Overload</item>
-        <item>A small/big win today</item>
-        <item>Unable to focus</item>
-        <item>Struggling to focus</item>
-        <item>Hyperfocus</item>
-        <item>ADHD Burnout</item>
-        <item>Lacking Motivation</item>
-        <item>Stress enhanced ADHD Response</item>
-        <item>Existential crisis</item>
-        <item>Freeze/Mental Paralysis</item>
         <item>Procrastination</item>
-        <item>Emotional Flooding</item>
-        <item>Emotion fueled response</item>
-        <item>Emotional Meltdown</item>
-        <item>Rejection Sensitivity Dysphoria</item>
-        <item>Depression</item>
-        <item>Anxiety</item>
+        <item>Sensory Overload</item>
+        <item>Struggling to focus</item>
+        <item>Unable to focus</item>
+        <item>Lacking Motivation</item>
+        <item>Brain Fog</item>
+        <item>ADHD Burnout</item>
+        <item>Freeze/Mental Paralysis</item>
     </string-array>
     <string-array name="positive_symptom_array">
         <item>No Symptoms</item>
@@ -61,5 +56,11 @@
         <item>Emotional Resiliency</item>
         <item>Hyperfocus</item>
     </string-array>
-    <string-array name="emotional_symptom_array"></string-array>
+    <string-array name="emotional_symptom_array">
+        <item>Emotional Flooding</item>
+        <item>Emotion fueled response</item>
+        <item>Rejection Sensitivity Dysphoria</item>
+        <item>Emotional Meltdown</item>
+    </string-array>
+
 </resources>
