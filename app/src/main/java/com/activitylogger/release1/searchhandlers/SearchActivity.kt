@@ -69,7 +69,7 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
     var i = resultList.size - 1
     try {
       net.sqlcipher.database.SQLiteDatabase.loadLibs(this)
-      HomeFragment.homeViewModel.recordsRepo!!.getRecords(query).observe(this, {
+      HomeFragment.homeViewModel.recordsRepo!!.getRecords(query).observe(this) {
         if (resultList.size > 0) resultList.clear()
         if (it != null) {
           resultList.addAll(it)
@@ -77,7 +77,7 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
           refreshAdapter()
 
         }
-      })
+      }
       Collections.sort(resultList, Records.compareUpdatedTimes)
     } catch (Ex: Exception) {
       print(Ex)
