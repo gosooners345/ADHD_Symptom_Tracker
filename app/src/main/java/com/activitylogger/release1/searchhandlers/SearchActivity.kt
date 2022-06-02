@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity(), OnRecordListener
     cancelButton.setOnClickListener(cancelButtonClickListener)
     
   }
-  
+  //git rekt
   private fun searchDB(query: String)
   {
     var i = resultList.size - 1

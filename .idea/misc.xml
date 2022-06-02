@@ -8,7 +8,6 @@
         <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/fragment_home.xml" value="0.20521590423257802" />
         <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/record_item_layout_collapsed.xml" value="0.1" />
         <entry key="..\:/Users/Boome/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout_test.xml" value="0.24959481361426256" />
-        <entry key="..\:/Users/Boome/OneDrive/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/login_screen.xml" value="0.12" />
         <entry key="..\:/Users/Boome/OneDrive/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout.xml" value="0.264" />
         <entry key="..\:/Users/Boome/OneDrive/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/layout/records_compose_layout_test.xml" value="0.2968085106382979" />
         <entry key="..\:/Users/Boome/OneDrive/Desktop/Android_App_Projects/ADHDSymptomTracker/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
@@ -81,6 +80,11 @@
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/xml/settings_page.xml" value="0.25" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/app/src/main/res/xml/settings_prefs.xml" value="0.2609375" />
         <entry key="..\:/Users/Brandon Guerin/AndroidStudioProjects/ADHDSymptomTracker/lib/src/main/res/layout/item_legend.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/content_records.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/record_item_layout_collapsed.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/records_compose_layout_test.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/records_item_layout.xml" value="0.1" />
       </map>
     </option>
   </component>
